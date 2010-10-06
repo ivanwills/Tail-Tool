@@ -15,3 +15,9 @@ t/pod-coverage.t
 t/pod.t
 t/perlcriticrc
 t/spelling.t
+lib/Tail/Tool/Tailer/Inodify.pm
+lib/Tail/Tool/Tailer/Loop.pm
+lib/Tail/Tool/Plugin/Filter.pm
+lib/Tail/Tool/Plugin/Highlight.pm
+lib/Tail/Tool/Plugin/Padding.pm
+
