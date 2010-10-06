@@ -1,13 +1,12 @@
-package Tail::Tool::Plugin::Spacing;
+package Template::Tool::Plugin::Spacing;
 
-# Created on: 2010-10-06 14:05:39
+# Created on: 2010-10-06 14:17:00
 # Create by:  dev
 # $Id$
 # $Revision$, $HeadURL$, $Date$
 # $Revision$, $Source$, $Date$
 
-use strict;
-use warnings;
+use Moose;
 use version;
 use Carp;
 use Scalar::Util;
@@ -15,23 +14,14 @@ use List::Util;
 #use List::MoreUtils;
 use Data::Dumper qw/Dumper/;
 use English qw/ -no_match_vars /;
-use base qw/Exporter/;
+
 
 our $VERSION     = version->new('0.0.1');
 our @EXPORT_OK   = qw//;
 our %EXPORT_TAGS = ();
 #our @EXPORT      = qw//;
 
-sub new {
-	my $caller = shift;
-	my $class  = ref $caller ? ref $caller : $caller;
-	my %param  = @_;
-	my $self   = \%param;
 
-	bless $self, $class;
-
-	return $self;
-}
 
 1;
 
@@ -39,16 +29,16 @@ __END__
 
 =head1 NAME
 
-Tail::Tool::Plugin::Spacing - <One-line description of module's purpose>
+Template::Tool::Plugin::Spacing - <One-line description of module's purpose>
 
 =head1 VERSION
 
-This documentation refers to Tail::Tool::Plugin::Spacing version 0.1.
+This documentation refers to Template::Tool::Plugin::Spacing version 0.1.
 
 
 =head1 SYNOPSIS
 
-   use Tail::Tool::Plugin::Spacing;
+   use Template::Tool::Plugin::Spacing;
 
    # Brief but working code example(s) here showing the most common usage(s)
    # This section will be as far as many users bother reading, so make it as
@@ -77,15 +67,6 @@ form "An object of this class represents ...") to give the reader a high-level
 context to help them understand the methods that are subsequently described.
 
 
-=head3 C<new ( $search, )>
-
-Param: C<$search> - type (detail) - description
-
-Return: Tail::Tool::Plugin::Spacing -
-
-Description:
-
-=cut
 
 
 =head1 DIAGNOSTICS

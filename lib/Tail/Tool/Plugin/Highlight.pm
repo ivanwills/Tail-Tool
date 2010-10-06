@@ -1,13 +1,12 @@
 package Template::Tool::Plugin::Highlight;
 
-# Created on: 2010-09-14 09:24:13
+# Created on: 2010-10-06 14:16:20
 # Create by:  dev
 # $Id$
 # $Revision$, $HeadURL$, $Date$
 # $Revision$, $Source$, $Date$
 
-use strict;
-use warnings;
+use Moose;
 use version;
 use Carp;
 use Scalar::Util;
@@ -15,23 +14,14 @@ use List::Util;
 #use List::MoreUtils;
 use Data::Dumper qw/Dumper/;
 use English qw/ -no_match_vars /;
-use base qw/Exporter/;
+
 
 our $VERSION     = version->new('0.0.1');
 our @EXPORT_OK   = qw//;
 our %EXPORT_TAGS = ();
 #our @EXPORT      = qw//;
 
-sub new {
-	my $caller = shift;
-	my $class  = ref $caller ? ref $caller : $caller;
-	my %param  = @_;
-	my $self   = \%param;
 
-	bless $self, $class;
-
-	return $self;
-}
 
 1;
 
@@ -77,15 +67,6 @@ form "An object of this class represents ...") to give the reader a high-level
 context to help them understand the methods that are subsequently described.
 
 
-=head3 C<new ( $search, )>
-
-Param: C<$search> - type (detail) - description
-
-Return: Template::Tool::Plugin::Highlight -
-
-Description:
-
-=cut
 
 
 =head1 DIAGNOSTICS
