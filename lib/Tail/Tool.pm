@@ -21,6 +21,11 @@ our @EXPORT_OK   = qw//;
 our %EXPORT_TAGS = ();
 #our @EXPORT      = qw//;
 
+has files => (
+    is      => 'rw',
+    isa     => 'HashRef',
+    default => sub {{}},
+);
 
 
 1;
