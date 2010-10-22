@@ -23,10 +23,17 @@ our %EXPORT_TAGS = ();
 
 has files => (
     is      => 'rw',
-    isa     => 'HashRef',
-    default => sub {{}},
+    isa     => 'ArrayRef[HashRef]',
+    default => sub {[]},
 );
-
+has pre_process => (
+    is   => 'rw',
+    isa  => 'ArrayRef[Tail::Tool::PreProcess]',
+);
+has post_process => (
+    is   => 'rw',
+    isa  => 'ArrayRef[Tail::Tool::PostProcess]',
+);
 
 1;
 
@@ -34,7 +41,7 @@ __END__
 
 =head1 NAME
 
-Tail::Tool - <One-line description of module's purpose>
+Tail::Tool - Tool for sofisticated tailing of files
 
 =head1 VERSION
 
@@ -49,6 +56,20 @@ This documentation refers to Tail::Tool version 0.1.
    # This section will be as far as many users bother reading, so make it as
    # educational and exemplary as possible.
 
+   my $tt = Tail::Tool->new(
+       files => [
+           '/tmpl/test.log',
+       ],
+       Spacing => {
+           short_time  => 2,
+           short_lines => 2,
+           long_time   => 5,
+           long_lines  => 10,
+       },
+       ...
+   );
+
+   $tt->tail();
 
 =head1 DESCRIPTION
 

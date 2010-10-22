@@ -1,4 +1,4 @@
-package Template::Tool::Tailer::Inotify;
+package Tail::Tool::Tailer::Inotify;
 
 # Created on: 2010-10-06 14:17:38
 # Create by:  dev
@@ -29,16 +29,16 @@ __END__
 
 =head1 NAME
 
-Template::Tool::Tailer::Inotify - <One-line description of module's purpose>
+Tail::Tool::Tailer::Inotify - <One-line description of module's purpose>
 
 =head1 VERSION
 
-This documentation refers to Template::Tool::Tailer::Inotify version 0.1.
+This documentation refers to Tail::Tool::Tailer::Inotify version 0.1.
 
 
 =head1 SYNOPSIS
 
-   use Template::Tool::Tailer::Inotify;
+   use Tail::Tool::Tailer::Inotify;
 
    # Brief but working code example(s) here showing the most common usage(s)
    # This section will be as far as many users bother reading, so make it as

@@ -1,6 +1,6 @@
-package Tail::Tool::Plugin::Spacing;
+package Tail::Tool::PreProcess;
 
-# Created on: 2010-10-06 14:17:00
+# Created on: 2010-10-22 14:45:34
 # Create by:  dev
 # $Id$
 # $Revision$, $HeadURL$, $Date$
@@ -15,13 +15,17 @@ use List::Util;
 use Data::Dumper qw/Dumper/;
 use English qw/ -no_match_vars /;
 
-extends 'Tail::Tool::PreProcess';
 
 our $VERSION     = version->new('0.0.1');
 our @EXPORT_OK   = qw//;
 our %EXPORT_TAGS = ();
 #our @EXPORT      = qw//;
 
+has post => (
+    is      => 'ro',
+    isa     => 'Bool',
+    default => 0,
+);
 
 
 1;
@@ -30,16 +34,16 @@ __END__
 
 =head1 NAME
 
-Tail::Tool::Plugin::Spacing - <One-line description of module's purpose>
+Tail::Tool::PreProcess - <One-line description of module's purpose>
 
 =head1 VERSION
 
-This documentation refers to Tail::Tool::Plugin::Spacing version 0.1.
+This documentation refers to Tail::Tool::PreProcess version 0.1.
 
 
 =head1 SYNOPSIS
 
-   use Tail::Tool::Plugin::Spacing;
+   use Tail::Tool::PreProcess;
 
    # Brief but working code example(s) here showing the most common usage(s)
    # This section will be as far as many users bother reading, so make it as
