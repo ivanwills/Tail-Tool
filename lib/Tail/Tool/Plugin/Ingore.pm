@@ -1,4 +1,4 @@
-package Template::Tool::Plugin::Filter;
+package Tail::Tool::Plugin::Ignore;
 
 # Created on: 2010-10-06 14:16:02
 # Create by:  dev
@@ -15,6 +15,7 @@ use List::Util;
 use Data::Dumper qw/Dumper/;
 use English qw/ -no_match_vars /;
 
+extends 'Tail::Tool::PreProcess';
 
 our $VERSION     = version->new('0.0.1');
 our @EXPORT_OK   = qw//;
@@ -29,16 +30,16 @@ __END__
 
 =head1 NAME
 
-Template::Tool::Plugin::Filter - <One-line description of module's purpose>
+Tail::Tool::Plugin::Ignore - <One-line description of module's purpose>
 
 =head1 VERSION
 
-This documentation refers to Template::Tool::Plugin::Filter version 0.1.
+This documentation refers to Tail::Tool::Plugin::Ignore version 0.1.
 
 
 =head1 SYNOPSIS
 
-   use Template::Tool::Plugin::Filter;
+   use Tail::Tool::Plugin::Ignore;
 
    # Brief but working code example(s) here showing the most common usage(s)
    # This section will be as far as many users bother reading, so make it as
