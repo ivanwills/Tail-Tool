@@ -22,7 +22,40 @@ our @EXPORT_OK   = qw//;
 our %EXPORT_TAGS = ();
 #our @EXPORT      = qw//;
 
+has regex => (
+    is    => 'rw',
+    isa   => 'ArrayRef[HashRef]',
+);
 
+around BUILDARGS => sub {
+    my ($orig, $class, @params) = @_;
+    my %param;
+
+    if ( ref $params[0] eq 'ARRAY' ) {
+        %param = ( 'regex' => map {{ regex => $_, enabled => 1 }} @{ $params[0] } );
+    }
+    else {
+        %param = @params;
+    }
+
+    return $class->$orig(%param);
+};
+
+sub process {
+    my ($self, $line) = @_;
+    my $matches;
+
+    for my $match ( @{ $self->regex } ) {
+        $matches += $match->enabled;
+        if ( $match->enabled && $line =~ /$match->{regex}/ ) {
+            # return the line if it matches
+            return ($line);
+        }
+    }
+
+    # return empty array if there were enabled matches else return the line
+    return $matches ? () : ($line);
+}
 
 1;
 

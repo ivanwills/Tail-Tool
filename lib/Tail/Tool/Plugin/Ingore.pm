@@ -16,6 +16,7 @@ use Data::Dumper qw/Dumper/;
 use English qw/ -no_match_vars /;
 
 extends 'Tail::Tool::PreProcess';
+extends 'Tail::Tool::Plugin::Match';
 
 our $VERSION     = version->new('0.0.1');
 our @EXPORT_OK   = qw//;
@@ -23,6 +24,21 @@ our %EXPORT_TAGS = ();
 #our @EXPORT      = qw//;
 
 
+sub process {
+    my ($self, $line) = @_;
+    my $matches;
+
+    for my $match ( @{ $self->regex } ) {
+        $matches += $match->enabled;
+        if ( $match->enabled && $line =~ /$match->{regex}/ ) {
+            # return empty as the line is to be ignored
+            return ();
+        }
+    }
+
+    # return empty array if there were enabled matches else return the line
+    return ($line);
+}
 
 1;
 

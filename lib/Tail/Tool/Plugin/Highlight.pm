@@ -14,14 +14,57 @@ use List::Util;
 #use List::MoreUtils;
 use Data::Dumper qw/Dumper/;
 use English qw/ -no_match_vars /;
+use Term::ANSIColor;
+use Readonly;
 
 extends 'Tail::Tool::PostProcess';
+extends 'Tail::Tool::Plugin::Match';
 
 our $VERSION     = version->new('0.0.1');
 our @EXPORT_OK   = qw//;
 our %EXPORT_TAGS = ();
 #our @EXPORT      = qw//;
+Readonly my @COLOURS => qw/
+    red
+    green
+    yellow
+    blue
+    magenta
+    cyan
+    on_red
+    on_green
+    on_yellow
+    on_blue
+    on_magenta
+    on_cyan
+/;
 
+sub process {
+    my ($self, $line) = @_;
+    my $matches;
+    my @colours = @COLOURS;
+
+    for my $match ( @{ $self->regex } ) {
+        next if !$match->enabled;
+
+        my $colour = shift @colours || 'red';
+        my @parts = split /($match->{regex})/, $line;
+        $line = '';
+
+        for my $i ( 0 .. @parts -1 ) {
+            if ( $i % 2 == 0 ) {
+                # non matching text
+                $line .= $parts[$i];
+            }
+            else {
+                $line .= colored [$colour], $parts[$i];
+            }
+        }
+    }
+
+    # return empty array if there were enabled matches else return the line
+    return ($line);
+}
 
 
 1;
