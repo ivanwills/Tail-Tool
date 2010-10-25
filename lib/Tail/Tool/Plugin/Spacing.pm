@@ -22,7 +22,47 @@ our @EXPORT_OK   = qw//;
 our %EXPORT_TAGS = ();
 #our @EXPORT      = qw//;
 
+has time => (
+    is      => 'rw',
+    isa     => 'Integer',
+);
+has short_time => (
+    is      => 'rw',
+    isa     => 'Integer',
+    default => 0,
+);
+has short_lines => (
+    is      => 'rw',
+    isa     => 'Integer',
+    default => 0,
+);
+has long_time => (
+    is      => 'rw',
+    isa     => 'Integer',
+    default => 0,
+);
+has long_lines => (
+    is      => 'rw',
+    isa     => 'Integer',
+    default => 0,
+);
 
+sub process {
+    my ( $self, $line ) = @_;
+
+    my $last = $self->time or return ($line);
+
+    my $diff = time - $last;
+
+    if ( $diff > $self->short_time ) {
+        print "\n" x $self->short_lines;
+    }
+    elsif ( $diff > $self->long_time ) {
+        print "\n" x $self->long_lines;
+    }
+
+    return ($line);
+}
 
 1;
 
