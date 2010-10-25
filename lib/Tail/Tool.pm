@@ -52,7 +52,7 @@ around BUILDARGS => sub {
     for my $key ( keys %param ) {
         if ( $key eq 'files' ) {
             for my $file ( @{ $param{$key} } ) {
-                $file = Tail::Tool::File->new( file => $file );
+                $file = Tail::Tool::File->new( name => $file );
             }
         }
         else {
@@ -68,7 +68,7 @@ around BUILDARGS => sub {
             my $plg = $plugin->new($param{$key});
             delete $param{$key};
 
-            $param{ ( $plig->post ? 'pre' : 'post' ) . '_process' } = $plg;
+            $param{ ( $plg->post ? 'pre' : 'post' ) . '_process' } = $plg;
         }
     }
 
