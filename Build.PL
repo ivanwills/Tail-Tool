@@ -5,7 +5,7 @@ use Module::Build;
 my $builder = Module::Build->new(
 	module_name       => 'Tail::Tool',
 	license           => 'perl',
-	dist_author       => 'dev <dev@localhost>',
+	dist_author       => 'Ivan Wills <ivan.wills@gamil.com>',
 	dist_version_from => 'lib/Tail/Tool.pm',
 	requires          => {
 		'perl'             => 5.008,
