@@ -26,6 +26,11 @@ has files => (
     isa     => 'ArrayRef[Tail::Tool::File]',
     default => sub {[]},
 );
+has lines => (
+    is      => 'rw',
+    isa     => 'Integer',
+    default => 10,
+);
 has pre_process => (
     is   => 'rw',
     isa  => 'ArrayRef[Tail::Tool::PreProcess]',
@@ -54,6 +59,8 @@ around BUILDARGS => sub {
             for my $file ( @{ $param{$key} } ) {
                 $file = Tail::Tool::File->new( name => $file );
             }
+        }
+        elsif ( $key eq 'lines' ) {
         }
         else {
             my $plugin = '+' eq substr $key, 0 ,1, 1 ? substr $key, 1, 999 : "Tail::Tool::Plugin::$key";
