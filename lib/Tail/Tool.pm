@@ -57,13 +57,16 @@ around BUILDARGS => sub {
     for my $key ( keys %param ) {
         if ( $key eq 'files' ) {
             for my $file ( @{ $param{$key} } ) {
-                $file = Tail::Tool::File->new( name => $file );
+                $file = Tail::Tool::File->new( ref $file ? $file : name => $file );
             }
         }
         elsif ( $key eq 'lines' ) {
         }
         else {
-            my $plugin = '+' eq substr $key, 0 ,1, 1 ? substr $key, 1, 999 : "Tail::Tool::Plugin::$key";
+            my $plugin
+                = '+' eq substr $key, 0 ,1, 1
+                ? substr $key, 1, 999
+                : "Tail::Tool::Plugin::$key";
             my $plugin_file = $plugin;
             $plugin_file =~ s{::}{/}gxms;
             $plugin_file .= '.pm';
