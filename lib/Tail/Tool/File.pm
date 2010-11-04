@@ -12,6 +12,7 @@ use Carp;
 use Data::Dumper qw/Dumper/;
 use English qw/ -no_match_vars /;
 use Path::Class;
+use AnyEvent;
 
 our $VERSION     = version->new('0.0.1');
 our @EXPORT_OK   = qw//;
@@ -20,25 +21,66 @@ our %EXPORT_TAGS = ();
 
 has name => (
     is   => 'rw',
-    isa  => 'str',
+    isa  => 'Str',
 );
 
 has cmd => (
     is   => 'rw',
-    isa  => 'str',
+    isa  => 'Str',
 );
 has pid => (
     is   => 'rw',
-    isa  => 'str',
+    isa  => 'Str',
 );
 has handle => (
     is   => 'rw',
-    isa  => 'str',
+    isa  => 'Str',
 );
 has real => (
     is   => 'rw',
     isa  => 'Class::Path',
 );
+has pause => (
+    is  => 'rw',
+    isa => 'Bool',
+);
+has watcher => (
+    is => 'rw',
+);
+
+my $inotify;
+my $watcher;
+sub watch {
+    my ($self) = @_;
+
+    return 0 if $self->pasue || !-e $self->name;
+    return $self->watcher if $self->watcher;
+
+    if ( !defined $inotify ) {
+        eval { use Linux::Inotify2 };
+        if ($EVAL_ERROR) {
+            $inotify = 0;
+        }
+        else {
+            $inotify = Linux::Inotify2->new;
+        }
+    }
+
+    my $w;
+    if ( $inotify ) {
+        $w = $inotify->watch( $self->name, IN_MODIFY, sub { $self->run } );
+        if ( !$watcher ) {
+            $watcher = AE::io $inotify->fileno, 0, sub { $inotify->poll };
+        }
+    }
+    else {
+        $w = AE::timer 1, 1, sub { $self->run };
+    }
+
+    $self->watcher($w);
+
+    return $self->watcher;
+}
 
 1;
 
@@ -46,12 +88,11 @@ __END__
 
 =head1 NAME
 
-Tail::Tool::File - <One-line description of module's purpose>
+Tail::Tool::File - Looks after individual files
 
 =head1 VERSION
 
 This documentation refers to Tail::Tool::File version 0.1.
-
 
 =head1 SYNOPSIS
 
