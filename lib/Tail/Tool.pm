@@ -14,6 +14,7 @@ use List::Util;
 #use List::MoreUtils;
 use Data::Dumper qw/Dumper/;
 use English qw/ -no_match_vars /;
+use Tail::Tool::File;
 
 
 our $VERSION     = version->new('0.0.1');
@@ -28,16 +29,29 @@ has files => (
 );
 has lines => (
     is      => 'rw',
-    isa     => 'Integer',
+    isa     => 'Int',
     default => 10,
 );
 has pre_process => (
     is   => 'rw',
     isa  => 'ArrayRef[Tail::Tool::PreProcess]',
+    default => sub {[]},
 );
 has post_process => (
     is   => 'rw',
     isa  => 'ArrayRef[Tail::Tool::PostProcess]',
+    default => sub {[]},
+);
+has printer => (
+    is      => 'rw',
+    isa     => 'CodeRef',
+    default => sub {
+        sub { print @_ };
+    },
+);
+has last => (
+    is  => 'rw',
+    isa => 'Tail::Tool::File',
 );
 
 around BUILDARGS => sub {
@@ -55,12 +69,16 @@ around BUILDARGS => sub {
     $param{post_process} ||= [];
 
     for my $key ( keys %param ) {
+        next if $key eq 'post_process' || $key eq 'pre_process';
+
         if ( $key eq 'files' ) {
             for my $file ( @{ $param{$key} } ) {
-                $file = Tail::Tool::File->new( ref $file ? $file : name => $file );
+                $file = Tail::Tool::File->new(
+                    ref $file ? $file : name => $file
+                );
             }
         }
-        elsif ( $key eq 'lines' ) {
+        elsif ( $key eq 'lines' || $key eq 'printer' ) {
         }
         else {
             my $plugin
@@ -87,6 +105,36 @@ around BUILDARGS => sub {
 
 sub tail {
     my ($self) = @_;
+
+    for my $file (@{ $self->files }) {
+        $file->runner( sub { $self->run(@_) } );
+        $file->watch();
+        $file->run(1);
+    }
+}
+
+sub run {
+    my ( $self, $file, $first ) = @_;
+
+    my @lines = $file->get_line;
+
+    if ( $first && @lines > $self->lines ) {
+        @lines = @lines[ -$self->lines .. -1 ];
+    }
+
+    for my $pre ( @{ $self->pre_process } ) {
+        @lines = $pre->process(@lines);
+    }
+    for my $post ( @{ $self->post_process } ) {
+        @lines = $post->process(@lines);
+    }
+
+    if ( @{ $self->files } > 1 && $self->last && $file ne $self->last ) {
+        unshift @lines, "\n==> " . $file->name . " <==\n";
+    }
+    $self->last($file);
+
+    return $self->printer->(@lines);
 }
 
 1;

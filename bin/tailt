@@ -17,7 +17,9 @@ use Pod::Usage;
 use Data::Dumper qw/Dumper/;
 use English qw/ -no_match_vars /;
 use FindBin qw/$Bin/;
+use Path::Class;
 use Tail::Tool;
+use EV;
 
 our $VERSION = version->new('0.0.1');
 my ($name)   = $PROGRAM_NAME =~ m{^.*/(.*?)$}mxs;
@@ -38,11 +40,13 @@ main();
 exit 0;
 
 sub main {
+    my %plugins = get_plugins();
 
     Getopt::Long::Configure('bundling');
     GetOptions(
         \%option,
         'lines|n=i',
+        ( map {  "$_|".(lc $_) . ( $plugins{$_} ? '|'. lc substr $_, 0, 1 : '%') } keys %plugins ),
         'verbose|v+',
         'man',
         'help',
@@ -62,14 +66,42 @@ sub main {
 
     # do stuff here
 
-    my $tt = Tail-Tool->new(
+    my $tt = Tail::Tool->new(
         files => \@ARGV,
         lines => $option{lines},
     );
 
     $tt->tail();
 
+    EV::loop;
+
     return;
+}
+
+sub get_plugins {
+    my %plugins;
+
+    for my $inc (@INC) {
+        my $dir = dir($inc, 'Tail', 'Tool', 'Plugin');
+        next if !-d $dir;
+
+        my @modules = grep { /[.]pm$/ } $dir->children;
+
+        for my $module (@modules) {
+            eval { require $module };
+            next if $EVAL_ERROR;
+
+            my $name = $module->basename;
+            $name =~ s/[.]pm//xms;
+
+            $module =~ s{$inc/}{}xms;
+            $module =~ s{[.]pm}{}xms;
+            $module =~ s{/}{::}gxms;
+            $plugins{$name} = $module->does('Tail::Tool::RegexRole');
+        }
+    }
+
+    return %plugins;
 }
 
 __DATA__

@@ -34,7 +34,7 @@ has pid => (
 );
 has handle => (
     is   => 'rw',
-    isa  => 'Str',
+    isa  => 'FileHandle',
 );
 has real => (
     is   => 'rw',
@@ -46,6 +46,10 @@ has pause => (
 );
 has watcher => (
     is => 'rw',
+);
+has runner => (
+    is  => 'rw',
+    isa => 'CodeRef',
 );
 
 my $inotify;
@@ -80,6 +84,24 @@ sub watch {
     $self->watcher($w);
 
     return $self->watcher;
+}
+
+sub run {
+    my ($self, $first) = @_;
+
+    $self->runner->($self, $first);
+}
+
+sub get_line {
+    my ($self) = @_;
+    my $fh = $self->handle;
+
+    if ( !$fh ) {
+        open $fh, '<', $self->name or die "Could not open '".$self->name."': $!\n";
+        $self->handle($fh);
+    }
+
+    return <$fh>;
 }
 
 1;
