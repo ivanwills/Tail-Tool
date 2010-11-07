@@ -129,6 +129,9 @@ This documentation refers to Tail::Tool version 0.1.
 
 =head1 SUBROUTINES/METHODS
 
+=head2 C<tail ()>
+
+Description: Start tailing?
 
 =head1 DIAGNOSTICS
 

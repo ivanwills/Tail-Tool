@@ -70,12 +70,12 @@ __END__
 
 =head1 NAME
 
-Tail::Tool::Plugin::Spacing - <One-line description of module's purpose>
+Tail::Tool::Plugin::Spacing - Prints spaces when there has been a pause in
+running.
 
 =head1 VERSION
 
 This documentation refers to Tail::Tool::Plugin::Spacing version 0.1.
-
 
 =head1 SYNOPSIS
 
@@ -85,30 +85,36 @@ This documentation refers to Tail::Tool::Plugin::Spacing version 0.1.
    # This section will be as far as many users bother reading, so make it as
    # educational and exemplary as possible.
 
+   my $sp = Tail::Tool::Plugin::Spacing(
+       short_time  => 2, # 2 seconds
+       short_lines => 2, # the number of lines to print when a short time has elapsed
+       long_time   => 5, # 5 seconds
+       long_lines  => 5, # the number of lines to print when a long time has elapsed
+   );
 
 =head1 DESCRIPTION
 
-A full description of the module and its features.
-
-May include numerous subsections (i.e., =head2, =head3, etc.).
-
-
 =head1 SUBROUTINES/METHODS
 
-A separate section listing the public components of the module's interface.
+=head2 C<new (%params)>
 
-These normally consist of either subroutines that may be exported, or methods
-that may be called on objects belonging to the classes that the module
-provides.
+Param: C<short_time > - int - The minimum time (in seconds) for a pause to be
+considered to have occured.
 
-Name the section accordingly.
+Param: C<short_lines> - int - The number of lines to print when a short time
+has elapsed but between calls but a long time has not been reached.
+Param: C<long_time  > - int - The minimum time (in seconds) for a long pause to
+be considered to have occured.
 
-In an object-oriented module, this section should begin with a sentence (of the
-form "An object of this class represents ...") to give the reader a high-level
-context to help them understand the methods that are subsequently described.
+Param: C<long_lines > - int - The number of lines to print when a long time has
+elapsed between calls.
 
+Description: create a new object
 
+=head2 C<process ()>
 
+Description: Prints spaces basied on time between last call and this one and
+the settings.
 
 =head1 DIAGNOSTICS
 

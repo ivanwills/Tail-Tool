@@ -79,7 +79,8 @@ __END__
 
 =head1 NAME
 
-Tail::Tool::Plugin::Highlight - <One-line description of module's purpose>
+Tail::Tool::Plugin::Highlight - Highlights any text that matches the supplied
+regular expressions.
 
 =head1 VERSION
 
@@ -94,30 +95,22 @@ This documentation refers to Tail::Tool::Plugin::Highlight version 0.1.
    # This section will be as far as many users bother reading, so make it as
    # educational and exemplary as possible.
 
-
 =head1 DESCRIPTION
-
-A full description of the module and its features.
-
-May include numerous subsections (i.e., =head2, =head3, etc.).
-
 
 =head1 SUBROUTINES/METHODS
 
-A separate section listing the public components of the module's interface.
+=head2 C<new (%params)>
 
-These normally consist of either subroutines that may be exported, or methods
-that may be called on objects belonging to the classes that the module
-provides.
+Param: regex - ArrayRef - List of regeular expressions that lines must match
 
-Name the section accordingly.
+Param: colourer - CodeRef - A sub that takes an array ref of colour
+specifications as the first argument and the text to be coloured as the second
+argument. The default colourer is the colored function from L<Term::ANSIColor>
 
-In an object-oriented module, this section should begin with a sentence (of the
-form "An object of this class represents ...") to give the reader a high-level
-context to help them understand the methods that are subsequently described.
+=head2 C<process ($line)>
 
-
-
+Description: Checks if the line matches any of the regular expressions supplied
+then colours the matched parts and returns the changed line.
 
 =head1 DIAGNOSTICS
 

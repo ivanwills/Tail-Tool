@@ -63,7 +63,7 @@ __END__
 
 =head1 NAME
 
-Tail::Tool::Plugin::Match - <One-line description of module's purpose>
+Tail::Tool::Plugin::Match - Checks that each line passed matches a regex
 
 =head1 VERSION
 
@@ -81,27 +81,17 @@ This documentation refers to Tail::Tool::Plugin::Match version 0.1.
 
 =head1 DESCRIPTION
 
-A full description of the module and its features.
-
-May include numerous subsections (i.e., =head2, =head3, etc.).
-
-
 =head1 SUBROUTINES/METHODS
 
-A separate section listing the public components of the module's interface.
+=head2 C<new (%params)>
 
-These normally consist of either subroutines that may be exported, or methods
-that may be called on objects belonging to the classes that the module
-provides.
+Param: regex - ArrayRef - List of regeular expressions that lines must match
 
-Name the section accordingly.
+=head2 C<process ($line)>
 
-In an object-oriented module, this section should begin with a sentence (of the
-form "An object of this class represents ...") to give the reader a high-level
-context to help them understand the methods that are subsequently described.
-
-
-
+Description: Check the the C<$line> passed matches at least one enabled regular
+expression. The line will be returned if it matches or if there are no enabled
+regular expressions, otherwise no line is returned.
 
 =head1 DIAGNOSTICS
 
