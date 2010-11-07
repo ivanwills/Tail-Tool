@@ -9,7 +9,7 @@ BEGIN {
     use_ok( 'Tail::Tool' );
     use_ok( 'Tail::Tool::File' );
     use_ok( 'Tail::Tool::Plugin::Highlight' );
-    use_ok( 'Tail::Tool::Plugin::Ingore' );
+    use_ok( 'Tail::Tool::Plugin::Ignore' );
     use_ok( 'Tail::Tool::Plugin::Match' );
     use_ok( 'Tail::Tool::Plugin::Spacing' );
     use_ok( 'Tail::Tool::PostProcess' );

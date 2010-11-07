@@ -53,7 +53,7 @@ my $watcher;
 sub watch {
     my ($self) = @_;
 
-    return 0 if $self->pasue || !-e $self->name;
+    return 0 if $self->pause || !-e $self->name;
     return $self->watcher if $self->watcher;
 
     if ( !defined $inotify ) {

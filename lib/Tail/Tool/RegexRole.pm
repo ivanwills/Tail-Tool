@@ -1,44 +1,39 @@
-package Tail::Tool::Plugin::Ignore;
+package Tail::Tool::RegexRole;
 
-# Created on: 2010-10-06 14:16:02
+# Created on: 2010-11-07 16:36:59
 # Create by:  Ivan Wills
 # $Id$
 # $Revision$, $HeadURL$, $Date$
 # $Revision$, $Source$, $Date$
 
-use Moose;
+use Moose::Role;
+use Moose::Util::TypeConstraints;
 use version;
-use Carp;
-use Scalar::Util;
-use List::Util;
-#use List::MoreUtils;
-use Data::Dumper qw/Dumper/;
 use English qw/ -no_match_vars /;
 
-extends 'Tail::Tool::PreProcess';
-extends 'Tail::Tool::Plugin::Match';
-
 our $VERSION     = version->new('0.0.1');
-our @EXPORT_OK   = qw//;
-our %EXPORT_TAGS = ();
-#our @EXPORT      = qw//;
 
+subtype 'ArrayRefHashRef'
+    => as 'ArrayRef[HashRef]';
 
-sub process {
-    my ($self, $line) = @_;
-    my $matches;
+coerce 'ArrayRefHashRef'
+    => from 'ArrayRef',
+    => via { [ map {{ regex => $_, enabled => 1 }} @{$_} ] };
 
-    for my $match ( @{ $self->regex } ) {
-        $matches += $match->enabled;
-        if ( $match->enabled && $line =~ /$match->{regex}/ ) {
-            # return empty as the line is to be ignored
-            return ();
-        }
-    }
+coerce 'ArrayRefHashRef'
+    => from 'RegexpRef',
+    => via { [{ regex => $_, enabled => 1 }] };
 
-    # return empty array if there were enabled matches else return the line
-    return ($line);
-}
+coerce 'ArrayRefHashRef'
+    => from 'Str',
+    => via { [{ regex => qr/$_/, enabled => 1 }] };
+
+has regex => (
+    is     => 'rw',
+    isa    => 'ArrayRefHashRef',
+    coerce => 1,
+);
+
 
 1;
 
@@ -46,16 +41,16 @@ __END__
 
 =head1 NAME
 
-Tail::Tool::Plugin::Ignore - <One-line description of module's purpose>
+Tail::Tool::RegexRole - <One-line description of module's purpose>
 
 =head1 VERSION
 
-This documentation refers to Tail::Tool::Plugin::Ignore version 0.1.
+This documentation refers to Tail::Tool::RegexRole version 0.1.
 
 
 =head1 SYNOPSIS
 
-   use Tail::Tool::Plugin::Ignore;
+   use Tail::Tool::RegexRole;
 
    # Brief but working code example(s) here showing the most common usage(s)
    # This section will be as far as many users bother reading, so make it as
@@ -127,18 +122,18 @@ The initial template usually just has:
 
 There are no known bugs in this module.
 
-Please report problems to Ivan Wills (ivan.wills@gamil.com).
+Please report problems to Ivan Wills (ivan.wills@gmail.com).
 
 Patches are welcome.
 
 =head1 AUTHOR
 
-Ivan Wills - (ivan.wills@gamil.com)
+Ivan Wills - (ivan.wills@gmail.com)
 <Author name(s)>  (<contact address>)
 
 =head1 LICENSE AND COPYRIGHT
 
-Copyright (c) 2010 Ivan Wills (14 Mullion Close, Hornsby Heights, NSW, Australia, 2077).
+Copyright (c) 2010 Ivan Wills (14 Mullion Close, Hornsby Heights, NSW Australia 2077).
 All rights reserved.
 
 This module is free software; you can redistribute it and/or modify it under

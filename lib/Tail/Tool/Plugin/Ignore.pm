@@ -1,6 +1,6 @@
-package Tail::Tool::Plugin::Highlight;
+package Tail::Tool::Plugin::Ignore;
 
-# Created on: 2010-10-06 14:16:20
+# Created on: 2010-10-06 14:16:02
 # Create by:  Ivan Wills
 # $Id$
 # $Revision$, $HeadURL$, $Date$
@@ -14,57 +14,25 @@ use List::Util;
 #use List::MoreUtils;
 use Data::Dumper qw/Dumper/;
 use English qw/ -no_match_vars /;
-use Term::ANSIColor;
-use Readonly;
 
-extends 'Tail::Tool::PostProcess';
+extends 'Tail::Tool::PreProcess';
 with 'Tail::Tool::RegexRole';
 
 our $VERSION     = version->new('0.0.1');
 our @EXPORT_OK   = qw//;
 our %EXPORT_TAGS = ();
 #our @EXPORT      = qw//;
-Readonly my @COLOURS => qw/
-    red
-    green
-    yellow
-    blue
-    magenta
-    cyan
-    on_red
-    on_green
-    on_yellow
-    on_blue
-    on_magenta
-    on_cyan
-/;
 
-has colourer => (
-    is    => 'rw',
-    isa   => 'CodeRef',
-    default => sub { \&colored },
-);
 
 sub process {
     my ($self, $line) = @_;
     my $matches;
-    my @colours = @COLOURS;
 
     for my $match ( @{ $self->regex } ) {
-        next if !$match->{enabled};
-
-        my $colour = shift @colours || 'red';
-        my @parts = split /($match->{regex})/, $line;
-        $line = '';
-
-        for my $i ( 0 .. @parts -1 ) {
-            if ( $i % 2 == 0 ) {
-                # non matching text
-                $line .= $parts[$i];
-            }
-            else {
-                $line .= $self->colourer->( [$colour], $parts[$i] );
-            }
+        $matches += $match->{enabled};
+        if ( $match->{enabled} && $line =~ /$match->{regex}/ ) {
+            # return empty as the line is to be ignored
+            return ();
         }
     }
 
@@ -72,45 +40,51 @@ sub process {
     return ($line);
 }
 
-
 1;
 
 __END__
 
 =head1 NAME
 
-Tail::Tool::Plugin::Highlight - Highlights any text that matches the supplied
-regular expressions.
+Tail::Tool::Plugin::Ignore - <One-line description of module's purpose>
 
 =head1 VERSION
 
-This documentation refers to Tail::Tool::Plugin::Highlight version 0.1.
+This documentation refers to Tail::Tool::Plugin::Ignore version 0.1.
 
 
 =head1 SYNOPSIS
 
-   use Tail::Tool::Plugin::Highlight;
+   use Tail::Tool::Plugin::Ignore;
 
    # Brief but working code example(s) here showing the most common usage(s)
    # This section will be as far as many users bother reading, so make it as
    # educational and exemplary as possible.
 
+
 =head1 DESCRIPTION
+
+A full description of the module and its features.
+
+May include numerous subsections (i.e., =head2, =head3, etc.).
+
 
 =head1 SUBROUTINES/METHODS
 
-=head2 C<new (%params)>
+A separate section listing the public components of the module's interface.
 
-Param: regex - ArrayRef - List of regeular expressions that lines must match
+These normally consist of either subroutines that may be exported, or methods
+that may be called on objects belonging to the classes that the module
+provides.
 
-Param: colourer - CodeRef - A sub that takes an array ref of colour
-specifications as the first argument and the text to be coloured as the second
-argument. The default colourer is the colored function from L<Term::ANSIColor>
+Name the section accordingly.
 
-=head2 C<process ($line)>
+In an object-oriented module, this section should begin with a sentence (of the
+form "An object of this class represents ...") to give the reader a high-level
+context to help them understand the methods that are subsequently described.
 
-Description: Checks if the line matches any of the regular expressions supplied
-then colours the matched parts and returns the changed line.
+
+
 
 =head1 DIAGNOSTICS
 
