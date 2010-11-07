@@ -24,26 +24,26 @@ our %EXPORT_TAGS = ();
 
 has time => (
     is      => 'rw',
-    isa     => 'Integer',
+    isa     => 'Int',
 );
 has short_time => (
     is      => 'rw',
-    isa     => 'Integer',
+    isa     => 'Int',
     default => 0,
 );
 has short_lines => (
     is      => 'rw',
-    isa     => 'Integer',
+    isa     => 'Int',
     default => 0,
 );
 has long_time => (
     is      => 'rw',
-    isa     => 'Integer',
+    isa     => 'Int',
     default => 0,
 );
 has long_lines => (
     is      => 'rw',
-    isa     => 'Integer',
+    isa     => 'Int',
     default => 0,
 );
 
