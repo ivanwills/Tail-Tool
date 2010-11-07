@@ -34,12 +34,12 @@ has lines => (
 );
 has pre_process => (
     is   => 'rw',
-    isa  => 'ArrayRef[Tail::Tool::PreProcess]',
+    isa  => 'ArrayRef',
     default => sub {[]},
 );
 has post_process => (
     is   => 'rw',
-    isa  => 'ArrayRef[Tail::Tool::PostProcess]',
+    isa  => 'ArrayRef',
     default => sub {[]},
 );
 has printer => (
@@ -82,21 +82,27 @@ around BUILDARGS => sub {
         }
         else {
             my $plugin
-                = '+' eq substr $key, 0 ,1, 1
+                = $key =~ /^\+/
                 ? substr $key, 1, 999
                 : "Tail::Tool::Plugin::$key";
             my $plugin_file = $plugin;
             $plugin_file =~ s{::}{/}gxms;
             $plugin_file .= '.pm';
-            eval { require $plugin_file };
-            if ( $EVAL_ERROR ) {
-                confess "Could not load the plugin $key (via $plugin_file)\n";
+            {
+                # don't load twice
+                no strict qw/refs/;
+                if ( !${"Tail::Tool::Plugin::${key}::"}{VERSION} ) {
+                    eval { require $plugin_file };
+                    if ( $EVAL_ERROR ) {
+                        confess "Could not load the plugin $key (via $plugin_file)\n";
+                    }
+                }
             }
 
             my $plg = $plugin->new($param{$key});
             delete $param{$key};
 
-            $param{ ( $plg->post ? 'pre' : 'post' ) . '_process' } = $plg;
+            push @{ $param{ ( $plg->post ? 'post' : 'pre' ) . '_process' } }, $plg;
         }
     }
 
@@ -123,16 +129,26 @@ sub run {
     }
 
     for my $pre ( @{ $self->pre_process } ) {
-        @lines = $pre->process(@lines);
+        my @new;
+        for my $line (@lines) {
+            push @new, $pre->process($line);
+        }
+        @lines = @new;
     }
     for my $post ( @{ $self->post_process } ) {
-        @lines = $post->process(@lines);
+        my @new;
+        for my $line (@lines) {
+            push @new, $post->process($line);
+        }
+        @lines = @new;
     }
 
-    if ( @{ $self->files } > 1 && $self->last && $file ne $self->last ) {
-        unshift @lines, "\n==> " . $file->name . " <==\n";
+    if ( @lines ) {
+        if ( @{ $self->files } > 1 && ( !$self->last || $file ne $self->last ) ) {
+            unshift @lines, "\n==> " . $file->name . " <==\n";
+        }
+        $self->last($file);
     }
-    $self->last($file);
 
     return $self->printer->(@lines);
 }
