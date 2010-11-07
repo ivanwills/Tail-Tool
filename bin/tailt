@@ -26,10 +26,6 @@ my ($name)   = $PROGRAM_NAME =~ m{^.*/(.*?)$}mxs;
 
 my %option = (
     lines   => 10,
-    verbose => 0,
-    man     => 0,
-    help    => 0,
-    VERSION => 0,
 );
 
 if ( !@ARGV ) {
@@ -46,7 +42,10 @@ sub main {
     GetOptions(
         \%option,
         'lines|n=i',
-        ( map {  "$_|".(lc $_) . ( $plugins{$_} ? '|'. lc substr $_, 0, 1 : '%') } keys %plugins ),
+        'Highlight|highlight|h=s@',
+        'Match|match|m=s@',
+        'Ignore|ignore|i=s@',
+        ( map {  "$_|". lc $_. '=s%' } keys %plugins ),
         'verbose|v+',
         'man',
         'help',
@@ -65,10 +64,14 @@ sub main {
     }
 
     # do stuff here
+    for my $key (qw/Highlight Match Ignore/) {
+        next if !exists $option{$key};
+        $option{$key} = { regex => [@{ $option{$key} }] };
+    }
 
     my $tt = Tail::Tool->new(
         files => \@ARGV,
-        lines => $option{lines},
+        %option,
     );
 
     $tt->tail();
@@ -87,12 +90,15 @@ sub get_plugins {
 
         my @modules = grep { /[.]pm$/ } $dir->children;
 
+        MODULE:
         for my $module (@modules) {
             eval { require $module };
             next if $EVAL_ERROR;
 
             my $name = $module->basename;
             $name =~ s/[.]pm//xms;
+
+            next MODULE if $name eq 'Highlight' || $name eq 'Ignore' || $name eq 'Match';
 
             $module =~ s{$inc/}{}xms;
             $module =~ s{[.]pm}{}xms;
@@ -108,7 +114,7 @@ __DATA__
 
 =head1 NAME
 
-tailt - <One-line description of commands purpose>
+tailt - Tail files using the Tail::Tool library
 
 =head1 VERSION
 
