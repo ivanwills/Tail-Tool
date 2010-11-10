@@ -101,7 +101,7 @@ This documentation refers to Tail::Tool::Plugin::Highlight version 0.1.
 
 =head2 C<new (%params)>
 
-Param: regex - ArrayRef - List of regeular expressions that lines must match
+Param: regex - ArrayRef - List of regular expressions that lines must match
 
 Param: colourer - CodeRef - A sub that takes an array ref of colour
 specifications as the first argument and the text to be coloured as the second

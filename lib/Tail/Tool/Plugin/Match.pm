@@ -67,7 +67,7 @@ This documentation refers to Tail::Tool::Plugin::Match version 0.1.
 
 =head2 C<new (%params)>
 
-Param: regex - ArrayRef - List of regeular expressions that lines must match
+Param: regex - ArrayRef - List of regular expressions that lines must match
 
 =head2 C<process ($line)>
 

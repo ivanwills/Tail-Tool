@@ -159,7 +159,7 @@ __END__
 
 =head1 NAME
 
-Tail::Tool - Tool for sofisticated tailing of files
+Tail::Tool - Tool for sophisticated tailing of files
 
 =head1 VERSION
 
@@ -196,6 +196,13 @@ This documentation refers to Tail::Tool version 0.1.
 =head2 C<tail ()>
 
 Description: Start tailing?
+
+=head2 C<run ($file, $first)>
+
+Param: C<$file> - Tail::Tool::File - The file to run
+
+Param: C<$first> - bool - Specifies that this is the first time run has been
+called.
 
 =head1 DIAGNOSTICS
 

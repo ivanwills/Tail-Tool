@@ -1,6 +1,6 @@
-package Tail::Tool::File;
+package Tail::Tool::Plugin::Change;
 
-# Created on: 2010-10-25 11:11:38
+# Created on: 2010-11-10 09:10:52
 # Create by:  Ivan Wills
 # $Id$
 # $Revision$, $HeadURL$, $Date$
@@ -9,103 +9,36 @@ package Tail::Tool::File;
 use Moose;
 use version;
 use Carp;
+use Scalar::Util;
+use List::Util;
+#use List::MoreUtils;
 use Data::Dumper qw/Dumper/;
 use English qw/ -no_match_vars /;
-use Path::Class;
-use AnyEvent;
+
+extends 'Tail::Tool::PreProcess';
+with 'Tail::Tool::RegexRole';
 
 our $VERSION     = version->new('0.0.1');
 our @EXPORT_OK   = qw//;
 our %EXPORT_TAGS = ();
 #our @EXPORT      = qw//;
 
-has name => (
-    is   => 'rw',
-    isa  => 'Str',
-);
+sub process {
+    my ($self, $line) = @_;
+    my $matches;
 
-has cmd => (
-    is   => 'rw',
-    isa  => 'Str',
-);
-has pid => (
-    is   => 'rw',
-    isa  => 'Str',
-);
-has handle => (
-    is   => 'rw',
-    isa  => 'FileHandle',
-);
-has real => (
-    is   => 'rw',
-    isa  => 'Class::Path',
-);
-has pause => (
-    is  => 'rw',
-    isa => 'Bool',
-);
-has watcher => (
-    is => 'rw',
-);
-has runner => (
-    is  => 'rw',
-    isa => 'CodeRef',
-);
-
-my $inotify;
-my $watcher;
-sub watch {
-    my ($self) = @_;
-
-    return 0 if $self->pause || !-e $self->name;
-    return $self->watcher if $self->watcher;
-
-    if ( !defined $inotify ) {
-        eval { use Linux::Inotify2 };
-        if ($EVAL_ERROR) {
-            $inotify = 0;
-        }
-        else {
-            $inotify = Linux::Inotify2->new;
+    for my $match ( @{ $self->regex } ) {
+        $matches += $match->{enabled};
+        if ( $match->{enabled} && $line =~ /$match->{regex}/ ) {
+            # return empty as the line is to be ignored
+            return ();
         }
     }
 
-    my $w;
-    if ( $inotify ) {
-        $w = $inotify->watch( $self->name, IN_ALL_EVENTS, sub { $self->run } );
-        if ( !$watcher ) {
-            $watcher = AE::io $inotify->fileno, 0, sub { $inotify->poll };
-        }
-    }
-    else {
-        $w = AE::timer 1, 1, sub { $self->run };
-    }
-
-    $self->watcher($w);
-
-    return $self->watcher;
+    # return empty array if there were enabled matches else return the line
+    return ($line);
 }
 
-sub run {
-    my ($self, $first) = @_;
-
-    $self->runner->($self, $first);
-}
-
-sub get_line {
-    my ($self) = @_;
-    my $fh = $self->handle;
-
-    if ( !$fh ) {
-        open $fh, '<', $self->name or die "Could not open '".$self->name."': $!\n";
-        $self->handle($fh);
-    }
-    else {
-        seek $fh, 0, 1;
-    }
-
-    return <$fh>;
-}
 
 1;
 
@@ -113,15 +46,16 @@ __END__
 
 =head1 NAME
 
-Tail::Tool::File - Looks after individual files
+Tail::Tool::Plugin::Change - <One-line description of module's purpose>
 
 =head1 VERSION
 
-This documentation refers to Tail::Tool::File version 0.1.
+This documentation refers to Tail::Tool::Plugin::Change version 0.1.
+
 
 =head1 SYNOPSIS
 
-   use Tail::Tool::File;
+   use Tail::Tool::Plugin::Change;
 
    # Brief but working code example(s) here showing the most common usage(s)
    # This section will be as far as many users bother reading, so make it as
@@ -137,23 +71,11 @@ May include numerous subsections (i.e., =head2, =head3, etc.).
 
 =head1 SUBROUTINES/METHODS
 
-=head2 C<watch ()>
+=head2 C<process ($line)>
 
-Return: AnyEvent watcher or Linux::Inode watcher
+Param: C<$line> -The line to process
 
-Description: Creates the watcher for the file if the file exists and is not
-paused.
-
-=head2 C<run ($first)>
-
-Param: C<$first> - bool - Specifies that this is the first time run has been
-called.
-
-Description: Runs the the file event.
-
-=head2 C<get_line ()>
-
-Description: Gets any unread lines from the file.
+Performs any changes to the line that have been specified.
 
 =head1 DIAGNOSTICS
 
@@ -196,18 +118,17 @@ The initial template usually just has:
 
 There are no known bugs in this module.
 
-Please report problems to Ivan Wills (ivan.wills@gamil.com).
+Please report problems to Ivan Wills (ivan.wills@gmail.com).
 
 Patches are welcome.
 
 =head1 AUTHOR
 
-Ivan Wills - (ivan.wills@gamil.com)
-<Author name(s)>  (<contact address>)
+Ivan Wills - (ivan.wills@gmail.com)
 
 =head1 LICENSE AND COPYRIGHT
 
-Copyright (c) 2010 Ivan Wills (14 Mullion Close, Hornsby Heights, NSW, Australia, 2077).
+Copyright (c) 2010 Ivan Wills (14 Mullion Close, Hornsby Heights, NSW, Australia).
 All rights reserved.
 
 This module is free software; you can redistribute it and/or modify it under

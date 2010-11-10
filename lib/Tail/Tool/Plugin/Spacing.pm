@@ -99,12 +99,12 @@ This documentation refers to Tail::Tool::Plugin::Spacing version 0.1.
 =head2 C<new (%params)>
 
 Param: C<short_time > - int - The minimum time (in seconds) for a pause to be
-considered to have occured.
+considered to have occurred.
 
 Param: C<short_lines> - int - The number of lines to print when a short time
 has elapsed but between calls but a long time has not been reached.
 Param: C<long_time  > - int - The minimum time (in seconds) for a long pause to
-be considered to have occured.
+be considered to have occurred.
 
 Param: C<long_lines > - int - The number of lines to print when a long time has
 elapsed between calls.
@@ -113,7 +113,7 @@ Description: create a new object
 
 =head2 C<process ()>
 
-Description: Prints spaces basied on time between last call and this one and
+Description: Prints spaces based on time between last call and this one and
 the settings.
 
 =head1 DIAGNOSTICS
