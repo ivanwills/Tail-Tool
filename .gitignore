@@ -3,4 +3,8 @@ TODO
 Debian_CPANTS.txt
 .vimtagsdisplay
 tags
+Build
+MYMETA.yml
+_build/
+blib/
 
