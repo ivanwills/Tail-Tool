@@ -72,7 +72,7 @@ sub watch {
 
     my $w;
     if ( $inotify ) {
-        $w = $inotify->watch( $self->name, IN_MODIFY, sub { $self->run } );
+        $w = $inotify->watch( $self->name, IN_ALL_EVENTS, sub { $self->run } );
         if ( !$watcher ) {
             $watcher = AE::io $inotify->fileno, 0, sub { $inotify->poll };
         }
@@ -99,6 +99,9 @@ sub get_line {
     if ( !$fh ) {
         open $fh, '<', $self->name or die "Could not open '".$self->name."': $!\n";
         $self->handle($fh);
+    }
+    else {
+        seek $fh, 0, 1;
     }
 
     return <$fh>;
