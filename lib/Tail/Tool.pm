@@ -15,7 +15,8 @@ use List::Util;
 use Data::Dumper qw/Dumper/;
 use English qw/ -no_match_vars /;
 use Tail::Tool::File;
-
+use Devel::Leak;
+use Devel::Size qw/total_size/;
 
 our $VERSION     = version->new('0.0.1');
 our @EXPORT_OK   = qw//;
@@ -72,13 +73,14 @@ around BUILDARGS => sub {
         next if $key eq 'post_process' || $key eq 'pre_process';
 
         if ( $key eq 'files' ) {
+            my @extra = ( no_inotify => $param{no_inotify} );
             for my $file ( @{ $param{$key} } ) {
                 $file = Tail::Tool::File->new(
-                    ref $file ? $file : name => $file
+                    ref $file ? $file : ( name => $file, @extra )
                 );
             }
         }
-        elsif ( $key eq 'lines' || $key eq 'printer' ) {
+        elsif ( $key eq 'lines' || $key eq 'printer' || $key eq 'no_inotify' ) {
         }
         else {
             my $plugin
@@ -109,9 +111,12 @@ around BUILDARGS => sub {
     return $class->$orig(%param);
 };
 
+my $handle;
+my $count;
 sub tail {
     my ($self) = @_;
 
+    warn $count = Devel::Leak::NoteSV($handle);
     for my $file (@{ $self->files }) {
         $file->runner( sub { $self->run(@_) } );
         $file->watch();
@@ -150,6 +155,8 @@ sub run {
         $self->last($file);
     }
 
+    warn "Total Size = " . total_size($self);
+    warn $count = Devel::Leak::NoteSV($handle);
     return $self->printer->(@lines);
 }
 

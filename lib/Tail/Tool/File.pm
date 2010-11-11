@@ -44,6 +44,10 @@ has pause => (
     is  => 'rw',
     isa => 'Bool',
 );
+has no_inotify => (
+    is  => 'ro',
+    isa => 'Bool',
+);
 has watcher => (
     is => 'rw',
 );
@@ -71,7 +75,7 @@ sub watch {
     }
 
     my $w;
-    if ( $inotify ) {
+    if ( $inotify && !$self->no_inotify ) {
         $w = $inotify->watch( $self->name, IN_ALL_EVENTS, sub { $self->run } );
         if ( !$watcher ) {
             $watcher = AE::io $inotify->fileno, 0, sub { $inotify->poll };

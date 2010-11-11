@@ -42,6 +42,7 @@ sub main {
     GetOptions(
         \%option,
         'lines|n=i',
+        'no_inotify!',
         'Highlight|highlight|h=s@',
         'Match|match|m=s@',
         'Ignore|ignore|i=s@',
