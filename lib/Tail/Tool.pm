@@ -90,7 +90,7 @@ around BUILDARGS => sub {
             $plugin_file .= '.pm';
             {
                 # don't load twice
-                no strict qw/refs/;
+                no strict qw/refs/; ## no critic
                 if ( !${"Tail::Tool::Plugin::${key}::"}{VERSION} ) {
                     eval { require $plugin_file };
                     if ( $EVAL_ERROR ) {
