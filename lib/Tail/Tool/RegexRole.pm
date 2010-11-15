@@ -17,15 +17,35 @@ subtype 'ArrayRefHashRef'
     => as 'ArrayRef[HashRef]';
 
 coerce 'ArrayRefHashRef'
-    => from 'ArrayRef',
-    => via { [ map {{ regex => $_, enabled => 1 }} @{$_} ] };
+    => from 'ArrayRef'
+    => via {
+        my $array = $_;
+        for my $item (@$array) {
+            my ( $regex, $change, $enabled ) = ('', '', 1);
+            if ( $item =~ m{^/[^/]+?/,} ) {
+                my $rest;
+                ( $regex, $rest ) = split m{/,}, $item, 2;
+                ( $change, $enabled )
+                $regex =~ s{^/}{};
+
+                if ( !defined $enabled ) {
+                    $enabled = 1;
+                }
+            }
+            else {
+                $regex = $item;
+            }
+            $item = { regex => $regex, change => $change, enabled => $enabled };
+        }
+        return $array;
+    };
 
 coerce 'ArrayRefHashRef'
-    => from 'RegexpRef',
+    => from 'RegexpRef'
     => via { [{ regex => $_, enabled => 1 }] };
 
 coerce 'ArrayRefHashRef'
-    => from 'Str',
+    => from 'Str'
     => via { [{ regex => qr/$_/, enabled => 1 }] };
 
 has regex => (
