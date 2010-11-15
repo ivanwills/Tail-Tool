@@ -29,9 +29,11 @@ sub process {
 
     for my $match ( @{ $self->regex } ) {
         $matches += $match->{enabled};
-        if ( $match->{enabled} && $line =~ /$match->{regex}/ ) {
-            # return empty as the line is to be ignored
-            return ();
+        if ( $match->{enabled} ) {
+            if ( !exists $match->{change} ) {
+                $match->{change} = '';
+            }
+            eval "\$line =~ /$match->{regex}/$match->{change}/;";
         }
     }
 
