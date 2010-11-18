@@ -36,9 +36,9 @@ has handle => (
     is   => 'rw',
     isa  => 'FileHandle',
 );
-has real => (
+has size => (
     is   => 'rw',
-    isa  => 'Class::Path',
+    isa  => 'Int',
 );
 has pause => (
     is  => 'rw',
@@ -59,7 +59,7 @@ has runner => (
 my $inotify;
 my $watcher;
 sub watch {
-    my ($self) = @_;
+    my ($self, $lines) = @_;
 
     return 0 if $self->pause || !-e $self->name;
     return $self->watcher if $self->watcher;
@@ -87,6 +87,13 @@ sub watch {
 
     $self->watcher($w);
 
+    my $fh = $self->handle;
+    if ( !$fh ) {
+        open $fh, '<', $self->name or die "Could not open '".$self->name."': $!\n";
+        $self->handle($fh);
+        $self->size(-s $self->name);
+    }
+
     return $self->watcher;
 }
 
@@ -100,13 +107,17 @@ sub get_line {
     my ($self) = @_;
     my $fh = $self->handle;
 
-    if ( !$fh ) {
-        open $fh, '<', $self->name or die "Could not open '".$self->name."': $!\n";
-        $self->handle($fh);
+    return if $self->pause;
+
+    my $size = -s $self->name;
+    if ( $size < $self->size ) {
+        warn $self->name . " was truncated\n!";
+        seek $fh, 0, 0;
     }
     else {
         seek $fh, 0, 1;
     }
+    $self->size($size);
 
     return <$fh>;
 }

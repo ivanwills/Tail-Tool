@@ -113,10 +113,12 @@ around BUILDARGS => sub {
 
 my $handle;
 my $count;
+my $size;
 sub tail {
     my ($self) = @_;
 
-    warn $count = Devel::Leak::NoteSV($handle);
+    $count = Devel::Leak::NoteSV($handle);
+    $size  = total_size($self);
     for my $file (@{ $self->files }) {
         $file->runner( sub { $self->run(@_) } );
         $file->watch();
@@ -132,6 +134,7 @@ sub run {
     if ( $first && @lines > $self->lines ) {
         @lines = @lines[ -$self->lines .. -1 ];
     }
+    warn scalar @lines if @lines;
 
     for my $pre ( @{ $self->pre_process } ) {
         my @new;
@@ -147,6 +150,7 @@ sub run {
         }
         @lines = @new;
     }
+    warn scalar @lines if @lines;
 
     if ( @lines ) {
         if ( @{ $self->files } > 1 && ( !$self->last || $file ne $self->last ) ) {
@@ -155,8 +159,17 @@ sub run {
         $self->last($file);
     }
 
-    warn "Total Size = " . total_size($self);
-    warn $count = Devel::Leak::NoteSV($handle);
+    my $my_size = total_size($self);
+    if ($my_size != $size) {
+        $size = $my_size;
+        warn "Total Size = $size\n";
+    }
+    my $my_count = Devel::Leak::NoteSV($handle);
+    if ($my_count != $count) {
+        $count = $my_count;
+        warn "Things now $count\n";
+    }
+
     return $self->printer->(@lines);
 }
 
