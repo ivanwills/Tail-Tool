@@ -25,7 +25,6 @@ coerce 'ArrayRefHashRef'
             if ( $item =~ m{^/[^/]+?/,} ) {
                 my $rest;
                 ( $regex, $rest ) = split m{/,}, $item, 2;
-                ( $change, $enabled )
                 $regex =~ s{^/}{};
 
                 if ( !defined $enabled ) {
