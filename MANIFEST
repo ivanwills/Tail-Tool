@@ -6,7 +6,17 @@ MANIFEST.SKIP
 META.yml
 Makefile.PL
 README
+bin/tailt
 lib/Tail/Tool.pm
+lib/Tail/Tool/File.pm
+lib/Tail/Tool/Plugin/Change.pm
+lib/Tail/Tool/Plugin/Highlight.pm
+lib/Tail/Tool/Plugin/Ignore.pm
+lib/Tail/Tool/Plugin/Match.pm
+lib/Tail/Tool/Plugin/Spacing.pm
+lib/Tail/Tool/PostProcess.pm
+lib/Tail/Tool/PreProcess.pm
+lib/Tail/Tool/RegexRole.pm
 t/00-load.t
 t/boilerplate.t
 t/critic.t
@@ -15,9 +25,13 @@ t/pod-coverage.t
 t/pod.t
 t/perlcriticrc
 t/spelling.t
-lib/Tail/Tool/Tailer/Inodify.pm
-lib/Tail/Tool/Tailer/Loop.pm
-lib/Tail/Tool/Plugin/Filter.pm
-lib/Tail/Tool/Plugin/Highlight.pm
-lib/Tail/Tool/Plugin/Padding.pm
+t/Tail_Tool.t
+t/Tail_Tool_File.t
+t/Tail_Tool_Plugin_Change.t
+t/Tail_Tool_Plugin_Highlight.t
+t/Tail_Tool_Plugin_Ingore.t
+t/Tail_Tool_Plugin_Match.t
+t/Tail_Tool_Plugin_Spacing.t
+t/Tail_Tool_PostProcess.t
+t/Tail_Tool_PreProcess.t
 
