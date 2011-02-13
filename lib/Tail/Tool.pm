@@ -13,6 +13,7 @@ use Scalar::Util;
 use List::Util;
 #use List::MoreUtils;
 use Data::Dumper qw/Dumper/;
+use Data::Dump::Streamer;
 use English qw/ -no_match_vars /;
 use Tail::Tool::File;
 use Devel::Leak;
@@ -44,11 +45,12 @@ has post_process => (
     default => sub {[]},
 );
 has printer => (
-    is      => 'rw',
-    isa     => 'CodeRef',
-    default => sub {
-        sub { print @_ };
-    },
+    is        => 'rw',
+    isa       => 'CodeRef',
+    predicate => 'has_printer',
+    #default => sub {
+    #    sub { print "Default printer\n", ( ref $_ eq 'ARRAY' ? @$_ : @_ ) };
+    #},
 );
 has last => (
     is  => 'rw',
@@ -134,7 +136,6 @@ sub run {
     if ( $first && @lines > $self->lines ) {
         @lines = @lines[ -$self->lines .. -1 ];
     }
-    warn scalar @lines if @lines;
 
     for my $pre ( @{ $self->pre_process } ) {
         my @new;
@@ -150,7 +151,6 @@ sub run {
         }
         @lines = @new;
     }
-    warn scalar @lines if @lines;
 
     if ( @lines ) {
         if ( @{ $self->files } > 1 && ( !$self->last || $file ne $self->last ) ) {
@@ -159,18 +159,36 @@ sub run {
         $self->last($file);
     }
 
-    my $my_size = total_size($self);
-    if ($my_size != $size) {
-        $size = $my_size;
-        warn "Total Size = $size\n";
+    #my $my_size = total_size($self);
+    #if ($my_size != $size) {
+    #    $size = $my_size;
+    #    warn "Total Size = $size\n";
+    #}
+    #my $my_count = Devel::Leak::NoteSV($handle);
+    #if ($my_count != $count) {
+    #    $count = $my_count;
+    #    warn "Things now $count\n";
+    #}
+
+    #warn join "", @lines if @lines;
+    if ( $self->has_printer ) {
+    my $printer = $self->printer;
+    warn "Lines = " . scalar @lines, "\tPrinter " . $printer . "\n";
+
+    $_ = \@lines;
+    eval { &{$printer}() };
+    warn "Error in printer: " . $@ if $@;
     }
-    my $my_count = Devel::Leak::NoteSV($handle);
-    if ($my_count != $count) {
-        $count = $my_count;
-        warn "Things now $count\n";
+    else {
+        $self->default_printer(@lines);
     }
 
-    return $self->printer->(@lines);
+    return;
+}
+
+sub default_printer {
+    my ( $self, @lines ) = @_;
+    print @lines;
 }
 
 1;
