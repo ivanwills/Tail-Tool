@@ -11,7 +11,7 @@ use version;
 use Carp;
 use Scalar::Util;
 use List::Util;
-#use List::MoreUtils;
+use List::MoreUtils qw/pairwise/;
 use Data::Dumper qw/Dumper/;
 use English qw/ -no_match_vars /;
 
@@ -22,46 +22,58 @@ our @EXPORT_OK   = qw//;
 our %EXPORT_TAGS = ();
 #our @EXPORT      = qw//;
 
-has time => (
-    is      => 'rw',
-    isa     => 'Int',
+has last_time => (
+    is       => 'rw',
+    isa      => 'Int',
+    init_arg => undef,
 );
-has short_time => (
+has times => (
     is      => 'rw',
-    isa     => 'Int',
-    default => 0,
+    isa     => 'ArrayRef[Int]',
+    default => sub {[]},
 );
-has short_lines => (
+has lines => (
     is      => 'rw',
-    isa     => 'Int',
-    default => 0,
+    isa     => 'ArrayRef[Int]',
+    default => sub {[]},
 );
-has long_time => (
-    is      => 'rw',
-    isa     => 'Int',
-    default => 0,
-);
-has long_lines => (
-    is      => 'rw',
-    isa     => 'Int',
-    default => 0,
-);
+
+around BUILDARGS => sub {
+    my ($orig, $class, @params) = @_;
+    my %param;
+
+    if ( ref $params[0] eq 'HASH' ) {
+        %param = %{ shift @params };
+    }
+    else {
+        %param = @params;
+    }
+
+    for my $param ( keys %param) {
+        my $value = $param{$param};
+        if ( !ref $value ) {
+            $value = [ split /,/xms, $value ];
+        }
+        $param{$param} = $value;
+    }
+
+    return $class->$orig(%param);
+};
 
 sub process {
-    my ( $self, $line ) = @_;
+    my ( $self, @lines ) = @_;
 
-    my $last = $self->time or return ($line);
+    my $last = $self->last_time;
+    $self->last_time(time);
+    return @lines if !$last;
 
     my $diff = time - $last;
 
-    if ( $diff > $self->short_time ) {
-        print "\n" x $self->short_lines;
-    }
-    elsif ( $diff > $self->long_time ) {
-        print "\n" x $self->long_lines;
+    for my $time ( pairwise {[$a, $b]} @{ $self->times }, @{ $self->lines } ) {
+        unshift @lines, ("\n") x $time->[1] if $diff >= $time->[0];
     }
 
-    return ($line);
+    return @lines;
 }
 
 1;
@@ -86,11 +98,25 @@ This documentation refers to Tail::Tool::Plugin::Spacing version 0.1.
    # educational and exemplary as possible.
 
    my $sp = Tail::Tool::Plugin::Spacing(
-       short_time  => 2, # 2 seconds
-       short_lines => 2, # the number of lines to print when a short time has elapsed
-       long_time   => 5, # 5 seconds
-       long_lines  => 5, # the number of lines to print when a long time has elapsed
+       times => [ 2, 5 ],
+       lines => [ 2, 5 ],
    );
+
+   $sp->process("test\n");
+   # returns ("test\n");
+
+   ...
+
+   # 2 seconds later
+   $sp->process("test\n");
+   # returns ( "\n", "\n", "test\n" );
+
+   ...
+
+   # another 5 seconds later
+   $sp->process("test\n");
+   # returns ( "\n", "\n", "\n", "\n", "\n", "\n", "\n", "test\n" );
+   # ie 7 blank lines ( 2 lines + 5 lines )
 
 =head1 DESCRIPTION
 
@@ -98,16 +124,12 @@ This documentation refers to Tail::Tool::Plugin::Spacing version 0.1.
 
 =head2 C<new (%params)>
 
-Param: C<short_time > - int - The minimum time (in seconds) for a pause to be
-considered to have occurred.
+Param: C<times> - [int] - The minimum time (in seconds) for a pause to be
+considered to have occurred, resulting in the corresponding number of lines
+(in the C<lines> argument) prepended to the found line.
 
-Param: C<short_lines> - int - The number of lines to print when a short time
-has elapsed but between calls but a long time has not been reached.
-Param: C<long_time  > - int - The minimum time (in seconds) for a long pause to
-be considered to have occurred.
-
-Param: C<long_lines > - int - The number of lines to print when a long time has
-elapsed between calls.
+Param: C<lines> - [int] - The number of lines to print when the corresponding
+period in C<times> is reached.
 
 Description: create a new object
 
@@ -118,42 +140,13 @@ the settings.
 
 =head1 DIAGNOSTICS
 
-A list of every error and warning message that the module can generate (even
-the ones that will "never happen"), with a full explanation of each problem,
-one or more likely causes, and any suggested remedies.
-
 =head1 CONFIGURATION AND ENVIRONMENT
-
-A full explanation of any configuration system(s) used by the module, including
-the names and locations of any configuration files, and the meaning of any
-environment variables or properties that can be set. These descriptions must
-also include details of any configuration language used.
 
 =head1 DEPENDENCIES
 
-A list of all of the other modules that this module relies upon, including any
-restrictions on versions, and an indication of whether these required modules
-are part of the standard Perl distribution, part of the module's distribution,
-or must be installed separately.
-
 =head1 INCOMPATIBILITIES
 
-A list of any modules that this module cannot be used in conjunction with.
-This may be due to name conflicts in the interface, or competition for system
-or program resources, or due to internal limitations of Perl (for example, many
-modules that use source code filters are mutually incompatible).
-
 =head1 BUGS AND LIMITATIONS
-
-A list of known problems with the module, together with some indication of
-whether they are likely to be fixed in an upcoming release.
-
-Also, a list of restrictions on the features the module does provide: data types
-that cannot be handled, performance issues and the circumstances in which they
-may arise, practical limitations on the size of data sets, special cases that
-are not (yet) handled, etc.
-
-The initial template usually just has:
 
 There are no known bugs in this module.
 
