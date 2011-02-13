@@ -12,21 +12,25 @@ use version;
 use Scalar::Util;
 use List::Util;
 #use List::MoreUtils;
-use Getopt::Long;
+use Getopt::Alt qw/get_options/;
 use Pod::Usage;
 use Data::Dumper qw/Dumper/;
 use English qw/ -no_match_vars /;
 use FindBin qw/$Bin/;
 use Path::Class;
 use Tail::Tool;
+use Term::Spinner;
+use AnyEvent;
 use EV;
 
 our $VERSION = version->new('0.0.1');
 my ($name)   = $PROGRAM_NAME =~ m{^.*/(.*?)$}mxs;
+my $spinner = Term::Spinner->new();
 
 my %option = (
     lines   => 10,
 );
+my $restart;
 
 if ( !@ARGV ) {
     pod2usage( -verbose => 1 );
@@ -38,40 +42,37 @@ exit 0;
 sub main {
     my %plugins = get_plugins();
 
-    Getopt::Long::Configure('bundling');
-    GetOptions(
+    my $opt = get_options(
         \%option,
+        'restart|r!',
         'lines|n=i',
         'no_inotify!',
         'Highlight|highlight|h=s@',
         'Match|match|m=s@',
         'Ignore|ignore|i=s@',
+        'Change|change|c=s@',
         ( map {  "$_|". lc $_. '=s%' } keys %plugins ),
         'verbose|v+',
         'man',
         'help',
         'VERSION!',
-    ) or pod2usage(2);
-
-    if ( $option{'VERSION'} ) {
-        print "$name Version = $VERSION\n";
-        exit 1;
-    }
-    elsif ( $option{'man'} ) {
-        pod2usage( -verbose => 2 );
-    }
-    elsif ( $option{'help'} ) {
-        pod2usage( -verbose => 1 );
-    }
+    );
+    %option = %{ $opt->opt };
 
     # do stuff here
-    for my $key (qw/Highlight Match Ignore/) {
+    for my $key (qw/Highlight Match Ignore Change/) {
         next if !exists $option{$key};
         $option{$key} = { regex => [@{ $option{$key} }] };
     }
 
+    if ( $option{restart} ) {
+        $restart = AE::signal INT => \&restart;
+        delete $option{restart};
+    }
+
     my $tt = Tail::Tool->new(
         files => \@ARGV,
+        #printer => \&printer,
         %option,
     );
 
@@ -82,8 +83,26 @@ sub main {
     return;
 }
 
+sub restart {
+    warn "Restarting ...\n";
+    exit 0;
+}
+
+sub printer {
+    my @lines = @_;
+    if (@lines) {
+        $spinner->advance;
+    }
+    else {
+        $spinner->clear;
+        print {*STDOUT} @lines;
+    }
+    die "Why isn't this working?\n".@lines."\n";
+}
+
 sub get_plugins {
     my %plugins;
+    my %done;
 
     for my $inc (@INC) {
         my $dir = dir($inc, 'Tail', 'Tool', 'Plugin');
@@ -93,11 +112,12 @@ sub get_plugins {
 
         MODULE:
         for my $module (@modules) {
-            eval { require $module };
-            next if $EVAL_ERROR;
-
             my $name = $module->basename;
             $name =~ s/[.]pm//xms;
+            next if $done{$name}++;
+
+            eval { require $module };
+            next if $EVAL_ERROR;
 
             next MODULE if $name eq 'Highlight' || $name eq 'Ignore' || $name eq 'Match';
 
