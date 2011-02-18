@@ -1,4 +1,4 @@
-package Tail::Tool::Plugin::Change;
+package Tail::Tool::Plugin::Replace;
 
 # Created on: 2010-11-10 09:10:52
 # Create by:  Ivan Wills
@@ -48,16 +48,16 @@ __END__
 
 =head1 NAME
 
-Tail::Tool::Plugin::Change - <One-line description of module's purpose>
+Tail::Tool::Plugin::Replace - <One-line description of module's purpose>
 
 =head1 VERSION
 
-This documentation refers to Tail::Tool::Plugin::Change version 0.1.
+This documentation refers to Tail::Tool::Plugin::Replace version 0.1.
 
 
 =head1 SYNOPSIS
 
-   use Tail::Tool::Plugin::Change;
+   use Tail::Tool::Plugin::Replace;
 
    # Brief but working code example(s) here showing the most common usage(s)
    # This section will be as far as many users bother reading, so make it as
