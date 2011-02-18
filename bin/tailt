@@ -22,6 +22,8 @@ use Tail::Tool;
 use Term::Spinner;
 use AnyEvent;
 use EV;
+use IO::Prompt qw/prompt/;
+use Try::Tiny;
 
 our $VERSION = version->new('0.0.1');
 my ($name)   = $PROGRAM_NAME =~ m{^.*/(.*?)$}mxs;
@@ -30,7 +32,9 @@ my $spinner = Term::Spinner->new();
 my %option = (
     lines   => 10,
 );
+my %found_plugins;
 my $restart;
+my $tt;
 
 if ( !@ARGV ) {
     pod2usage( -verbose => 1 );
@@ -50,7 +54,7 @@ sub main {
         'Highlight|highlight|h=s@',
         'Match|match|m=s@',
         'Ignore|ignore|i=s@',
-        'Change|change|c=s@',
+        'Replace|replace|r=s@',
         ( map {  "$_|". lc $_. '=s%' } keys %plugins ),
         'verbose|v+',
         'man',
@@ -60,7 +64,7 @@ sub main {
     %option = %{ $opt->opt };
 
     # do stuff here
-    for my $key (qw/Highlight Match Ignore Change/) {
+    for my $key (qw/Highlight Match Ignore Replace/) {
         next if !exists $option{$key};
         $option{$key} = { regex => [@{ $option{$key} }] };
     }
@@ -70,7 +74,7 @@ sub main {
         delete $option{restart};
     }
 
-    my $tt = Tail::Tool->new(
+    $tt = Tail::Tool->new(
         files => \@ARGV,
         #printer => \&printer,
         %option,
@@ -84,8 +88,52 @@ sub main {
 }
 
 sub restart {
-    warn "Restarting ...\n";
-    exit 0;
+    print "\n";
+    my $files   = join ', ', map { $_->name } @{ $tt->files };
+    my $plugins = '';
+    my $i       = 1;
+    my %done;
+
+    for my $plg ( @{ $tt->pre_process }, @{ $tt->post_process }, sort keys %found_plugins ) {
+        my $name = ref $plg || $plg;
+        $name =~ s/^(.+::)//xms;
+
+        next if $done{$name}++;
+
+        $plugins .= "\n" if $plugins;
+        $plugins .= sprintf "%2d  %s %s", $i++, $name eq $plg ? 'Add' : 'Change', $name;
+        if ( ref $plg && $plg->can('summarise') ) {
+            $plugins .= ' (' . $plg->summarise . ')';
+        }
+    }
+
+    print <<"MENU";
+
+$plugins
+ f  Change files ($files)
+ r  Resume tailing
+ q  Quit
+MENU
+
+    my @choices = ( 1 .. $i, qw/f r q/ );
+    my @onechar = $i < 10 ? ('-one_char') : ();
+    my $match
+        = @onechar
+        ? '^[' . ( join '',  @choices ) . ']$'
+        : '^(' . ( join '|', @choices ) . ')$';
+
+    try {
+        my $answer = prompt(
+            -prompt => 'Enter your choice [' . ( join ',', @choices ) . ']',
+            @onechar,
+            -require => {
+                'Must be one of [' . ( join ', ', @choices ) . ']' => qr/$match/,
+            },
+        );
+    }
+    catch {
+        exit;
+    }
 }
 
 sub printer {
@@ -102,7 +150,6 @@ sub printer {
 
 sub get_plugins {
     my %plugins;
-    my %done;
 
     for my $inc (@INC) {
         my $dir = dir($inc, 'Tail', 'Tool', 'Plugin');
@@ -114,9 +161,10 @@ sub get_plugins {
         for my $module (@modules) {
             my $name = $module->basename;
             $name =~ s/[.]pm//xms;
-            next if $done{$name}++;
+            next if $found_plugins{$name}++;
 
             eval { require $module };
+            warn $@ if $@;
             next if $EVAL_ERROR;
 
             next MODULE if $name eq 'Highlight' || $name eq 'Ignore' || $name eq 'Match';
