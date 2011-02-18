@@ -76,6 +76,12 @@ sub process {
     return @lines;
 }
 
+sub summarise {
+    my ($self) = @_;
+
+    return "times = " . ( join ', ', @{ $self->times } ) . ", lines = " . ( join ', ', @{ $self->lines } );
+}
+
 1;
 
 __END__
