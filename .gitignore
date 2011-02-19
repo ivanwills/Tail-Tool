@@ -8,3 +8,4 @@ MYMETA.yml
 _build/
 blib/
 tmp*
+*~
