@@ -22,9 +22,16 @@ our %EXPORT_TAGS = ();
 #our @EXPORT      = qw//;
 
 has post => (
-    is      => 'ro',
-    isa     => 'Bool',
-    default => 0,
+    is       => 'ro',
+    isa      => 'Bool',
+    default  => 0,
+    init_arg => undef,
+);
+has many => (
+    is       => 'ro',
+    isa      => 'Bool',
+    default  => 1,
+    init_arg => undef,
 );
 
 

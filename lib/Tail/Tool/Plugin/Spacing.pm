@@ -37,6 +37,9 @@ has lines => (
     isa     => 'ArrayRef[Int]',
     default => sub {[]},
 );
+has '+many' => (
+    default => 0,
+);
 
 around BUILDARGS => sub {
     my ($orig, $class, @params) = @_;
