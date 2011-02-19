@@ -91,17 +91,21 @@ sub restart {
     print "\n";
     my $files   = join ', ', map { $_->name } @{ $tt->files };
     my $plugins = '';
-    my $i       = 1;
+    my $i       = 0;
     my %done;
+    my @plugins;
 
     for my $plg ( @{ $tt->pre_process }, @{ $tt->post_process }, sort keys %found_plugins ) {
         my $name = ref $plg || $plg;
         $name =~ s/^(.+::)//xms;
 
-        next if $done{$name}++;
+        next if $done{$name};
+        $i++;
+        $done{$name} = $plg;
+        $plugins[$i] = $plg;
 
         $plugins .= "\n" if $plugins;
-        $plugins .= sprintf "%2d  %s %s", $i++, $name eq $plg ? 'Add' : 'Change', $name;
+        $plugins .= sprintf "%2d  %s %s", $i, $name eq $plg ? 'Add' : 'Change', $name;
         if ( ref $plg && $plg->can('summarise') ) {
             $plugins .= ' (' . $plg->summarise . ')';
         }
@@ -115,25 +119,36 @@ $plugins
  q  Quit
 MENU
 
-    my @choices = ( 1 .. $i, qw/f r q/ );
+    my @choices = ( 1 .. $i, qw/f r q Q/ );
     my @onechar = $i < 10 ? ('-one_char') : ();
     my $match
         = @onechar
-        ? '^[' . ( join '',  @choices ) . ']$'
-        : '^(' . ( join '|', @choices ) . ')$';
+        ? '^[' . ( join '',  @choices ) . ']?$'
+        : '^(' . ( join '|', @choices ) . ')?$';
 
-    try {
-        my $answer = prompt(
-            -prompt => 'Enter your choice [' . ( join ',', @choices ) . ']',
-            @onechar,
-            -require => {
-                'Must be one of [' . ( join ', ', @choices ) . ']' => qr/$match/,
-            },
-        );
+    my $answer = prompt(
+        -prompt => 'Enter your choice [' . ( join ',', @choices ) . '] ',
+        @onechar,
+        '-tty',
+        -require => {
+            'Must be one of [' . ( join ', ', @choices ) . '] ' => qr/$match/,
+        },
+    );
+    print "\n" if @onechar;
+
+    if ( $answer eq 'f' ) {
+        update_files();
     }
-    catch {
-        exit;
+    elsif ( $answer eq 'r' ) {
+        return 1;
     }
+    elsif ( $answer =~ /^\d+$/ ) {
+        update_plugin( $plugins[$answer] );
+    }
+
+    exit if !defined $answer || $answer eq '' || lc $answer eq 'q';
+
+    return restart();
 }
 
 sub printer {
@@ -178,6 +193,113 @@ sub get_plugins {
 
     return %plugins;
 }
+
+sub update_files {
+}
+
+sub update_plugin {
+    my ($plg) = @_;
+
+    my $plugin = $plg;
+    if ( !ref $plugin ) {
+        my $module = 'Tail::Tool::Plugin::' . $plugin;
+        $plugin = $module->new();
+    }
+
+    my $meta = $plugin->meta;
+    my $i = 0;
+    my @names;
+
+    for my $attrib ( $meta->get_all_attributes ) {
+        my $name = $attrib->name;
+        next if $name eq 'post';
+        next if !$attrib->has_init_arg;
+        #next if grep { $name eq $_ } qw/last_time/;
+        $i++;
+
+        $names[$i] = $attrib;
+        my $out = sprintf "%2d  Change $name", $i;
+
+        my $reader = $attrib->reader || $name;
+        my $value = $plugin->$reader();
+
+        $out .= ' (' . show_value($value) . ')' if $value;
+
+        print "$out\n";
+    }
+    print " a  Add a new instance\n" if $plg eq $plugin && $plugin->many;
+    print " r  Return to previous menu\n";
+
+    my @choices = ( 1 .. $i, qw/r R/ );
+    my @onechar = $i < 10 ? ('-one_char') : ();
+    my $match
+        = @onechar
+        ? '^[' . ( join '',  @choices ) . ']?$'
+        : '^(' . ( join '|', @choices ) . ')?$';
+
+    my $answer = prompt(
+        -prompt => 'Enter your choice [' . ( join ',', @choices ) . '] ',
+        @onechar,
+        '-tty',
+        -require => {
+            'Must be one of [' . ( join ', ', @choices ) . '] ' => qr/$match/,
+        },
+    );
+    print "\n" if @onechar;
+
+    return if !defined $answer || $answer eq '' || $answer eq 'r';
+
+    my $updated = update_attribute( $plugin, $names[$answer] );
+
+    if ( $updated && $plugin ne $plg ) {
+        if ( $plugin->post ) {
+            $tt->post_process( [ @{ $tt->post_process() }, $plugin ] );
+        }
+        else {
+            $tt->pre_process( [ @{ $tt->pre_process() }, $plugin ] );
+        }
+    }
+
+    return update_plugin($plugin);
+}
+
+sub update_attribute {
+    my ( $plugin, $attrib ) = @_;
+    my $name   = $attrib->name;
+    my $reader = $attrib->reader || $name;
+    my $writer = $attrib->writer || $name;
+    my $value = $plugin->$reader();
+
+    if ( ref $value eq 'ARRAY' ) {
+    }
+    else {
+        my $new_value = prompt("Change $name to : ", '-tty');
+        try {
+            $plugin->$writer( $new_value );
+        }
+        catch {
+            if ( /ArrayRefHashRef/ ) {
+                $plugin->$writer( [{ regex => qr/$new_value/, enabled => 1 }] );
+            }
+        }
+        return 1;
+    }
+    return 0;
+}
+
+sub show_value {
+    my ($value) = @_;
+
+    if ( !ref $value ) {
+        return $value;
+    }
+    elsif ( ref $value eq 'ARRAY' ) {
+        return join ', ', map { show_value($_) } @{ $value };
+    }
+
+    return '';
+}
+
 
 __DATA__
 
