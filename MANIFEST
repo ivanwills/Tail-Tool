@@ -13,6 +13,7 @@ lib/Tail/Tool/Plugin/Change.pm
 lib/Tail/Tool/Plugin/Highlight.pm
 lib/Tail/Tool/Plugin/Ignore.pm
 lib/Tail/Tool/Plugin/Match.pm
+lib/Tail/Tool/Plugin/Replace.pm
 lib/Tail/Tool/Plugin/Spacing.pm
 lib/Tail/Tool/PostProcess.pm
 lib/Tail/Tool/PreProcess.pm

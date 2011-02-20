@@ -64,4 +64,6 @@ Debian_CPANTS.txt
 
 .vimtagsdisplay
 tags
+tmp-writer.pl
+tmp.log
 
