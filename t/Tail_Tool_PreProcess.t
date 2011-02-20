@@ -12,7 +12,7 @@ use_ok( $module );
 
 my $pre = $module->new( post => 1 );
 ok $pre, 'Can create a new object';
-ok $pre->post, ' Post object is true';
+ok !$pre->post, ' Post object is false';
 eval { $pre->post(0) };
 ok $@, 'Can\'t change the value of post';
 
