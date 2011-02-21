@@ -9,7 +9,6 @@ README
 bin/tailt
 lib/Tail/Tool.pm
 lib/Tail/Tool/File.pm
-lib/Tail/Tool/Plugin/Change.pm
 lib/Tail/Tool/Plugin/Highlight.pm
 lib/Tail/Tool/Plugin/Ignore.pm
 lib/Tail/Tool/Plugin/Match.pm
@@ -28,10 +27,10 @@ t/perlcriticrc
 t/spelling.t
 t/Tail_Tool.t
 t/Tail_Tool_File.t
-t/Tail_Tool_Plugin_Change.t
 t/Tail_Tool_Plugin_Highlight.t
 t/Tail_Tool_Plugin_Ingore.t
 t/Tail_Tool_Plugin_Match.t
+t/Tail_Tool_Plugin_Replace.t
 t/Tail_Tool_Plugin_Spacing.t
 t/Tail_Tool_PostProcess.t
 t/Tail_Tool_PreProcess.t
