@@ -257,7 +257,7 @@ sub update_attribute {
         }
     }
     else {
-        my $new_value = prompt("Change $name to : ", '-tty');
+        my $new_value = prompt("Change $name to : ", '-tty') . '';
         try {
             $plugin->$writer( $new_value );
         }
@@ -305,7 +305,7 @@ MENU
         }
     }
     elsif ( $answer eq 'a' ) {
-        my $new = prompt("Enter new element : ", '-tty');
+        my $new = prompt("Enter new element : ", '-tty') . '';
         push @{ $array }
             , $new =~ / ^ (?: qr | \[ | \{ ) /xms
             ? eval $new
