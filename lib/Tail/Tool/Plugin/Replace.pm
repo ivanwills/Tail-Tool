@@ -30,10 +30,10 @@ sub process {
     for my $match ( @{ $self->regex } ) {
         $matches += $match->{enabled};
         if ( $match->{enabled} ) {
-            if ( !exists $match->{change} ) {
-                $match->{change} = '';
+            if ( !exists $match->{replace} ) {
+                $match->{replace} = '';
             }
-            eval "\$line =~ /$match->{regex}/$match->{change}/;";
+            eval "\$line =~ s/$match->{regex}/$match->{replace}/;";
         }
     }
 

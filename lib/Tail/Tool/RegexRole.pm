@@ -47,6 +47,10 @@ coerce 'ArrayRefHashRef'
     => from 'Str'
     => via { [{ regex => qr/$_/, enabled => 1 }] };
 
+coerce 'ArrayRefHashRef'
+    => from 'HashRef'
+    => via { [$_] };
+
 has regex => (
     is     => 'rw',
     isa    => 'ArrayRefHashRef',

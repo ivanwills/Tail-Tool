@@ -7,24 +7,24 @@ use warnings;
 use Test::More tests => 6 + 1;
 use Test::NoWarnings;
 
-my $module = 'Tail::Tool::Plugin::Ignore';
+my $module = 'Tail::Tool::Plugin::Replace';
 use_ok( $module );
 
-my $ig = $module->new( regex => 'test' );
+my $rep = $module->new( regex => { enabled => 1, regex => qr/foo/, replace => 'bar' }  );
 
-isa_ok $ig, $module, 'Get a new ignore object';
+isa_ok $rep, $module, 'Get a new replace object';
 
 my $line    = "the test line\n";
 
-my @w = eval { $ig->process($line) };
+my @w = eval { $rep->process($line) };
 diag $@ if $@;
 ok !$@, 'No errors when trying to process the line';
-ok !@w, "Line ignored";
+ok @w, "Line replace";
 
-$line    = "the line\n";
+$line    = "the foo line\n";
 
-@w = eval { $ig->process($line) };
+@w = eval { $rep->process($line) };
 diag $@ if $@;
 ok !$@, 'No errors when trying to process the line';
-ok @w, "Line ignored";
+is $w[0], "the bar line\n", "Line replace";
 
