@@ -12,19 +12,19 @@ use_ok( $module );
 
 my $ig = $module->new( regex => 'test' );
 
-isa_ok $ig, $module, 'Get a new ignore object';
+isa_ok $ig, $module, 'Get a new match object';
 
 my $line    = "the test line\n";
 
 my @w = eval { $ig->process($line) };
 diag $@ if $@;
 ok !$@, 'No errors when trying to process the line';
-ok @w, "Line ignored";
+ok @w, "Line match";
 
 $line    = "the line\n";
 
 @w = eval { $ig->process($line) };
 diag $@ if $@;
 ok !$@, 'No errors when trying to process the line';
-ok !@w, "Line ignored";
+ok !@w, "Line not match";
 

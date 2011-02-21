@@ -26,5 +26,5 @@ $line    = "the line\n";
 @w = eval { $ig->process($line) };
 diag $@ if $@;
 ok !$@, 'No errors when trying to process the line';
-ok @w, "Line ignored";
+ok @w, "Line not ignored";
 
