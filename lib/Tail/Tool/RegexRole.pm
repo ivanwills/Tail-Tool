@@ -57,6 +57,31 @@ has regex => (
     coerce => 1,
 );
 
+sub summarise {
+    my ($self) = @_;
+
+    my @out;
+    for my $regex ( @{ $self->regex } ) {
+        my $text = "qr/$regex->{regex}/";
+
+        if ( defined $regex->{replace} ) {
+            $text .= "$regex->{replace}/";
+        }
+
+        if ( keys %{$regex} > 2 ) {
+
+            for my $key ( keys %{$regex} ) {
+                next if $key eq 'regex' || $key eq 'enabled' || $key eq 'replace';
+                $text .= " $key=$regex->{$key}";
+            }
+        }
+
+        $text .= 'd' if !$regex->{enabled};
+
+        push @out, $text;
+    }
+    return join ' ', @out;
+}
 
 1;
 
