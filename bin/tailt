@@ -24,7 +24,6 @@ use AnyEvent;
 use EV;
 use IO::Prompt qw/prompt/;
 use TryCatch;
-#use Try::Tiny;
 
 our $VERSION = version->new('0.0.1');
 my ($name)   = $PROGRAM_NAME =~ m{^.*/(.*?)$}mxs;
