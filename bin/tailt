@@ -33,7 +33,7 @@ my %option = (
     lines   => 10,
 );
 my %found_plugins;
-my $restart;
+my $restart = {};
 my $tt;
 
 if ( !@ARGV ) {
@@ -70,7 +70,17 @@ sub main {
     }
 
     if ( $option{restart} ) {
-        $restart = AE::signal INT => \&restart;
+        $restart->{normal} = AE::io *STDIN, 0, sub {
+            my $cmd = <STDIN>;
+            chomp $cmd;
+
+            exit 0 if lc $cmd eq 'q' || lc $cmd eq 'bye';
+
+            return if $cmd eq '';
+
+            restart();
+        };
+        $restart->{int} = AE::signal INT => \&restart;
         delete $option{restart};
     }
 
@@ -254,6 +264,7 @@ sub update_attribute {
         catch ($e) {
             warn "Error in updating value ($value): $e\n";
         }
+        return 1;
     }
     else {
         my $new_value = prompt("Change $name to : ", '-tty') . '';
