@@ -16,8 +16,6 @@ use Data::Dumper qw/Dumper/;
 use Data::Dump::Streamer;
 use English qw/ -no_match_vars /;
 use Tail::Tool::File;
-use Devel::Leak;
-use Devel::Size qw/total_size/;
 
 our $VERSION     = version->new('0.0.1');
 our @EXPORT_OK   = qw//;
@@ -113,24 +111,21 @@ around BUILDARGS => sub {
     return $class->$orig(%param);
 };
 
-my $handle;
-my $count;
-my $size;
 sub tail {
-    my ($self) = @_;
+    my ( $self, $no_start ) = @_;
 
-    $count = Devel::Leak::NoteSV($handle);
-    $size  = total_size($self);
     for my $file (@{ $self->files }) {
+        next if $file->runner;
         $file->runner( sub { $self->run(@_) } );
         $file->watch();
-        $file->run(1);
+        $file->run() if !$no_start;
     }
 }
 
 sub run {
-    my ( $self, $file, $first ) = @_;
+    my ( $self, $file ) = @_;
 
+    my $first = !$file->started;
     my @lines = $file->get_line;
 
     if ( $first && @lines > $self->lines ) {
@@ -159,17 +154,6 @@ sub run {
         $self->last($file);
     }
 
-    #my $my_size = total_size($self);
-    #if ($my_size != $size) {
-    #    $size = $my_size;
-    #    warn "Total Size = $size\n";
-    #}
-    #my $my_count = Devel::Leak::NoteSV($handle);
-    #if ($my_count != $count) {
-    #    $count = $my_count;
-    #    warn "Things now $count\n";
-    #}
-
     #warn join "", @lines if @lines;
     if ( $self->has_printer ) {
     my $printer = $self->printer;
@@ -183,6 +167,7 @@ sub run {
         $self->default_printer(@lines);
     }
 
+    $file->started(1) if $first;
     return;
 }
 
