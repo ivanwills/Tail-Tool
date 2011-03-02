@@ -37,8 +37,9 @@ has handle => (
     isa  => 'FileHandle',
 );
 has size => (
-    is   => 'rw',
-    isa  => 'Int',
+    is       => 'rw',
+    isa      => 'Int',
+    init_arg => undef,
 );
 has pause => (
     is  => 'rw',
@@ -54,6 +55,12 @@ has watcher => (
 has runner => (
     is  => 'rw',
     isa => 'CodeRef',
+);
+has started => (
+    is       => 'rw',
+    isa      => 'Bool',
+    default  => 0,
+    init_arg => undef,
 );
 
 my $inotify;
