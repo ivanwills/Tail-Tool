@@ -24,6 +24,7 @@ use AnyEvent;
 use EV;
 use IO::Prompt qw/prompt/;
 use TryCatch;
+use YAML qw/LoadFile DumpFile/;
 
 our $VERSION = version->new('0.0.1');
 my ($name)   = $PROGRAM_NAME =~ m{^.*/(.*?)$}mxs;
@@ -35,6 +36,7 @@ my %option = (
 my %found_plugins;
 my $restart = {};
 my $tt;
+my $config_file = file("$ENV{HOME}/.tailtrc");
 
 if ( !@ARGV ) {
     pod2usage( -verbose => 1 );
@@ -51,6 +53,7 @@ sub main {
         'restart|r!',
         'lines|n=i',
         'no_inotify!',
+        'config|c=s',
         'Highlight|highlight|h=s@',
         'Match|match|m=s@',
         'Ignore|ignore|i=s@',
@@ -67,6 +70,12 @@ sub main {
     for my $key (qw/Highlight Match Ignore Replace/) {
         next if !exists $option{$key};
         $option{$key} = { regex => [@{ $option{$key} }] };
+    }
+
+    if ( $option{config} && -f $config_file ) {
+        my $config = LoadFile($config_file);
+
+        delete $option{config};
     }
 
     if ( $option{restart} ) {
