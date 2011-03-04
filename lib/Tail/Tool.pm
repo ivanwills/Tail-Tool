@@ -83,25 +83,7 @@ around BUILDARGS => sub {
         elsif ( $key eq 'lines' || $key eq 'printer' || $key eq 'no_inotify' ) {
         }
         else {
-            my $plugin
-                = $key =~ /^\+/
-                ? substr $key, 1, 999
-                : "Tail::Tool::Plugin::$key";
-            my $plugin_file = $plugin;
-            $plugin_file =~ s{::}{/}gxms;
-            $plugin_file .= '.pm';
-            {
-                # don't load twice
-                no strict qw/refs/; ## no critic
-                if ( !${"Tail::Tool::Plugin::${key}::"}{VERSION} ) {
-                    eval { require $plugin_file };
-                    if ( $EVAL_ERROR ) {
-                        confess "Could not load the plugin $key (via $plugin_file)\n";
-                    }
-                }
-            }
-
-            my $plg = $plugin->new($param{$key});
+            my $plg = _new_plugin( $key, $param{$key} );
             delete $param{$key};
 
             push @{ $param{ ( $plg->post ? 'post' : 'pre' ) . '_process' } }, $plg;
@@ -110,6 +92,31 @@ around BUILDARGS => sub {
 
     return $class->$orig(%param);
 };
+
+sub _new_plugin {
+    my ( $name, $value ) = @_;
+    my $plugin
+        = $name =~ /^\+/
+        ? substr $name, 1, 999
+        : "Tail::Tool::Plugin::$name";
+    my $plugin_file = $plugin;
+    $plugin_file =~ s{::}{/}gxms;
+    $plugin_file .= '.pm';
+    {
+        # don't load twice
+        no strict qw/refs/; ## no critic
+        if ( !${"Tail::Tool::Plugin::${name}::"}{VERSION} ) {
+            eval { require $plugin_file };
+            if ( $EVAL_ERROR ) {
+                confess "Could not load the plugin $name (via $plugin_file)\n";
+            }
+        }
+    }
+
+    my $plg = $plugin->new($value);
+
+    return $plg;
+}
 
 sub tail {
     my ( $self, $no_start ) = @_;
