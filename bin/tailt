@@ -406,11 +406,11 @@ MENU
         }
     }
     elsif ( $answer eq 'a' ) {
-        my $new = prompt("Enter new element : ", '-tty') . '';
-        push @{ $array }
-            , $new =~ / ^ (?: qr | \[ | \{ ) /xms
-            ? eval $new
-            : $new;
+        my $new
+            = ref $array->[0] eq 'ARRAY' ? update_array([])
+            : ref $array->[0] eq 'HASH'  ? update_hash({})
+            :                              prompt("Enter new element : ", '-tty') . '';
+        push @{ $array }, $new;
     }
     else {
         $array->[$answer]
@@ -425,8 +425,42 @@ MENU
 
 sub update_hash {
     my ( $hash ) = @_;
+    my @keys;
 
-    die "Not done yet";
+    for my $key ( keys %{ $hash } ) {
+        printf "%2d  Change %s => %s\n", ( scalar @keys ), $key, show_value($hash->{$key});
+        push @keys, $key;
+    }
+    print <<"MENU";
+ a  Add new key
+ d  Delete key
+ r  Return
+MENU
+
+    my $answer = prompt_menu( 0 .. @keys - 1, qw/a d r R/ );
+
+    return $hash if !defined $answer || lc $answer eq 'r';
+
+    if ( $answer eq 'd' ) {
+        print "Select which key to delete: ";
+        my $answer = prompt_menu( 0 .. @keys - 1 );
+        delete $hash->{ $keys[ $answer ] };
+    }
+    elsif ( $answer eq 'a' ) {
+        my $key = prompt("Enter new key : ", '-tty') . '';
+        my $value = prompt("Enter new value : ", '-tty') . '';
+        $hash->{$key} = $value;
+    }
+    else {
+        my $key = $keys[ $answer ];
+        my $value
+            = ref $hash->{$key} eq 'ARRAY' ? update_array( $hash->{$key} )
+            : ref $hash->{$key} eq 'HASH'  ? update_hash( $hash->{$key} )
+            :                                prompt("Enter new value : ", '-tty') . '';
+        $hash->{$key} = $value;
+    }
+
+    return update_hash( $hash );
 }
 
 sub update_regex {
@@ -440,10 +474,10 @@ sub show_value {
     my ($value) = @_;
 
     if ( !ref $value ) {
-        return $value;
+        return "'$value'";
     }
     elsif ( ref $value eq 'ARRAY' ) {
-        return '[ ' . ( join ', ', map { show_value($_) } @{ $value } ) . ' ]';
+        return '[' . ( join ', ', map { show_value($_) } @{ $value } ) . ']';
     }
     elsif ( ref $value eq 'HASH' ) {
         return '{ ' . ( join ', ', map { "$_=>" . show_value($value->{$_}) } keys %{ $value } ) . ' }';
