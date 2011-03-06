@@ -10,6 +10,7 @@ use Moose::Role;
 use Moose::Util::TypeConstraints;
 use version;
 use English qw/ -no_match_vars /;
+use Data::Dumper qw/Dumper/;
 
 our $VERSION     = version->new('0.0.1');
 
@@ -52,14 +53,16 @@ coerce 'ArrayRefHashRef'
     => via { [$_] };
 
 has regex => (
-    is     => 'rw',
-    isa    => 'ArrayRefHashRef',
-    coerce => 1,
+    is      => 'rw',
+    isa     => 'ArrayRefHashRef',
+    coerce  => 1,
+    trigger => \&_set_regex,
 );
 
 sub summarise {
     my ($self) = @_;
 
+    print Dumper $self->regex;
     my @out;
     for my $regex ( @{ $self->regex } ) {
         my $text = "qr/$regex->{regex}/";
@@ -72,7 +75,11 @@ sub summarise {
 
             for my $key ( keys %{$regex} ) {
                 next if $key eq 'regex' || $key eq 'enabled' || $key eq 'replace';
-                $text .= " $key=$regex->{$key}";
+                next if !$regex->{$key};
+                my $value
+                    = ref $regex->{$key} eq 'ARRAY' ? '[' . ( join ', ', @{ $regex->{$key} } ) . ']'
+                    :                                 $regex->{$key};
+                $text .= " $key=$value";
             }
         }
 
@@ -80,7 +87,17 @@ sub summarise {
 
         push @out, $text;
     }
-    return join ' ', @out;
+    return join ', ', @out;
+}
+
+sub _set_regex {
+    my ( $self, $regexs, $old_regexs ) = @_;
+
+    for my $regex ( @{ $regexs } ) {
+        $regex->{enabled} ||= 0;
+    }
+
+    return;
 }
 
 1;

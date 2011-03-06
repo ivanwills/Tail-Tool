@@ -50,10 +50,12 @@ sub process {
     my $matches;
     my @colours = @COLOURS;
 
+    $self->colourer( \&colored ) if !$self->colourer;
+
     for my $match ( @{ $self->regex } ) {
         next if !$match->{enabled};
 
-        my $colour = shift @colours || 'red';
+        $match->{colour} ||= [ shift @colours || 'red' ];
         my @parts = split /($match->{regex})/, $line;
         $line = '';
 
@@ -63,13 +65,25 @@ sub process {
                 $line .= $parts[$i];
             }
             else {
-                $line .= $self->colourer->( [$colour], $parts[$i] );
+                $line .= $self->colourer->( $match->{colour}, $parts[$i] );
             }
         }
     }
 
     # return empty array if there were enabled matches else return the line
     return ($line);
+}
+
+sub _set_regex {
+    my ( $self, $regexs, $old_regexs ) = @_;
+
+    my $i = 0;
+    for my $regex ( @{ $regexs } ) {
+        $regex->{colour} ||= [ $COLOURS[$i % @COLOURS] ];
+        $i++;
+    }
+
+    return;
 }
 
 1;
