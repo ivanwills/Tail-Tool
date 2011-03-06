@@ -40,9 +40,10 @@ Readonly my @COLOURS => qw/
 /;
 
 has colourer => (
-    is    => 'rw',
-    isa   => 'CodeRef',
+    is      => 'rw',
+    isa     => 'CodeRef',
     default => sub { \&colored },
+    trigger => \&_set_colourer,
 );
 
 sub process {
@@ -51,6 +52,7 @@ sub process {
     my @colours = @COLOURS;
 
     $self->colourer( \&colored ) if !$self->colourer;
+    $self->_set_colourer($self->colourer);
 
     for my $match ( @{ $self->regex } ) {
         next if !$match->{enabled};
@@ -79,8 +81,21 @@ sub _set_regex {
 
     my $i = 0;
     for my $regex ( @{ $regexs } ) {
-        $regex->{colour} ||= [ $COLOURS[$i % @COLOURS] ];
+        $regex->{colour}  ||= [ $COLOURS[$i % @COLOURS] ];
+        $regex->{enabled} ||= 0;
         $i++;
+    }
+
+    return;
+}
+
+sub _set_colourer {
+    my ( $self, $new, $old ) = @_;
+
+    my $test = $new->( ['red'], 'thing' );
+
+    if ( !$test || $test eq 'DUMMY' ) {
+        $self->colourer( \&colored );
     }
 
     return;
