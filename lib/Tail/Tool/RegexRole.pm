@@ -62,7 +62,6 @@ has regex => (
 sub summarise {
     my ($self) = @_;
 
-    print Dumper $self->regex;
     my @out;
     for my $regex ( @{ $self->regex } ) {
         my $text = "qr/$regex->{regex}/";
