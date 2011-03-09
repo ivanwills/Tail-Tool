@@ -39,5 +39,7 @@ add_stopwords(qw/
     pre
     plugins
     Plugins
+    summarise
+    STDOUT
 /);
 all_pod_files_spelling_ok();
