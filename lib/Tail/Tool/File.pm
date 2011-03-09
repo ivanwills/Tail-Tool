@@ -72,7 +72,7 @@ sub watch {
     return $self->watcher if $self->watcher;
 
     if ( !defined $inotify ) {
-        eval { use Linux::Inotify2 };
+        eval { require Linux::Inotify2 };
         if ($EVAL_ERROR) {
             $inotify = 0;
         }
