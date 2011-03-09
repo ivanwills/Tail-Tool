@@ -147,6 +147,10 @@ Description: create a new object
 Description: Prints spaces based on time between last call and this one and
 the settings.
 
+=head2 C<summarise ()>
+
+Returns a string that summarise the current settings of the plugin instance
+
 =head1 DIAGNOSTICS
 
 =head1 CONFIGURATION AND ENVIRONMENT
