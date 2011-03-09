@@ -234,6 +234,14 @@ Param: C<$file> - Tail::Tool::File - The file to run
 Param: C<$first> - bool - Specifies that this is the first time run has been
 called.
 
+=head2 C<run ( $file )>
+
+Runs the the tailing of C<$file>.
+
+=head2 C<default_printer ( @lines )>
+
+Prints C<@lines> to STDOUT
+
 =head1 DIAGNOSTICS
 
 =head1 CONFIGURATION AND ENVIRONMENT
