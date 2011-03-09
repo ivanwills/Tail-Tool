@@ -83,7 +83,7 @@ sub watch {
 
     my $w;
     if ( $inotify && !$self->no_inotify ) {
-        $w = $inotify->watch( $self->name, IN_ALL_EVENTS, sub { $self->run } );
+        $w = $inotify->watch( $self->name, Linux::Inotify2::IN_ALL_EVENTS(), sub { $self->run } );
         if ( !$watcher ) {
             $watcher = AE::io $inotify->fileno, 0, sub { $inotify->poll };
         }
@@ -161,7 +161,7 @@ May include numerous subsections (i.e., =head2, =head3, etc.).
 
 =head2 C<watch ()>
 
-Return: AnyEvent watcher or Linux::Inode watcher
+Return: AnyEvent watcher or Linux::Inotify2 watcher
 
 Description: Creates the watcher for the file if the file exists and is not
 paused.
