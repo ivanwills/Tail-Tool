@@ -33,7 +33,7 @@ sub process {
             if ( !exists $match->{replace} ) {
                 $match->{replace} = '';
             }
-            eval "\$line =~ s/$match->{regex}/$match->{replace}/;";
+            eval { $line =~ s/$match->{regex}/$match->{replace}/ };
         }
     }
 
