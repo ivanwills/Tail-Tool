@@ -6,21 +6,32 @@ WriteMakefile
           'NAME' => 'Tail::Tool',
           'VERSION_FROM' => 'lib/Tail/Tool.pm',
           'PREREQ_PM' => {
+                           'AnyEvent' => 0,
+                           'Data::Dump::Streamer' => 0,
+                           'Devel::Leak' => 0,
+                           'Devel::Size' => 0,
+                           'EV' => 0,
+                           'Getopt::Alt' => 0,
+                           'IO::Prompt' => 0,
+                           'List::MoreUtils' => 0,
                            'List::Util' => 0,
                            'Moose' => 0,
+                           'Moose::Role' => 0,
+                           'Moose::Util::TypeConstraints' => 0,
                            'Path::Class' => 0,
                            'Pod::Usage' => 0,
                            'Readonly' => 0,
                            'Scalar::Util' => 0,
                            'Term::ANSIColor' => 0,
+                           'Term::Spinner' => 0,
                            'Test::More' => 0,
                            'Test::NoWarnings' => 0,
+                           'TryCatch' => 0,
                            'version' => 0,
                            'warnings' => 0
                          },
           'INSTALLDIRS' => 'site',
           'EXE_FILES' => [
-                           'bin/.tailt.swp',
                            'bin/tailt'
                          ],
           'PL_FILES' => {}
