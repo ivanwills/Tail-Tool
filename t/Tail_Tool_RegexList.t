@@ -89,5 +89,17 @@ sub test_data {
             },
             name => 'simple regex',
         },
+        {
+            new => {
+                regex => [ '/^find/found/' ],
+            },
+            test => {
+                regex     => [
+                    Tail::Tool::Regex->new( regex => qr/^find/, replace => 'found' ),
+                ],
+                summarise => 'qr/(?-xism:^find)/found/',
+            },
+            name => 'simple replace',
+        },
     );
 }
