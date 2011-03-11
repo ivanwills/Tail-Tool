@@ -393,6 +393,7 @@ MENU
 
     return $array if !defined $answer || lc $answer eq 'r';
 
+    my $regex = 'Tail::Tool::Regex';
     if ( $answer eq 'd' ) {
         my $delete = prompt("Delete which entry : ", '-tty');
         if ( $delete == 0 ) {
@@ -409,6 +410,7 @@ MENU
         my $new
             = ref $array->[0] eq 'ARRAY' ? update_array([])
             : ref $array->[0] eq 'HASH'  ? update_hash({})
+            : ref $array->[0] eq $regex  ? update_regex( $regex->new(regex=>''), $array->[0] )
             :                              prompt("Enter new element : ", '-tty') . '';
         push @{ $array }, $new;
     }
@@ -416,7 +418,7 @@ MENU
         $array->[$answer]
             = ref $array->[$answer] eq 'ARRAY'  ? update_array( $array->[$answer] )
             : ref $array->[$answer] eq 'HASH'   ? update_hash( $array->[$answer] )
-            : ref $array->[$answer] eq 'Regexp' ? update_regex( $array->[$answer] )
+            : ref $array->[$answer] eq $regex   ? update_regex( $array->[$answer] )
             :                                     prompt("Enter new value : ", '-tty') . '';
     }
 
@@ -464,10 +466,50 @@ MENU
 }
 
 sub update_regex {
-    my ( $regex ) = @_;
+    my ( $regex, $other ) = @_;
 
-    $regex = prompt("Enter new value : ", '-tty');
-    return qr/$regex/;
+    my @choice = ('x');
+    print " x  Change regex (" . $regex->regex .")\n";
+
+    if ( $regex->has_colour || ( $other && $other->has_colour ) ) {
+        print " c  Change colour (" . ( join ', ', @{ $regex->colour || [] } ) . ")\n";
+        push @choice, 'c';
+    }
+
+    if ( $regex->has_replace || ( $other && $other->has_replace ) ) {
+        print " p  Change replace value (" . $regex->replace . ")\n";
+        push @choice, 'p';
+    }
+
+    my $enabled = $regex->enabled ? 'Disable' : 'Enable';
+    print <<"MENU";
+ e  $enabled
+ r  Return
+MENU
+
+    my $answer = prompt_menu( @choice, qw/e r R/ );
+
+    if ( $answer eq 'r' ) {
+        return $regex;
+    }
+    elsif ( $answer eq 'x' ) {
+        my $new = prompt("Enter new regexp : ", '-tty');
+        $regex->regex(qr/$new/);
+    }
+    elsif ( $answer eq 'c' ) {
+        print "Possible colours: red green yellow blue magenta cyan on_red on_green on_yellow on_blue on_magenta on_cyan & bold\n";
+        my $new = update_array( $regex->colour || [] );
+        $regex->colour($new);
+    }
+    elsif ( $answer eq 'p' ) {
+        my $new = prompt("Enter new replace value : ", '-tty');
+        $regex->replace($new);
+    }
+    elsif ( $answer eq 'e' ) {
+        $regex->enabled( !$regex->enabled );
+    }
+
+    return update_regex($regex);
 }
 
 sub show_value {
@@ -484,6 +526,9 @@ sub show_value {
     }
     elsif ( ref $value eq 'Regexp' ) {
         return "qr/$value/";
+    }
+    elsif ( eval { $value->can('summarise') } ) {
+        return $value->summarise;
     }
     else {
         warn "Don't yet display " . ( ref $value ) . " values\n";
