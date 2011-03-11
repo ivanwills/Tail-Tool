@@ -72,7 +72,8 @@ sub summarise {
 
     my @out;
     for my $regex ( @{ $self->regex } ) {
-        push @out, $regex->summarise;
+        push @out, eval { $regex->summarise };
+        warn "regex not a propper Tail::Tool::Regex object: $@" if $@;
     }
     return join ', ', @out;
 }
