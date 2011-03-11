@@ -16,7 +16,7 @@ use Data::Dumper qw/Dumper/;
 use English qw/ -no_match_vars /;
 
 extends 'Tail::Tool::PreProcess';
-with 'Tail::Tool::RegexRole';
+with 'Tail::Tool::RegexList';
 
 our $VERSION     = version->new('0.0.1');
 our @EXPORT_OK   = qw//;
@@ -28,17 +28,26 @@ sub process {
     my $matches;
 
     for my $match ( @{ $self->regex } ) {
-        $matches += $match->{enabled};
-        if ( $match->{enabled} ) {
-            if ( !exists $match->{replace} ) {
-                $match->{replace} = '';
-            }
-            eval { $line =~ s/$match->{regex}/$match->{replace}/ };
+        $matches += $match->enabled;
+        if ( $match->enabled ) {
+            my $reg = $match->regex;
+            my $rep = $match->replace;
+            eval { $line =~ s/$reg/$rep/ };
         }
     }
 
     # return empty array if there were enabled matches else return the line
     return ($line);
+}
+
+sub _set_regex {
+    my ( $self, $regexs, $old_regexs ) = @_;
+
+    for my $regex ( @{ $regexs } ) {
+       $regex->replace('') if !$regex->has_replace;
+    }
+
+    return;
 }
 
 1;

@@ -16,7 +16,7 @@ use Data::Dumper qw/Dumper/;
 use English qw/ -no_match_vars /;
 
 extends 'Tail::Tool::PreProcess';
-with 'Tail::Tool::RegexRole';
+with 'Tail::Tool::RegexList';
 
 our $VERSION     = version->new('0.0.1');
 our @EXPORT_OK   = qw//;
@@ -28,8 +28,9 @@ sub process {
     my $matches;
 
     for my $match ( @{ $self->regex } ) {
-        $matches += $match->{enabled};
-        if ( $match->{enabled} && $line =~ /$match->{regex}/ ) {
+        $matches += $match->enabled;
+        my $reg = $match->regex;
+        if ( $match->enabled && $line =~ /$reg/ ) {
             # return empty as the line is to be ignored
             return ();
         }

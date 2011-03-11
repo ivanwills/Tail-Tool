@@ -18,7 +18,7 @@ use Term::ANSIColor;
 use Readonly;
 
 extends 'Tail::Tool::PostProcess';
-with 'Tail::Tool::RegexRole';
+with 'Tail::Tool::RegexList';
 
 our $VERSION     = version->new('0.0.1');
 our @EXPORT_OK   = qw//;
@@ -37,6 +37,7 @@ Readonly my @COLOURS => qw/
     on_blue
     on_magenta
     on_cyan
+    bold
 /;
 
 has colourer => (
@@ -81,8 +82,7 @@ sub _set_regex {
 
     my $i = 0;
     for my $regex ( @{ $regexs } ) {
-        $regex->{colour}  ||= [ $COLOURS[$i % @COLOURS] ];
-        $regex->{enabled} ||= 0;
+        $regex->colour( [ $COLOURS[$i % @COLOURS] ] ) if !$regex->has_colour;
         $i++;
     }
 
