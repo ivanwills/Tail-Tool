@@ -15,7 +15,8 @@ BEGIN {
     use_ok( 'Tail::Tool::Plugin::Spacing'   );
     use_ok( 'Tail::Tool::PostProcess'       );
     use_ok( 'Tail::Tool::PreProcess'        );
-    use_ok( 'Tail::Tool::RegexRole'         );
+    use_ok( 'Tail::Tool::Regex'             );
+    use_ok( 'Tail::Tool::RegexList'         );
 }
 
 diag( "Testing Tail::Tool $Tail::Tool::VERSION, Perl $], $^X" );
