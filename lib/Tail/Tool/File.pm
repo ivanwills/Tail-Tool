@@ -118,7 +118,7 @@ sub get_line {
 
     my $size = -s $self->name;
     if ( $size < $self->size ) {
-        warn $self->name . " was truncated\n!";
+        warn $self->name . " was truncated!\n";
         seek $fh, 0, 0;
     }
     else {
