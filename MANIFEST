@@ -16,7 +16,8 @@ lib/Tail/Tool/Plugin/Replace.pm
 lib/Tail/Tool/Plugin/Spacing.pm
 lib/Tail/Tool/PostProcess.pm
 lib/Tail/Tool/PreProcess.pm
-lib/Tail/Tool/RegexRole.pm
+lib/Tail/Tool/Regex.pm
+lib/Tail/Tool/RegexList.pm
 t/00-load.t
 t/boilerplate.t
 t/critic.t
@@ -34,4 +35,6 @@ t/Tail_Tool_Plugin_Replace.t
 t/Tail_Tool_Plugin_Spacing.t
 t/Tail_Tool_PostProcess.t
 t/Tail_Tool_PreProcess.t
+t/Tail_Tool_Regex.t
+t/Tail_Tool_RegexList.t
 
