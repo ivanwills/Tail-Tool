@@ -41,8 +41,11 @@ provides:
   Tail::Tool::PreProcess:
     file: lib/Tail/Tool/PreProcess.pm
     version: v0.0.1
-  Tail::Tool::RegexRole:
-    file: lib/Tail/Tool/RegexRole.pm
+  Tail::Tool::Regex:
+    file: lib/Tail/Tool/Regex.pm
+    version: v0.0.1
+  Tail::Tool::RegexList:
+    file: lib/Tail/Tool/RegexList.pm
     version: v0.0.1
 requires:
   AnyEvent: 0
