@@ -1,12 +1,12 @@
 .*.sw[ponx]
 Debian_CPANTS.txt
-Tail-Tool-v0.0.1*
+Tail-Tool-*
 .vimtagsdisplay
 tags
 Build
 MYMETA.yml
 _build/
 blib/
-TODO
 tmp*
 *~
+TODO
