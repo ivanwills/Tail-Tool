@@ -6,11 +6,12 @@ use strict;
 use warnings;
 use Test::More tests => 6 + 1;
 use Test::NoWarnings;
+use Tail::Tool::RegexList;
 
 my $module = 'Tail::Tool::Plugin::Replace';
 use_ok( $module );
 
-my $rep = $module->new( regex => { enabled => 1, regex => qr/foo/, replace => 'bar' }  );
+my $rep = $module->new( regex => Tail::Tool::Regex->new( enabled => 1, regex => qr/foo/, replace => 'bar' ) );
 
 isa_ok $rep, $module, 'Get a new replace object';
 

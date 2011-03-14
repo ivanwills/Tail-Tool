@@ -60,6 +60,10 @@ coerce 'ArrayRefRegex'
     => from 'Str'
     => via { [ Tail::Tool::Regex->new( regex => qr/$_/, enabled => 1 ) ] };
 
+coerce 'ArrayRefRegex'
+    => from 'Tail::Tool::Regex'
+    => via { [ $_ ] };
+
 has regex => (
     is     => 'rw',
     isa    => 'ArrayRefRegex',
