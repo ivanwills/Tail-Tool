@@ -56,19 +56,22 @@ sub process {
     $self->_set_colourer($self->colourer);
 
     for my $match ( @{ $self->regex } ) {
-        next if !$match->{enabled};
+        next if !$match->enabled;
 
-        $match->{colour} ||= [ shift @colours || 'red' ];
+        $match->colour( [ shift @colours || 'red' ] ) if !$match->colour;
+
+        # count the number of internal matches
+        my $count = $match->regex =~ /( [(] (?! [?] ) )/gxms || 0;
         my @parts = split /($match->{regex})/, $line;
         $line = '';
 
         for my $i ( 0 .. @parts -1 ) {
-            if ( $i % 2 == 0 ) {
+            if ( $i % ($count + 2) == 0 ) {
                 # non matching text
                 $line .= $parts[$i];
             }
-            else {
-                $line .= $self->colourer->( $match->{colour}, $parts[$i] );
+            elsif ( $i % ($count + 2) == 1 ) {
+                $line .= $self->colourer->( $match->colour, $parts[$i] );
             }
         }
     }
