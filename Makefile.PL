@@ -8,8 +8,6 @@ WriteMakefile
           'PREREQ_PM' => {
                            'AnyEvent' => 0,
                            'Data::Dump::Streamer' => 0,
-                           'Devel::Leak' => 0,
-                           'Devel::Size' => 0,
                            'EV' => 0,
                            'Getopt::Alt' => 0,
                            'IO::Prompt' => 0,
@@ -27,6 +25,7 @@ WriteMakefile
                            'Test::More' => 0,
                            'Test::NoWarnings' => 0,
                            'TryCatch' => 0,
+                           'YAML' => 0,
                            'version' => 0,
                            'warnings' => 0
                          },

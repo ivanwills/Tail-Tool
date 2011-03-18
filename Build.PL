@@ -11,8 +11,6 @@ my $builder = Module::Build->new(
         'perl'                         => 5.006,
         'AnyEvent'                     => 0,
         'Data::Dump::Streamer'         => 0,
-        'Devel::Leak'                  => 0,
-        'Devel::Size'                  => 0,
         'EV'                           => 0,
         'Getopt::Alt'                  => 0,
         'IO::Prompt'                   => 0,
@@ -30,7 +28,7 @@ my $builder = Module::Build->new(
         'Term::Spinner'                => 0,
         'version'                      => 0,
         'warnings'                     => 0,
-
+        'YAML'                         => 0,
     },
     build_requires => {
         'Test::More'       => 0,
