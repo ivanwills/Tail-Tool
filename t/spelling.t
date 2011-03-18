@@ -41,5 +41,6 @@ add_stopwords(qw/
     Plugins
     summarise
     STDOUT
+    YAML
 /);
 all_pod_files_spelling_ok();
