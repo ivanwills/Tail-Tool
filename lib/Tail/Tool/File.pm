@@ -89,7 +89,7 @@ sub watch {
         }
     }
     else {
-        $w = AE::timer 1, 1, sub { $self->run };
+        $w = AE::timer 0, 2, sub { $self->run };
     }
 
     $self->watcher($w);
