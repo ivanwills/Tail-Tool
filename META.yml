@@ -20,6 +20,9 @@ provides:
   Tail::Tool::File:
     file: lib/Tail/Tool/File.pm
     version: v0.0.1
+  Tail::Tool::Plugin::GroupLines:
+    file: lib/Tail/Tool/Plugin/GroupLines.pm
+    version: v0.0.1
   Tail::Tool::Plugin::Highlight:
     file: lib/Tail/Tool/Plugin/Highlight.pm
     version: v0.0.1

@@ -9,6 +9,7 @@ README
 bin/tailt
 lib/Tail/Tool.pm
 lib/Tail/Tool/File.pm
+lib/Tail/Tool/Plugin/GroupLines.pm
 lib/Tail/Tool/Plugin/Highlight.pm
 lib/Tail/Tool/Plugin/Ignore.pm
 lib/Tail/Tool/Plugin/Match.pm
