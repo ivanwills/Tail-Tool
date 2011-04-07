@@ -64,7 +64,8 @@ around BUILDARGS => sub {
 };
 
 sub process {
-    my ( $self, @lines ) = @_;
+    my ( $self, $line ) = @_;
+    my @lines = ($line);
 
     my $last = $self->last_time;
     $self->last_time(time);
