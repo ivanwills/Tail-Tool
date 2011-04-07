@@ -33,13 +33,14 @@ has lines => (
     default => 10,
 );
 has pre_process => (
-    is   => 'rw',
-    isa  => 'ArrayRef',
+    is      => 'rw',
+    isa     => 'ArrayRef',
     default => sub {[]},
+    trigger => \&_pre_process_set,
 );
 has post_process => (
-    is   => 'rw',
-    isa  => 'ArrayRef',
+    is      => 'rw',
+    isa     => 'ArrayRef',
     default => sub {[]},
 );
 has printer => (
@@ -142,14 +143,14 @@ sub run {
     for my $pre ( @{ $self->pre_process } ) {
         my @new;
         for my $line (@lines) {
-            push @new, $pre->process($line);
+            push @new, $pre->process($line, $file);
         }
         @lines = @new;
     }
     for my $post ( @{ $self->post_process } ) {
         my @new;
         for my $line (@lines) {
-            push @new, $post->process($line);
+            push @new, $post->process($line, $file);
         }
         @lines = @new;
     }
@@ -163,12 +164,12 @@ sub run {
 
     #warn join "", @lines if @lines;
     if ( $self->has_printer ) {
-    my $printer = $self->printer;
-    warn "Lines = " . scalar @lines, "\tPrinter " . $printer . "\n";
+        my $printer = $self->printer;
+        warn "Lines = " . scalar @lines, "\tPrinter " . $printer . "\n";
 
-    $_ = \@lines;
-    eval { &{$printer}() };
-    warn "Error in printer: " . $@ if $@;
+        $_ = \@lines;
+        eval { &{$printer}() };
+        warn "Error in printer: " . $@ if $@;
     }
     else {
         $self->default_printer(@lines);
@@ -181,6 +182,37 @@ sub run {
 sub default_printer {
     my ( $self, @lines ) = @_;
     print @lines;
+}
+
+sub _pre_process_set {
+    my ($self, $pre_process) = @_;
+    my @pre = @{ $pre_process };
+    my @group;
+    my @other;
+
+    # sort (in order) pre process plugins
+    for my $pre (@pre) {
+        if ( ref $pre eq 'Tail::Tool::Plugin::GroupLines' ) {
+            push @group, $pre;
+        }
+        else {
+            push @other, $pre;
+        }
+    }
+
+    # check that the sorted plugins match the current order
+    my $differ = 0;
+    for my $new_pre ( @group, @other ) {
+        if ( $new_pre != shift @pre ) {
+            $differ = 1;
+            last;
+        }
+    }
+
+    # if the orders differ, reset the plugins.
+    if ($differ) {
+        $self->pre_process([ @group, @other ]);
+    }
 }
 
 1;
