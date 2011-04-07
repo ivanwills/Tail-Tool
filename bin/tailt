@@ -56,7 +56,7 @@ sub main {
         [
             'restart|r!',
             'lines|n=i',
-            'no_inotify!',
+            'no_inotify|no-inotify',
             'config|c=s',
             'Highlight|highlight|h=s@',
             'Match|match|m=s@',
@@ -148,6 +148,7 @@ $plugins
  r  Resume tailing
  l  Load Config
  s  Save Config
+ b  Shell out
  q  Quit
 MENU
 
@@ -164,6 +165,9 @@ MENU
     }
     elsif ( $answer eq 's' ) {
         save_config();
+    }
+    elsif ( $answer eq 'b' ) {
+        system $ENV{SHELL} || '/bin/bash';
     }
     elsif ( $answer =~ /^\d+$/ ) {
         update_plugin( $plugins[$answer] );
