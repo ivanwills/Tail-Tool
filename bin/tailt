@@ -56,7 +56,7 @@ sub main {
         [
             'restart|r!',
             'lines|n=i',
-            'no_inotify|no-inotify',
+            'no_inotify|no-inotify!',
             'config|c=s',
             'Highlight|highlight|h=s@',
             'Match|match|m=s@',
