@@ -20,63 +20,78 @@ our %EXPORT_TAGS = ();
 #our @EXPORT      = qw//;
 
 has name => (
-    is   => 'rw',
-    isa  => 'Str',
+    is            => 'rw',
+    isa           => 'Str',
+    documentation => 'The name of a file to be watched',
 );
 
 has cmd => (
-    is   => 'rw',
-    isa  => 'Str',
+    is            => 'rw',
+    isa           => 'Str',
+    documentation => '',
 );
 has pid => (
-    is   => 'rw',
-    isa  => 'Str',
+    is            => 'rw',
+    isa           => 'Str',
+    documentation => '',
 );
 has handle => (
-    is   => 'rw',
-    isa  => 'FileHandle',
+    is            => 'rw',
+    isa           => 'FileHandle',
+    documentation => 'The opened filehandle of name',
 );
 has size => (
-    is       => 'rw',
-    isa      => 'Int',
-    init_arg => undef,
+    is            => 'rw',
+    isa           => 'Int',
+    init_arg      => undef,
+    documentation => 'The size of file when last read',
 );
 has pause => (
-    is  => 'rw',
-    isa => 'Bool',
+    is            => 'rw',
+    isa           => 'Bool',
+    documentation => 'Flags not to display any lines from the file',
+);
 has auto_unpause => (
     is            => 'rw',
     isa           => 'Bool',
     default       => 0,
     init_arg      => undef,
+    documentation => 'If a file was missing moved or deleted this flags that tailing should be restarted when the file reappears',
 );
 has no_inotify => (
-    is  => 'ro',
-    isa => 'Bool',
+    is            => 'ro',
+    isa           => 'Bool',
+    documentation => 'Flags not to use the INotify the file (can be useful when a file is on a network file system like sshfs)',
 );
 has watcher => (
-    is => 'rw',
+    is            => 'rw',
+    init_arg      => undef,
+    documentation => 'This is the event watcher ojbect handle',
 );
 has runner => (
-    is  => 'rw',
-    isa => 'CodeRef',
+    is            => 'rw',
+    isa           => 'CodeRef',
+    documentation => 'This is the subroutine reference that should be run with each file change',
 );
 has started => (
     is            => 'rw',
     isa           => 'Bool',
     default       => 0,
     init_arg      => undef,
+    documentation => 'Flags that tailing has started and not to limit the number of lines any more',
 );
 has stat_time => (
     is            => 'rw',
     isa           => 'Int',
     default       => time,
     init_arg      => undef,
+    documentation => 'The last time a file was stat()ed',
 );
 has stat_period => (
     is            => 'rw',
     isa           => 'Int',
     default       => 1,
+    documentation => 'The time period between checks if a file has been moved or deleted',
 );
 
 my $inotify;
