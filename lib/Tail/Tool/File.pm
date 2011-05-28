@@ -44,6 +44,11 @@ has size => (
 has pause => (
     is  => 'rw',
     isa => 'Bool',
+has auto_unpause => (
+    is            => 'rw',
+    isa           => 'Bool',
+    default       => 0,
+    init_arg      => undef,
 );
 has no_inotify => (
     is  => 'ro',
@@ -57,10 +62,21 @@ has runner => (
     isa => 'CodeRef',
 );
 has started => (
-    is       => 'rw',
-    isa      => 'Bool',
-    default  => 0,
-    init_arg => undef,
+    is            => 'rw',
+    isa           => 'Bool',
+    default       => 0,
+    init_arg      => undef,
+);
+has stat_time => (
+    is            => 'rw',
+    isa           => 'Int',
+    default       => time,
+    init_arg      => undef,
+);
+has stat_period => (
+    is            => 'rw',
+    isa           => 'Int',
+    default       => 1,
 );
 
 my $inotify;
@@ -95,11 +111,7 @@ sub watch {
     $self->watcher($w);
 
     my $fh = $self->handle;
-    if ( !$fh ) {
-        open $fh, '<', $self->name or die "Could not open '".$self->name."': $!\n";
-        $self->handle($fh);
-        $self->size(-s $self->name);
-    }
+    $self->_open_file();
 
     return $self->watcher;
 }
@@ -122,13 +134,38 @@ sub get_line {
         seek $fh, 0, 0;
     }
     else {
+        # reset file handle
         seek $fh, 0, 1;
     }
     $self->size($size);
 
-    return <$fh>;
+    my @lines = <$fh>;
+    if ( !@lines && time > $self->stat_time + $self->stat_period * 60 ) {
+        $self->stat_time(time);
+        if ( @{[ stat $fh ]}[1] != @{[ stat $self->name ]}[1] ) {
+            # close and reopen file incase the file has been rotated
+            close $fh;
+            $self->_open_file();
+        }
+    }
+    return @lines;
 }
 
+sub _open_file {
+    my ($self) = @_;
+    my $fh = $self->handle;
+    if ( !$fh || tell $fh == -1 ) {
+        if ( open $fh, '<', $self->name ) {
+            $self->handle($fh);
+            $self->size(-s $self->name);
+        }
+        else {
+            warn "Could not open '".$self->name."': $!\n" if !$self->auto_unpause;
+            $self->pause(1);
+            $self->auto_unpause(1);
+        }
+    }
+}
 1;
 
 __END__
