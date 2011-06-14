@@ -96,6 +96,15 @@ around BUILDARGS => sub {
 
 sub _new_plugin {
     my ( $name, $value ) = @_;
+    my $plugin = _load_plugin($name);
+
+    my $plg = $plugin->new($value);
+
+    return $plg;
+}
+
+sub _load_plugin {
+    my ( $name ) = @_;
     my $plugin
         = $name =~ /^\+/
         ? substr $name, 1, 999
@@ -114,9 +123,7 @@ sub _new_plugin {
         }
     }
 
-    my $plg = $plugin->new($value);
-
-    return $plg;
+    return $plugin;
 }
 
 sub tail {

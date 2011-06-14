@@ -237,11 +237,11 @@ MENU
 
     if ( $answer eq 'a' ) {
         my $new_file = prompt("New file name : ", '-tty') . '';
-        if ( -f $new_file ) {
-            my $file = Tail::Tool::File->new( name => $new_file );
-            push @{ $tt->files }, $file;
-            $tt->tail( 1 );
-        }
+
+        my $file = Tail::Tool::File->new( name => $new_file );
+        $file->parent($tt);
+        push @{ $tt->files }, $file;
+        $tt->tail( 1 );
     }
     else {
         update_file( $answer - 1 );
