@@ -24,7 +24,13 @@ has name => (
     isa           => 'Str',
     documentation => 'The name of a file to be watched',
 );
-
+has remote => (
+    is            => 'rw',
+    isa           => 'Bool',
+    default       => 0,
+    init_arg      => undef,
+    documentation => 'Flags that the file is located on a remote server',
+);
 has cmd => (
     is            => 'rw',
     isa           => 'Str',
@@ -93,14 +99,21 @@ has stat_period => (
     default       => 1,
     documentation => 'The time period between checks if a file has been moved or deleted',
 );
+has tailer => (
+    is            => 'rw',
+    isa           => 'Tail::Tool',
+    documentation => 'The object that this file belongs to',
+);
 
 my $inotify;
 my $watcher;
 sub watch {
     my ($self, $lines) = @_;
 
-    return 0 if $self->pause || !-e $self->name;
+    return 0 if $self->pause;
     return $self->watcher if $self->watcher;
+
+    $self->_get_file_handle();
 
     if ( !defined $inotify ) {
         eval { require Linux::Inotify2 };
@@ -113,7 +126,7 @@ sub watch {
     }
 
     my $w;
-    if ( $inotify && !$self->no_inotify ) {
+    if ( !$self->remote  && $inotify && !$self->no_inotify ) {
         $w = $inotify->watch( $self->name, Linux::Inotify2::IN_ALL_EVENTS(), sub { $self->run } );
         if ( !$watcher ) {
             $watcher = AE::io $inotify->fileno, 0, sub { $inotify->poll };
@@ -124,9 +137,6 @@ sub watch {
     }
 
     $self->watcher($w);
-
-    my $fh = $self->handle;
-    $self->_open_file();
 
     return $self->watcher;
 }
@@ -139,37 +149,62 @@ sub run {
 
 sub get_line {
     my ($self) = @_;
-    my $fh = $self->handle;
+    my $fh = $self->_get_file_handle;
 
     return if $self->pause;
 
-    my $size = -s $self->name;
-    if ( $size < $self->size ) {
-        warn $self->name . " was truncated!\n";
-        seek $fh, 0, 0;
+    if ( !$self->remote ) {
+        my $size = -s $self->name;
+        if ( $size < $self->size ) {
+            warn $self->name . " was truncated!\n";
+            seek $fh, 0, 0;
+        }
+        else {
+            # reset file handle
+            seek $fh, 0, 1;
+        }
+        $self->size($size);
     }
-    else {
-        # reset file handle
-        seek $fh, 0, 1;
-    }
-    $self->size($size);
 
     my @lines = <$fh>;
-    if ( !@lines && time > $self->stat_time + $self->stat_period * 60 ) {
+    if ( !$self->remote && !@lines && time > $self->stat_time + $self->stat_period * 60 ) {
         $self->stat_time(time);
         if ( @{[ stat $fh ]}[1] != @{[ stat $self->name ]}[1] ) {
             # close and reopen file incase the file has been rotated
             close $fh;
-            $self->_open_file();
+            $self->_get_file_handle();
         }
     }
     return @lines;
 }
 
-sub _open_file {
+sub _get_file_handle {
     my ($self) = @_;
+
     my $fh = $self->handle;
-    if ( !$fh || tell $fh == -1 ) {
+    if ( $self->remote || $self->name =~ m{^ssh://}xms ) {
+        $self->remote(1);
+        return if $self->pause;
+
+        my ($user, $host, $port, $file) = $self->name =~ m{^ssh://(?: ([^@]+) [@] )? ( [\w.-]+ ) (?: [:] (\d+) )? / (.*)}xms;
+        if ( !$fh ) {
+            my $cmd = sprintf "ssh %s$host %s 'tail -f -n %d %s'",
+               ( $user         ? "$user\@"            : '' ),
+               ( $port         ? "-P $port"           : '' ),
+               ( $self->parent ? $self->parent->lines : 10 ),
+               _shell_quote($file);
+
+            if ( my $pid = open $fh, '|-', $cmd ) {
+                $self->pid($pid);
+                $self->handle($fh);
+            }
+            else {
+                $self->pause(1);
+                warn "Could not tail remote file (" . $self->name . "): $!";
+            }
+        }
+    }
+    elsif ( !$fh || tell $fh == -1 ) {
         if ( open $fh, '<', $self->name ) {
             $self->handle($fh);
             $self->size(-s $self->name);
@@ -180,7 +215,17 @@ sub _open_file {
             $self->auto_unpause(1);
         }
     }
+
+    return $fh;
 }
+
+sub _shell_quote {
+    my ($file) = @_;
+    $file =~ s{ ( [^\w-./] ) }{\\$1}gxms;
+
+    return $file;
+}
+
 1;
 
 __END__
