@@ -132,6 +132,7 @@ sub tail {
     for my $file (@{ $self->files }) {
         next if $file->runner;
         $file->runner( sub { $self->run(@_) } );
+        $file->parent($self);
         $file->watch();
         $file->run() if !$no_start;
     }
