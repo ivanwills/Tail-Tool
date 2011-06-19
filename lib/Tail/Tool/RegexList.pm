@@ -14,7 +14,7 @@ use Data::Dumper qw/Dumper/;
 use English qw/ -no_match_vars /;
 use Tail::Tool::Regex;
 
-our $VERSION     = version->new('0.0.1');
+our $VERSION     = version->new('0.1.0');
 
 subtype 'ArrayRefRegex'
     => as 'ArrayRef[Tail::Tool::Regex]';
@@ -102,7 +102,7 @@ Tail::Tool::RegexList - <One-line description of module's purpose>
 
 =head1 VERSION
 
-This documentation refers to Tail::Tool::RegexList version 0.1.
+This documentation refers to Tail::Tool::RegexList version 0.1.0.
 
 
 =head1 SYNOPSIS

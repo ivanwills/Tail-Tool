@@ -11,7 +11,7 @@ use Moose::Util::TypeConstraints;
 use version;
 use English qw/ -no_match_vars /;
 
-our $VERSION = version->new('0.0.1');
+our $VERSION = version->new('0.1.0');
 
 coerce 'RegexpRef'
     => from 'Str'
@@ -70,7 +70,7 @@ Tail::Tool::Regex - Base class for regex details
 
 =head1 VERSION
 
-This documentation refers to Tail::Tool::Regex version 0.1.
+This documentation refers to Tail::Tool::Regex version 0.1.0.
 
 =head1 SYNOPSIS
 
