@@ -5,6 +5,7 @@ author:
 build_requires:
   Test::More: 0
   Test::NoWarnings: 0
+  Test::Output: 0
 configure_requires:
   Module::Build: 0.36
 generated_by: 'Module::Build version 0.3607'
@@ -16,40 +17,40 @@ name: Tail-Tool
 provides:
   Tail::Tool:
     file: lib/Tail/Tool.pm
-    version: v0.0.1
+    version: v0.1.0
   Tail::Tool::File:
     file: lib/Tail/Tool/File.pm
-    version: v0.0.1
+    version: v0.1.0
   Tail::Tool::Plugin::GroupLines:
     file: lib/Tail/Tool/Plugin/GroupLines.pm
-    version: v0.0.1
+    version: v0.1.0
   Tail::Tool::Plugin::Highlight:
     file: lib/Tail/Tool/Plugin/Highlight.pm
-    version: v0.0.1
+    version: v0.1.0
   Tail::Tool::Plugin::Ignore:
     file: lib/Tail/Tool/Plugin/Ignore.pm
-    version: v0.0.1
+    version: v0.1.0
   Tail::Tool::Plugin::Match:
     file: lib/Tail/Tool/Plugin/Match.pm
-    version: v0.0.1
+    version: v0.1.0
   Tail::Tool::Plugin::Replace:
     file: lib/Tail/Tool/Plugin/Replace.pm
-    version: v0.0.1
+    version: v0.1.0
   Tail::Tool::Plugin::Spacing:
     file: lib/Tail/Tool/Plugin/Spacing.pm
-    version: v0.0.1
+    version: v0.1.0
   Tail::Tool::PostProcess:
     file: lib/Tail/Tool/PostProcess.pm
-    version: v0.0.1
+    version: v0.1.0
   Tail::Tool::PreProcess:
     file: lib/Tail/Tool/PreProcess.pm
-    version: v0.0.1
+    version: v0.1.0
   Tail::Tool::Regex:
     file: lib/Tail/Tool/Regex.pm
-    version: v0.0.1
+    version: v0.1.0
   Tail::Tool::RegexList:
     file: lib/Tail/Tool/RegexList.pm
-    version: v0.0.1
+    version: v0.1.0
 requires:
   AnyEvent: 0
   Data::Dump::Streamer: 0
@@ -76,4 +77,4 @@ resources:
   bugtracker: http://rt.cpan.org/NoAuth/Bugs.html?Dist=Tail::Tool
   license: http://dev.perl.org/licenses/
   repository: git://github.com/ivanwills/Tail-Tool.git
-version: v0.0.1
+version: v0.1.0
