@@ -146,6 +146,7 @@ sub restart {
 $plugins
  f  Change tailed files ($files)
  r  Resume tailing
+ c  Clear screen and resume tailing
  l  Load Config
  s  Save Config
  b  Shell out
@@ -158,6 +159,10 @@ MENU
         update_files();
     }
     elsif ( $answer eq 'r' ) {
+        return 1;
+    }
+    elsif ( $answer eq 'c' ) {
+        print "\n" x 2_000;
         return 1;
     }
     elsif ( $answer eq 'l' ) {
