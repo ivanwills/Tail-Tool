@@ -191,7 +191,7 @@ sub _get_file_handle {
             my $cmd = sprintf "ssh %s$host %s 'tail -f -n %d %s'",
                ( $user         ? "$user\@"            : '' ),
                ( $port         ? "-P $port"           : '' ),
-               ( $self->parent ? $self->parent->lines : 10 ),
+               ( $self->tailer ? $self->tailer->lines : 10 ),
                _shell_quote($file);
 
             if ( my $pid = open $fh, '|-', $cmd ) {
