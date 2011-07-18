@@ -244,7 +244,7 @@ MENU
         my $new_file = prompt("New file name : ", '-tty') . '';
 
         my $file = Tail::Tool::File->new( name => $new_file );
-        $file->parent($tt);
+        $file->tailer($tt);
         push @{ $tt->files }, $file;
         $tt->tail( 1 );
     }
