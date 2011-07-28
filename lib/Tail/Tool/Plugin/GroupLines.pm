@@ -14,6 +14,7 @@ use List::Util;
 #use List::MoreUtils;
 use Data::Dumper qw/Dumper/;
 use English qw/ -no_match_vars /;
+use AnyEvent;
 
 extends 'Tail::Tool::PreProcess';
 with 'Tail::Tool::RegexList';
@@ -29,7 +30,7 @@ has end => (
 );
 has files => (
     is      => 'rw',
-    isa     => 'HashRef[String]',
+    isa     => 'HashRef[HashRef]',
 );
 
 sub process {
@@ -41,20 +42,32 @@ sub process {
 
     my $match = grep {my $r = $_->regex; $_->enabled && $line =~ /$r/  } @{ $self->regex };
 
-    if ($match) {
+    if ( $match || $self->files->{$file->name}{show} ) {
         if ( $self->end ) {
-            $line .= $self->files->{$file->name};
-            $self->files->{$file->name} = '';
+            $line .= $self->files->{$file->name}{line};
+            $self->files->{$file->name}{line} = '';
         }
         else {
-            my $new_line = $self->files->{$file->name};
-            $self->files->{$file->name} = $line;
+            my $new_line = $self->files->{$file->name}{line};
+            $self->files->{$file->name}{line} = $line;
             $line = $new_line;
         }
+        undef $self->files->{$file->name}{watcher};
+        undef $self->files->{$file->name}{show};
     }
     else {
-        $self->files->{$file->name} .= $line;
+        $self->files->{$file->name}{line} .= $line;
         $line = undef;
+        if ( !$self->end && !$self->files->{$file->name}{watcher} ) {
+            # create a timer that will cause log lines to be written 2s after
+            # they are first encounted when the match method is on the start of
+            # the line, other wise these lines wont be shown until the next line
+            # is found which may be some time.
+            $self->files->{$file->name}{watcher} = AE::timer 2, 0, sub {
+                $self->files->{$file->name}{show} = 1;
+                $file->run();
+            };
+        }
     }
 
     return defined $line ? ($line) : ();
