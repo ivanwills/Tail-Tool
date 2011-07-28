@@ -180,6 +180,9 @@ MENU
 
     exit if !defined $answer || $answer eq '' || lc $answer eq 'q';
 
+    # reinstall interupt handler
+    $restart->{int} = AE::signal INT => \&restart;
+
     return restart();
 }
 
