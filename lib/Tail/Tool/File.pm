@@ -163,7 +163,7 @@ sub get_line {
             # reset file handle
             seek $fh, 0, 1;
         }
-        $self->size($size);
+        $self->size($size || 0);
     }
 
     my @lines = <$fh>;
