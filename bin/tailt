@@ -21,7 +21,8 @@ use Path::Class;
 use Tail::Tool;
 use Term::Spinner;
 use AnyEvent;
-use EV;
+#use EV;
+use AnyEvent::Impl::Perl;
 use IO::Prompt qw/prompt/;
 use TryCatch;
 use YAML qw/LoadFile DumpFile Dump/;
@@ -112,7 +113,8 @@ sub main {
 
     $tt->tail();
 
-    EV::loop;
+    #EV::loop;
+    AnyEvent::Impl::Perl::loop;
 
     return;
 }
