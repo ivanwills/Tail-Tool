@@ -44,6 +44,7 @@ has pid => (
 has handle => (
     is            => 'rw',
     isa           => 'FileHandle',
+    clearer       => 'clear_handle',
     documentation => 'The opened filehandle of name',
 );
 has size => (
@@ -157,7 +158,9 @@ sub get_line {
         my $size = -s $self->name;
         if ( $size < $self->size ) {
             warn $self->name . " was truncated!\n";
-            seek $fh, 0, 0;
+            close $fh;
+            $self->clear_handle;
+            $fh = $self->_get_file_handle;
         }
         else {
             # reset file handle
