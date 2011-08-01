@@ -150,8 +150,13 @@ sub run {
 
     for my $pre ( @{ $self->pre_process } ) {
         my @new;
-        for my $line (@lines) {
-            push @new, $pre->process($line, $file);
+        if (@lines) {
+            for my $line (@lines) {
+                push @new, $pre->process($line, $file);
+            }
+        }
+        elsif ( $pre->can('allow_empty') && $pre->allow_empty ) {
+            push @new, $pre->process('', $file);
         }
         @lines = @new;
     }
