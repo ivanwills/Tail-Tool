@@ -1,5 +1,19 @@
 Revision history for Tail-Tool
 
+0.2.0   2011-08-05
+        Removed EV dependency
+        Fixed issue when Test::Kwalitee not installed
+        Added the ability to process plugins when no lines have been read if they flag allow_lines attribute
+        Added closing and reopening the file handle incase the log file was deleted
+        Changed from EV events to AnyEvent::Impl::Perl which fixes ^C handling
+        Fixed issue when a file has been truncated and the file size is undefined
+        Trying to get group lines to not freeze the opperation of tailing
+        Added reinstalling interupt handler after it's called to try and fix ^C handling
+        Fixed missing renamed method parent to tailer
+        Fixed parent -> tailer change
+        Fixed missing option
+        Added a clear screen option
+
 0.1.0   2011-06-26
         First version, released on an unsuspecting world.
 
