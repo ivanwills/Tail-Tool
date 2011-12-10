@@ -26,16 +26,16 @@ plan skip_all => "Test::Spelling required for testing POD spelling" if $@;
 plan skip_all => "spell command required for testing POD spelling" if !$found;
 
 add_stopwords(qw/
-    Hornsby
     NSW
+    Hornsby
     Param
+    eg
     colour
     coloured
     colourer
     colours
     tailt
     AnyEvent
-    eg
     pre
     plugins
     Plugins
