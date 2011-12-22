@@ -649,16 +649,18 @@ This documentation refers to tailt version 0.2.0.
 
 =head1 SYNOPSIS
 
-   tailt [option] file1 [file2 ...]
+   tailt [option] file1 [ file2 ...]
    tailt --help | --man | --VERSION
 
  OPTIONS:
+  file             This can be a local file or a remote file specified by an
+                   ssh URI eg ssh://user@example.com:22//var/log/error.log
   -r --restart     Turn on menu, which allows chnaging of options/files/plugin
                    configuration on the fly. To see the menu type any thing
                    other than q and press enter, typing q & enter quit.
   -n --lines=int   The number of lines form the end of a file to start tailing
                    The default is 10.
-  -s --config=str  Use the str config option from previously save config
+  -c --config=str  Use the str config option from previously save config
      --no_inotify  Inotify works wonderfully usually but if a file is on a network
                    networked drive it sometimes doesn't fire when a tailed file
                    changes, this option turns off inotify and uses the polling
@@ -679,6 +681,19 @@ This documentation refers to tailt version 0.2.0.
      --spacing key=value
 
 =head1 DESCRIPTION
+
+=head2 Files
+
+You can specify local files either relativly or absolutly. Remote files uses
+a vim like syntax for specifying remote files, it uses the ssh protocol which
+may mean that you may have issues if you don't use ssh keys. The format for
+the URI is:
+
+ ssh://[user@]host[:port]/(home/relative/file|/absolute/file)
+
+Note if you want a absolute file location you must have two slashes at the
+start of the path. One slash means that the file is relateive to the user
+that you are logging in as.
 
 =head1 SUBROUTINES/METHODS
 
