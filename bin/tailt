@@ -97,6 +97,8 @@ sub main {
         delete $option{restart};
     }
 
+    @ARGV = map {glob($_)} @ARGV;
+
     $tt = Tail::Tool->new(
         files => \@ARGV,
         #printer => \&printer,
