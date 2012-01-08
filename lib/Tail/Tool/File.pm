@@ -134,7 +134,7 @@ sub watch {
         }
     }
     else {
-        $w = AE::timer 0, 2, sub { $self->run };
+        $w = AE::timer 0, 1, sub { $self->run };
     }
 
     $self->watcher($w);
@@ -144,7 +144,6 @@ sub watch {
 
 sub run {
     my ($self, $first) = @_;
-
     $self->runner->($self, $first);
 }
 
@@ -170,9 +169,13 @@ sub get_line {
     }
 
     my @lines = <$fh>;
+    # re-check the stat time of the file to make sure that the file has not been rotated
     if ( !$self->remote && !@lines && time > $self->stat_time + $self->stat_period * 60 ) {
         $self->stat_time(time);
-        if ( @{[ stat $fh ]}[1] != @{[ stat $self->name ]}[1] ) {
+        my @stat_file   = stat $self->name;
+        my @stat_handle = stat $fh;
+        # check if the file handle's modified time is not the same as files'
+        if ( $stat_handle[1] != $stat_file[1] ) {
             # close and reopen file incase the file has been rotated
             close $fh;
             $self->_get_file_handle();
