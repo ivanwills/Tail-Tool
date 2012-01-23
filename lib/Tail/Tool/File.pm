@@ -168,7 +168,15 @@ sub get_line {
         $self->size($size || 0);
     }
 
-    my @lines = <$fh>;
+    my @lines;
+    if ( $self->remote ) {
+        my $line = <$fh>;
+        push @lines, $line;
+    }
+    else {
+        @lines = <$fh>;
+    }
+
     # re-check the stat time of the file to make sure that the file has not been rotated
     if ( !$self->remote && !@lines && time > $self->stat_time + $self->stat_period * 60 ) {
         $self->stat_time(time);
@@ -192,7 +200,7 @@ sub _get_file_handle {
         $self->remote(1);
         return if $self->pause;
 
-        my ($user, $host, $port, $file) = $self->name =~ m{^ssh://(?: ([^@]+) [@] )? ( [\w.-]+ ) (?: [:] (\d+) )? / (.*)}xms;
+        my ($user, $host, $port, $file) = $self->name =~ m{^ssh://(?: ([^@]+) [@] )? ( [\w.-]+ ) (?: [:] (\d+) )? / (.*)$}xms;
         if ( !$fh ) {
             my $cmd = sprintf "ssh %s$host %s 'tail -f -n %d %s'",
                ( $user         ? "$user\@"            : '' ),
@@ -200,7 +208,7 @@ sub _get_file_handle {
                ( $self->tailer ? $self->tailer->lines : 10 ),
                _shell_quote($file);
 
-            if ( my $pid = open $fh, '|-', $cmd ) {
+            if ( my $pid = open $fh, '-|', $cmd ) {
                 $self->pid($pid);
                 $self->handle($fh);
             }
