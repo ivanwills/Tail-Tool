@@ -168,14 +168,7 @@ sub get_line {
         $self->size($size || 0);
     }
 
-    my @lines;
-    if ( $self->remote ) {
-        my $line = <$fh>;
-        push @lines, $line;
-    }
-    else {
-        @lines = <$fh>;
-    }
+    my @lines = <$fh>;
 
     # re-check the stat time of the file to make sure that the file has not been rotated
     if ( !$self->remote && !@lines && time > $self->stat_time + $self->stat_period * 60 ) {
@@ -209,6 +202,7 @@ sub _get_file_handle {
                _shell_quote($file);
 
             if ( my $pid = open $fh, '-|', $cmd ) {
+                $fh->blocking(0);
                 $self->pid($pid);
                 $self->handle($fh);
             }
