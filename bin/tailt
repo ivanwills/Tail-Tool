@@ -149,13 +149,14 @@ $plugins
  f  Change tailed files ($files)
  r  Resume tailing
  c  Clear screen and resume tailing
+ p  Plugin ordering
  l  Load Config
  s  Save Config
  b  Shell out
  q  Quit
 MENU
 
-    my $answer = prompt_menu( 1 .. $i, qw/f r c l s q Q/ );
+    my $answer = prompt_menu( 1 .. $i, qw/f r c p l s q Q/ );
 
     if ( $answer eq 'f' ) {
         update_files();
@@ -166,6 +167,9 @@ MENU
     elsif ( $answer eq 'c' ) {
         print "\n" x 2_000;
         return 1;
+    }
+    elsif ( $answer eq 'p' ) {
+        plugin_order();
     }
     elsif ( $answer eq 'l' ) {
         load_config();
@@ -573,6 +577,83 @@ sub prompt_menu {
     print "\n" if @onechar;
 
     return $answer;
+}
+
+sub plugin_order {
+    print "\nPlugins:\n";
+    print "1.  Pre  Processing: ";
+    print join ", ", map {$a = ref $_; $a =~ s/^.*:://; $a} @{$tt->pre_process};
+    print "\n";
+    print "2.  Post Processing: ";
+    print join ", ", map {$a = ref $_; $a =~ s/^.*:://; $a} @{$tt->post_process};
+    print "\n";
+
+    my $answer = prompt_menu( qw/ 1 2 r R/ );
+    print "\n";
+    if ( !$answer || lc $answer eq 'r' ) {
+        return;
+    }
+
+    plugin_reorder( $answer == 1 ? $tt->pre_process : $tt->post_process );
+
+    return plugin_order();
+}
+
+sub plugin_reorder {
+    my ($plugins) = @_;
+
+    print "\n";
+    print join ", ", map {$a = ref $_; $a =~ s/^.*:://; $a} @{$plugins};
+    print "\n";
+    my $i = 0;
+    for my $plugin (@{$plugins}) {
+        my $name = ref $plugin;
+        $name =~ s/^.*:://;
+
+        printf "%2d  %s (%s)\n", ++$i, $name, $plugin->can('summarise') ? $plugin->summarise : '';
+    }
+
+    return if $1 == 1;
+
+    my $answer = prompt_menu( 1 .. $i, qw/r R/ );
+    print "\n";
+
+    return if !$answer || lc $answer eq 'r';
+
+    my ($first, $second);
+    if ( $answer == 1 ) {
+        $first  = 1;
+        $second = 2;
+    }
+    elsif ( $answer == $i ) {
+        $first  = $i - 1;
+        $second = $i;
+    }
+    else {
+        my $dir = prompt(
+            "Move (u)p or (d)own : ",
+            '-one_char',
+            '-tty',
+            -require => {
+                'Please enter either u or p' => qr/^[ud]$/,
+            },
+        ) . '';
+        if ( $dir eq 'u' ) {
+            $first  = $i;
+            $second = $i + 1;
+        }
+        else {
+            $first  = $i - 1;
+            $second = $i;
+        }
+    }
+
+    warn "Swapping $first => $second\n";
+    my $tmp = $plugins->[$first - 1];
+    $plugins->[$first - 1]  = $plugins->[$second - 1];
+    $plugins->[$second - 1] = $tmp;
+
+    return plugin_reorder($plugins);
 }
 
 sub load_config {
