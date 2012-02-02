@@ -16,7 +16,7 @@ use Data::Dumper qw/Dumper/;
 use English qw/ -no_match_vars /;
 
 
-our $VERSION     = version->new('0.2.0');
+our $VERSION     = version->new('0.3.0');
 our @EXPORT_OK   = qw//;
 our %EXPORT_TAGS = ();
 #our @EXPORT      = qw//;
@@ -46,7 +46,7 @@ tasks on tailed lines. eg filtering
 
 =head1 VERSION
 
-This documentation refers to Tail::Tool::PreProcess version 0.2.0.
+This documentation refers to Tail::Tool::PreProcess version 0.3.0.
 
 
 =head1 SYNOPSIS
