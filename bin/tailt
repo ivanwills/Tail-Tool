@@ -686,7 +686,7 @@ This documentation refers to tailt version 0.2.0.
 
 =head2 Files
 
-You can specify local files either relativly or absolutly. Remote files uses
+You can specify local files either relatively or absolutely. Remote files uses
 a vim like syntax for specifying remote files, it uses the ssh protocol which
 may mean that you may have issues if you don't use ssh keys. The format for
 the URI is:
@@ -694,7 +694,7 @@ the URI is:
  ssh://[user@]host[:port]/(home/relative/file|/absolute/file)
 
 Note if you want a absolute file location you must have two slashes at the
-start of the path. One slash means that the file is relateive to the user
+start of the path. One slash means that the file is relative to the user
 that you are logging in as.
 
 =head1 SUBROUTINES/METHODS

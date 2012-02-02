@@ -42,5 +42,7 @@ add_stopwords(qw/
     summarise
     STDOUT
     YAML
+    URI
+    ssh
 /);
 all_pod_files_spelling_ok();
