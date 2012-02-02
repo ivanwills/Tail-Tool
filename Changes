@@ -1,5 +1,16 @@
 Revision history for Tail-Tool
 
+0.3.0   2012-02-03
+        Licence date updated
+        Fixed spelling errors
+        Fixed blocking file reads correctly
+        Fixed issues with reading remote files
+        Changed tailt to glob input files before passing on to Tail::Tool module
+        Added all log files to be ignored by default
+        More documentation of code function
+        Updated licnese text
+        Removed generated files from git, updated to current standards
+
 0.2.0   2011-08-05
         Removed EV dependency
         Fixed issue when Test::Kwalitee not installed
