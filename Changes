@@ -1,5 +1,9 @@
 Revision history for Tail-Tool
 
+0.3.1   2012-02-06
+        Removed accidentally added junk
+        Added more tests
+
 0.3.0   2012-02-03
         Licence date updated
         Fixed spelling errors
@@ -8,7 +12,7 @@ Revision history for Tail-Tool
         Changed tailt to glob input files before passing on to Tail::Tool module
         Added all log files to be ignored by default
         More documentation of code function
-        Updated licnese text
+        Updated license text
         Removed generated files from git, updated to current standards
 
 0.2.0   2011-08-05
@@ -18,8 +22,8 @@ Revision history for Tail-Tool
         Added closing and reopening the file handle incase the log file was deleted
         Changed from EV events to AnyEvent::Impl::Perl which fixes ^C handling
         Fixed issue when a file has been truncated and the file size is undefined
-        Trying to get group lines to not freeze the opperation of tailing
-        Added reinstalling interupt handler after it's called to try and fix ^C handling
+        Trying to get group lines to not freeze the operation of tailing
+        Added reinstalling interrupt handler after it's called to try and fix ^C handling
         Fixed missing renamed method parent to tailer
         Fixed parent -> tailer change
         Fixed missing option
