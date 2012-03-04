@@ -68,7 +68,7 @@ sub process {
             # they are first encounted when the match method is on the start of
             # the line, other wise these lines wont be shown until the next line
             # is found which may be some time.
-            my $size = $file->size;
+            my $size = $file->size || 0;
             $self->files->{$file->name}{watcher} = AE::timer 2, 0, sub {
                 $self->allow_empty(1);
                 $self->files->{$file->name}{show} = 1;
