@@ -51,6 +51,7 @@ has size => (
     is            => 'rw',
     isa           => 'Int',
     init_arg      => undef,
+    default       => 0,
     documentation => 'The size of file when last read',
 );
 has pause => (
@@ -154,7 +155,7 @@ sub get_line {
     return if $self->pause;
 
     if ( !$self->remote ) {
-        my $size = -s $self->name;
+        my $size = -s $self->name || 0;
         if ( $size < $self->size ) {
             warn $self->name . " was truncated!\n";
             close $fh;
