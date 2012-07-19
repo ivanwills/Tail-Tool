@@ -39,7 +39,7 @@ my $builder = Module::Build->new(
         'Test::Perl::Critic' => 0,
         'Test::Kwalitee'     => 0,
         'Pod::Coverage'      => 0,
-    }
+    },
     add_to_cleanup     => [ 'Tail-Tool-*' ],
     create_makefile_pl => 'traditional',
     create_license     => 1,
