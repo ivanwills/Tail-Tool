@@ -7,6 +7,7 @@ package Tail::Tool::File;
 # $Revision$, $Source$, $Date$
 
 use Moose;
+use warnings;
 use version;
 use Carp;
 use Data::Dumper qw/Dumper/;
