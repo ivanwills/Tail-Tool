@@ -1,12 +1,15 @@
 Revision history for Tail-Tool
 
 0.3.2   2012-07-19
+        Updated with new version
         Upped version
         Added TODO markers for serialised regexes
         Added log to files to be skipped
         Fixed missing comma
         Added recommends for author test modules
         Added "use warnings"
+        Changed globbing of files to also pseudo glob servers (from code mssh) for sshed files
+        Fixed doing replacements
         Fixed warnings
         Defaulting size to zero if no size set
 
