@@ -1,5 +1,15 @@
 Revision history for Tail-Tool
 
+0.3.2   2012-07-19
+        Upped version
+        Added TODO markers for serialised regexes
+        Added log to files to be skipped
+        Fixed missing comma
+        Added recommends for author test modules
+        Added "use warnings"
+        Fixed warnings
+        Defaulting size to zero if no size set
+
 0.3.1   2012-02-06
         Removed accidentally added junk
         Added more tests
