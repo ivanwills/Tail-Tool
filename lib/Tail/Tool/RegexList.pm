@@ -72,6 +72,11 @@ has regex => (
     trigger => \&_set_regex,
 );
 
+has replace => (
+    is     => 'rw',
+    isa    => 'Str',
+);
+
 sub summarise {
     my ($self) = @_;
 

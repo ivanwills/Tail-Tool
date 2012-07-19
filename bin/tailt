@@ -97,10 +97,8 @@ sub main {
         delete $option{restart};
     }
 
-    @ARGV = map {glob($_)} @ARGV;
-
     $tt = Tail::Tool->new(
-        files => \@ARGV,
+        files => get_files(@ARGV),
         #printer => \&printer,
         %option,
     );
@@ -718,6 +716,60 @@ sub save_config {
 
     DumpFile($config_file, $config);
     return;
+}
+
+sub get_files {
+    my (@files) = @_;
+    my @all;
+
+    for my $file (@files) {
+        push @all,
+            $file =~ m{^ssh://} ? get_hosts([$file])
+            :                     glob($file);
+    }
+
+    return \@all;
+}
+
+# converts host ranges to actual host names
+sub get_hosts {
+    my ($hosts) = @_;
+    my @hosts;
+
+    my $int_re       = qr/ [0-9a-zA-Z] /xms;
+    my $range_re     = qr/ ($int_re) (?:[.][.]|-) ($int_re)/xms;
+    my $group_re     = qr/ (?: $int_re | $range_re )       /xms;
+    my $seperated_re = qr/ $group_re (?: , $group_re )  *  /xms;
+    my $num_range_re = qr/ [[{] ( $seperated_re ) [\]}]    /xms;
+
+    while ( my $host_range = shift @{$hosts} ) {
+        my ($num_range) = $host_range =~ /$num_range_re/;
+
+        if (!$num_range) {
+            push @hosts, $host_range;
+            next;
+            #if ( is_host($host_range) ) {
+            #    push @hosts, $host_range;
+            #    next;
+            #}
+            #else {
+            #    unshift @{$hosts}, $host_range;
+            #    last;
+            #}
+        }
+
+        my @numbs    = map { /$range_re/ ? ($1 .. $2) : ($_) } split /,/, $num_range;
+        my @hostmaps = map { $a=$host_range; $a =~ s/$num_range_re/$_/e; $a } @numbs;
+
+        if ( $hostmaps[0] =~ /$num_range_re/ ) {
+            push @{$option{host}}, @hostmaps;
+        }
+        else {
+            push @hosts, @hostmaps;
+        }
+    }
+
+    return @hosts;
 }
 
 __DATA__

@@ -231,7 +231,7 @@ sub _get_file_handle {
 
 sub _shell_quote {
     my ($file) = @_;
-    $file =~ s{ ( [^\w\-./] ) }{\\$1}gxms;
+    $file =~ s{ ( [^\w\-./?*] ) }{\\$1}gxms;
 
     return $file;
 }

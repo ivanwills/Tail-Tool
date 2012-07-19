@@ -33,7 +33,7 @@ sub process {
         if ( $match->enabled ) {
             my $reg = $match->regex;
             my $rep = $match->replace;
-            eval { $line =~ s/$reg/$rep/ };
+            eval { $line =~ s/$reg/eval qq{"$rep"}/e };
         }
     }
 
