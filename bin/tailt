@@ -54,6 +54,7 @@ sub main {
             helper  => 1,
         },
         [
+            'disabled|d=s@',
             'restart|r!',
             'lines|n=i',
             'no_inotify|no-inotify!',
@@ -97,11 +98,34 @@ sub main {
         delete $option{restart};
     }
 
+    my %disabled;
+    if ( @{ $option{disabled} } ) {
+        %disabled = (
+            map {
+                $_ => 1
+            }
+            map {
+                split /[,;]/, $_
+            }
+            @{ $option{disabled} }
+        );
+        push @ARGV, keys %disabled;
+        delete $option{disabled};
+    }
+
     $tt = Tail::Tool->new(
         files => get_files(@ARGV),
         #printer => \&printer,
         %option,
     );
+
+    if ( %disabled ) {
+        for my $file ( @{ $tt->files } ) {
+            if ( $disabled{$file->name} ) {
+                $file->pause(1);
+            }
+        }
+    }
 
     if ( $restore ) {
         push @{ $tt->pre_process }, @{ $restore->{pre_process} }
@@ -279,6 +303,7 @@ MENU
 
     if ( $answer eq 'p' ) {
         $file->pause( ! $file->pause );
+        $file->watch();
     }
     elsif ( $answer eq 'd' ) {
         my @files = @{ $tt->files };
@@ -800,6 +825,10 @@ This documentation refers to tailt version 0.3.0.
                    networked drive it sometimes doesn't fire when a tailed file
                    changes, this option turns off inotify and uses the polling
                    option
+  -d --disable=file
+                   Add the file to the list of files but don't automatically
+                   start tailing it. This can be specified more than once for
+                   multiple disabled files or comma/semi-comma seperated
 
   -v --verbose       Show more detailed option
      --VERSION       Prints the version information
