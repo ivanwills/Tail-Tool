@@ -105,6 +105,9 @@ sub main {
                 $_ => 1
             }
             map {
+                @{ get_files($_) }
+            }
+            map {
                 split /[,;]/, $_
             }
             @{ $option{disabled} }
