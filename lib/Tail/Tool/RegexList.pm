@@ -7,6 +7,7 @@ package Tail::Tool::RegexList;
 # $Revision$, $Source$, $Date$
 
 use strict;
+use warnings;
 use Moose::Role;
 use Moose::Util::TypeConstraints;
 use version;

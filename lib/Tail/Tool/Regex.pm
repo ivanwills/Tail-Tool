@@ -7,8 +7,9 @@ package Tail::Tool::Regex;
 # $Revision$, $Source$, $Date$
 
 use Moose;
-use Moose::Util::TypeConstraints;
+use warnings;
 use version;
+use Moose::Util::TypeConstraints;
 use English qw/ -no_match_vars /;
 
 our $VERSION = version->new('0.3.0');

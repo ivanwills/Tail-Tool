@@ -75,3 +75,4 @@ errors.err
 tmp-writer.pl
 .*\.log
 TODO
+log
