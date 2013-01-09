@@ -11,6 +11,7 @@ use warnings;
 use version;
 use Moose::Util::TypeConstraints;
 use English qw/ -no_match_vars /;
+use Term::ANSIColor qw/colored/;
 
 our $VERSION = version->new('0.3.0');
 
@@ -42,7 +43,7 @@ has enabled => (
 );
 
 sub summarise {
-    my ($self) = @_;
+    my ($self, $term) = @_;
 
     my $text = "qr/" . $self->regex . "/";
 
@@ -51,11 +52,15 @@ sub summarise {
     }
 
     if ( $self->has_colour ) {
-        $text .= ', colour=[' . ( join ', ', @{ $self->colour } ) . ']';
+        $text =
+            $term ? colored( $text, join ' ', @{ $self->colour } )
+            :       $text . ', colour=[' . ( join ', ', @{ $self->colour } ) . ']';
     }
 
     if ( !$self->enabled ) {
-        $text .= ', disabled';
+        $text =
+            $term ? colored( "[$text]", 'bold' )
+            :       $text . ', disabled';
     }
 
     return $text;
@@ -105,9 +110,10 @@ This documentation refers to Tail::Tool::Regex version 0.3.0.
 
 =head1 SUBROUTINES/METHODS
 
-=head2 C<summarise ()>
+=head2 C<summarise ( [$term] )>
 
-Returns a summary of this modules settings
+Returns a summary of this modules settings, if C<$term> is true the string is
+coloured for terminal displays.
 
 =head1 DIAGNOSTICS
 

@@ -78,11 +78,11 @@ has replace => (
 );
 
 sub summarise {
-    my ($self) = @_;
+    my ($self, $term) = @_;
 
     my @out;
     for my $regex ( @{ $self->regex } ) {
-        push @out, eval { $regex->summarise };
+        push @out, eval { $regex->summarise($term) };
         warn "regex not a propper Tail::Tool::Regex object: $@" if $@;
     }
     return join ', ', @out;
@@ -124,9 +124,10 @@ This documentation refers to Tail::Tool::RegexList version 0.3.0.
 
 =head1 SUBROUTINES/METHODS
 
-=head2 C<summarise ()>
+=head2 C<summarise ( [$term] )>
 
-Returns a summary of this modules settings
+Returns a summary of this modules settings, setting C<$term> true results in
+summary being coloured for terminal display
 
 =head1 DIAGNOSTICS
 
