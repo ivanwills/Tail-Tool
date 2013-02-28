@@ -264,7 +264,19 @@ sub get_plugins {
 
 sub update_files {
     my $i = 0;
-    my $files = join "\n", map { sprintf "%2d  Change %s", ++$i, colored( $_->name, $_->pause ? 'red' : 'green' ) } @{ $tt->files };
+    my $files
+        = join "\n",
+        map {
+            sprintf "%2d  Change %s", ++$i, colored( $_->name, $_->pause ? 'red' : 'green' )
+        }
+        sort {
+            my $aname = $a->name;
+            my $bname = $b->name;
+            $aname =~ s/(\d+)/sprintf "%05d", $1/egxms;
+            $bname =~ s/(\d+)/sprintf "%05d", $1/egxms;
+            $aname cmp $bname;
+        }
+        @{ $tt->files };
     print <<"MENU";
 
 $files
