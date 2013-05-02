@@ -88,6 +88,9 @@ sub main {
     if ( $option{restart} ) {
         $restart->{normal} = AE::io *STDIN, 0, sub {
             my $cmd = <STDIN>;
+
+            return if !$cmd || $cmd =~ /^\s*$/;
+
             chomp $cmd;
 
             exit 0 if lc $cmd eq 'q' || lc $cmd eq 'bye';
