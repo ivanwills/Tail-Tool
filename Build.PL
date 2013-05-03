@@ -5,7 +5,7 @@ use Module::Build;
 my $builder = Module::Build->new(
     module_name       => 'Tail::Tool',
     license           => 'perl',
-    dist_author       => 'Ivan Wills <ivan.wills@gamil.com>',
+    dist_author       => 'Ivan Wills <ivan.wills@gmail.com>',
     dist_version_from => 'lib/Tail/Tool.pm',
     requires          => {
         'perl'                         => 5.006,
@@ -29,6 +29,9 @@ my $builder = Module::Build->new(
         'warnings'                     => 0,
         'YAML'                         => 0,
     },
+    configure_requires => {
+        'Module::Build' => 0.38,
+    },
     build_requires => {
         'Test::More'       => 0,
         'Test::NoWarnings' => 0,
@@ -43,7 +46,7 @@ my $builder = Module::Build->new(
     add_to_cleanup     => [ 'Tail-Tool-*' ],
     create_makefile_pl => 'traditional',
     create_license     => 1,
-    meta_merge => {
+    meta_merge         => {
         resources => {
             repository => 'git://github.com/ivanwills/Tail-Tool.git',
             bugtracker => 'http://rt.cpan.org/NoAuth/Bugs.html?Dist=Tail::Tool',
