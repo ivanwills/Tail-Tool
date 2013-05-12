@@ -10,6 +10,7 @@ my $builder = Module::Build->new(
     requires          => {
         'perl'                         => 5.006,
         'AnyEvent'                     => 0,
+        'AnyEvent::Impl::Perl'         => 0,
         'Data::Dump::Streamer'         => 0,
         'Getopt::Alt'                  => 0,
         'IO::Prompt'                   => 0,
