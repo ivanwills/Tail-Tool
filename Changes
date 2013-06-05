@@ -1,5 +1,18 @@
 Revision history for Tail-Tool
 
+0.3.4   2013-05-13
+        Fixed bad build of 0.0.3
+        Added missing dependency from Build.PL
+
+0.3.3   2013-05-04
+        Added sanity check that Perl read something in we can process
+        Fixed not editing the correct file
+        Added sorting file names
+        Added colouring menus
+        Added allowing ssh expansion
+        Added the ability to start tailt with some files disabled
+        Fixed version log
+
 0.3.2   2012-07-19
         Updated with new version
         Upped version
