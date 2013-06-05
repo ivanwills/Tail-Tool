@@ -40,10 +40,6 @@ my $restart = {};
 my $tt;
 my $config_file = file("$ENV{HOME}/.tailtrc");
 
-if ( !@ARGV ) {
-    pod2usage( -verbose => 1 );
-}
-
 main();
 exit 0;
 
@@ -779,7 +775,7 @@ sub get_files {
             :                     glob($file);
     }
 
-    return \@all;
+    return @all ? \@all : ['-'];
 }
 
 # converts host ranges to actual host names

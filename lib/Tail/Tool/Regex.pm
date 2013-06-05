@@ -59,7 +59,7 @@ sub summarise {
 
     if ( !$self->enabled ) {
         $text =
-            $term ? colored( "[$text]", 'bold' )
+            $term ? colored( "[$text]", 'reverse' )
             :       $text . ', disabled';
     }
 

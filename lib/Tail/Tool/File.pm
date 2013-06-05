@@ -129,11 +129,16 @@ sub watch {
     }
 
     my $w;
-    if ( !$self->remote  && $inotify && !$self->no_inotify ) {
+    if ( $self->name ne '-' && !$self->remote  && $inotify && !$self->no_inotify ) {
         $w = $inotify->watch( $self->name, Linux::Inotify2::IN_ALL_EVENTS(), sub { $self->run } );
         if ( !$watcher ) {
             $watcher = AE::io $inotify->fileno, 0, sub { $inotify->poll };
         }
+    }
+    elsif ( $self->name eq '-' ) {
+        $self->started(1);
+        $w = AE::io \*STDIN, 0, sub { $self->run };
+        # TODO work out how to end if STDIN closed
     }
     else {
         $w = AE::timer 0, 1, sub { $self->run };
@@ -175,6 +180,7 @@ sub get_line {
     # re-check the stat time of the file to make sure that the file has not been rotated
     if ( !$self->remote && !@lines && time > $self->stat_time + $self->stat_period * 60 ) {
         $self->stat_time(time);
+        # TODO why is this being run if the file has finished? Should not be run for STDIN reading
         my @stat_file   = stat $self->name;
         my @stat_handle = stat $fh;
         # check if the file handle's modified time is not the same as files'
@@ -191,6 +197,11 @@ sub _get_file_handle {
     my ($self) = @_;
 
     my $fh = $self->handle;
+    if ( !$fh && $self->name eq '-' ) {
+        $self->handle(\*STDIN);
+        return $self->handle;
+    }
+
     if ( $self->remote || $self->name =~ m{^ssh://}xms ) {
         $self->remote(1);
         return if $self->pause;
