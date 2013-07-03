@@ -22,7 +22,7 @@ use Tail::Tool;
 use Term::Spinner;
 use Term::ANSIColor qw/colored/;
 use AnyEvent;
-use AnyEvent::Impl::Perl;
+use AnyEvent::Loop;
 use IO::Prompt qw/prompt/;
 use TryCatch;
 use YAML qw/LoadFile DumpFile Dump/;
@@ -140,7 +140,14 @@ sub main {
 
     $tt->tail();
 
-    AnyEvent::Impl::Perl::loop;
+    my $w = AE::timer 1, 1, sub {
+        my $count = 0;
+        for my $file (@{ $tt->files }) {
+            $count++ if $file->watcher;
+        }
+        exit if $count == 0;
+    };
+    AnyEvent::Loop::run;
 
     return;
 }

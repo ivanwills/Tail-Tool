@@ -10,6 +10,7 @@ use Moose;
 use warnings;
 use version;
 use Carp;
+use Scalar::Util qw/openhandle/;
 use Data::Dumper qw/Dumper/;
 use English qw/ -no_match_vars /;
 use Path::Class;
@@ -75,6 +76,7 @@ has no_inotify => (
 has watcher => (
     is            => 'rw',
     init_arg      => undef,
+    clearer       => 'clear_watcher',
     documentation => 'This is the event watcher ojbect handle',
 );
 has runner => (
@@ -184,7 +186,7 @@ sub get_line {
         my @stat_file   = stat $self->name;
         my @stat_handle = stat $fh;
         # check if the file handle's modified time is not the same as files'
-        if ( $stat_handle[1] != $stat_file[1] ) {
+        if ( !defined $stat_handle[1] || !defined $stat_file[1] || $stat_handle[1] != $stat_file[1] ) {
             # close and reopen file incase the file has been rotated
             close $fh;
             $self->_get_file_handle();
@@ -197,8 +199,13 @@ sub _get_file_handle {
     my ($self) = @_;
 
     my $fh = $self->handle;
-    if ( !$fh && $self->name eq '-' ) {
-        $self->handle(\*STDIN);
+    if ( $self->name eq '-' ) {
+        if ( !$fh ) {
+            $self->handle(\*STDIN);
+        }
+        elsif ( !openhandle($fh) ) {
+            $self->clear_watcher;
+        }
         return $self->handle;
     }
 
