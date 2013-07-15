@@ -2,12 +2,13 @@
 
 use strict;
 use warnings;
-use Test::More tests => 11 + 1;
+use Test::More tests => 12 + 1;
 use Test::NoWarnings;
 
 BEGIN {
     use_ok( 'Tail::Tool'                    );
     use_ok( 'Tail::Tool::File'              );
+    use_ok('Tail::Tool::Plugin::GroupLines' );
     use_ok( 'Tail::Tool::Plugin::Highlight' );
     use_ok( 'Tail::Tool::Plugin::Ignore'    );
     use_ok( 'Tail::Tool::Plugin::Match'     );
