@@ -65,7 +65,7 @@ sub main {
             'verbose|v+',
         ]
     );
-    %option = %{ $opt->opt };
+    %option = %{ $opt };
 
     # do stuff here
     for my $key (qw/Highlight Match Ignore Replace/) {
