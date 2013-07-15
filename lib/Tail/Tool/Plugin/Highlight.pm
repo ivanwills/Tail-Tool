@@ -21,7 +21,7 @@ use Readonly;
 extends 'Tail::Tool::PostProcess';
 with 'Tail::Tool::RegexList';
 
-our $VERSION     = version->new('0.3.0');
+our $VERSION     = version->new('0.3.5');
 our @EXPORT_OK   = qw//;
 our %EXPORT_TAGS = ();
 #our @EXPORT      = qw//;
@@ -116,7 +116,7 @@ regular expressions.
 
 =head1 VERSION
 
-This documentation refers to Tail::Tool::Plugin::Highlight version 0.3.0.
+This documentation refers to Tail::Tool::Plugin::Highlight version 0.3.5.
 
 
 =head1 SYNOPSIS

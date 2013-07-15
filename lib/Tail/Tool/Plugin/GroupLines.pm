@@ -20,7 +20,7 @@ use AnyEvent;
 extends 'Tail::Tool::PreProcess';
 with 'Tail::Tool::RegexList';
 
-our $VERSION     = version->new('0.3.0');
+our $VERSION     = version->new('0.3.5');
 our @EXPORT_OK   = qw//;
 our %EXPORT_TAGS = ();
 #our @EXPORT      = qw//;
@@ -92,7 +92,7 @@ plugins treat then as one line.
 
 =head1 VERSION
 
-This documentation refers to Tail::Tool::Plugin::GroupLines version 0.3.0.
+This documentation refers to Tail::Tool::Plugin::GroupLines version 0.3.5.
 
 =head1 SYNOPSIS
 

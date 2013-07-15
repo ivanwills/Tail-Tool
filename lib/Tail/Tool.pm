@@ -18,7 +18,7 @@ use Data::Dump::Streamer;
 use English qw/ -no_match_vars /;
 use Tail::Tool::File;
 
-our $VERSION     = version->new('0.3.4');
+our $VERSION     = version->new('0.3.5');
 our @EXPORT_OK   = qw//;
 our %EXPORT_TAGS = ();
 #our @EXPORT      = qw//;
@@ -239,7 +239,7 @@ Tail::Tool - Tool for sophisticated tailing of files
 
 =head1 VERSION
 
-This documentation refers to Tail::Tool version 0.3.4.
+This documentation refers to Tail::Tool version 0.3.5.
 
 
 =head1 SYNOPSIS

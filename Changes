@@ -1,5 +1,10 @@
 Revision history for Tail-Tool
 
+0.3.5   2013-07-15
+        Added missing module to test
+        Upgraded to using latest Getopt::Alt
+        Fixed code so that if all files have finished being read tailt will exit
+
 0.3.4   2013-05-13
         Fixed bad build of 0.0.3
         Added missing dependency from Build.PL

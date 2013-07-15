@@ -17,7 +17,7 @@ use Data::Dumper qw/Dumper/;
 use English qw/ -no_match_vars /;
 
 
-our $VERSION     = version->new('0.3.0');
+our $VERSION     = version->new('0.3.5');
 our @EXPORT_OK   = qw//;
 our %EXPORT_TAGS = ();
 #our @EXPORT      = qw//;
@@ -46,7 +46,7 @@ lines. eg highlighting
 
 =head1 VERSION
 
-This documentation refers to Tail::Tool::PostProcess version 0.3.0.
+This documentation refers to Tail::Tool::PostProcess version 0.3.5.
 
 =head1 SYNOPSIS
 
