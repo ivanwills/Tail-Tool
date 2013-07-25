@@ -75,7 +75,10 @@ around BUILDARGS => sub {
         next if $key eq 'post_process' || $key eq 'pre_process';
 
         if ( $key eq 'files' ) {
-            my @extra = ( no_inotify => $param{no_inotify} );
+            my @extra = (
+                no_inotify => $param{no_inotify},
+                restart    => $param{restart},
+            );
             for my $file ( @{ $param{$key} } ) {
                 $file = Tail::Tool::File->new(
                     ref $file ? $file : ( name => $file, @extra )

@@ -96,7 +96,6 @@ sub main {
             restart();
         };
         $restart->{int} = AE::signal INT => \&restart;
-        delete $option{restart};
     }
 
     my %disabled;
@@ -138,7 +137,7 @@ sub main {
             if @{ $restore->{post_process} || [] };
     }
 
-    my $w = AE::timer 0, 0.1, sub {
+    my $w = AE::timer 0.1, 0.1, sub {
         my $count = 0;
         for my $file (@{ $tt->files }) {
             $count++ if $file->watcher;

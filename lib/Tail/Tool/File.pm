@@ -109,6 +109,10 @@ has tailer => (
     isa           => 'Tail::Tool',
     documentation => 'The object that this file belongs to',
 );
+has restart => (
+    is      => 'ro',
+    default => 0,
+);
 
 my $inotify;
 my $watcher;
@@ -139,7 +143,12 @@ sub watch {
     }
     elsif ( $self->name eq '-' ) {
         $self->started(1);
-        $w = AE::io \*STDIN, 0, sub { $self->run };
+        $w = AE::io \*STDIN, 0, sub {
+            if ( !defined fileno \*STDIN ) {
+                close STDIN;
+            }
+            $self->run
+        };
         # TODO work out how to end if STDIN closed
     }
     else {
@@ -170,9 +179,12 @@ sub get_line {
             $self->clear_handle;
             $fh = $self->_get_file_handle;
         }
-        else {
+        elsif ($self->restart) {
             # reset file handle
             seek $fh, 0, 1;
+        }
+        else {
+            $self->clear_watcher;
         }
         $self->size($size || 0);
     }
