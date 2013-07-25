@@ -138,18 +138,19 @@ sub main {
             if @{ $restore->{post_process} || [] };
     }
 
-    $tt->tail();
-
-    my $w = AE::timer 1, 1, sub {
+    my $w = AE::timer 0, 0.1, sub {
         my $count = 0;
         for my $file (@{ $tt->files }) {
             $count++ if $file->watcher;
         }
         exit if $count == 0;
     };
+
+    $tt->tail();
+
     AnyEvent::Loop::run;
 
-    return;
+    return $w;
 }
 
 sub restart {
