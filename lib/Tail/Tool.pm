@@ -85,7 +85,7 @@ around BUILDARGS => sub {
                 );
             }
         }
-        elsif ( $key eq 'lines' || $key eq 'printer' || $key eq 'no_inotify' ) {
+        elsif ( $key eq 'lines' || $key eq 'printer' || $key eq 'no_inotify' || $key eq 'restart' ) {
         }
         else {
             my $plg = _new_plugin( $key, $param{$key} );
