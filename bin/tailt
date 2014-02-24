@@ -137,13 +137,17 @@ sub main {
             if @{ $restore->{post_process} || [] };
     }
 
-    my $w = AE::timer 0.1, 0.1, sub {
-        my $count = 0;
-        for my $file (@{ $tt->files }) {
-            $count++ if $file->watcher;
-        }
-        exit if $count == 0;
-    };
+    my $w;
+    if ( grep { $_->{name} eq '-' } @{ $tt->files } ) {
+        # check that all files have finished if we are looking at STDIN
+        $w = AE::timer 0.1, 0.1, sub {
+            my $count = 0;
+            for my $file (@{ $tt->files }) {
+                $count++ if $file->watcher;
+            }
+            exit if $count == 0;
+        };
+    }
 
     $tt->tail();
 
