@@ -111,8 +111,7 @@ __END__
 
 =head1 NAME
 
-Tail::Tool::Plugin::Highlight - Highlights any text that matches the supplied
-regular expressions.
+Tail::Tool::Plugin::Highlight - Highlights any text that matches the supplied regular expressions.
 
 =head1 VERSION
 

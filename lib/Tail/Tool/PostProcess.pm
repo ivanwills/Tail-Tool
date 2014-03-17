@@ -41,8 +41,7 @@ __END__
 
 =head1 NAME
 
-Tail::Tool::PostProcess - The parent module for plugins that change individual
-lines. eg highlighting
+Tail::Tool::PostProcess - The parent module for plugins that change individual lines. eg highlighting
 
 =head1 VERSION
 

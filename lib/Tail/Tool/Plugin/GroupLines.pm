@@ -87,8 +87,7 @@ __END__
 
 =head1 NAME
 
-Tail::Tool::Plugin::GroupLines - Groups real lines of a log file so that other
-plugins treat then as one line.
+Tail::Tool::Plugin::GroupLines - Groups real lines of a log file so that other plugins treat then as one line.
 
 =head1 VERSION
 

@@ -42,8 +42,7 @@ __END__
 
 =head1 NAME
 
-Tail::Tool::PreProcess - Parent module for Plugins that perform pre-processing
-tasks on tailed lines. eg filtering
+Tail::Tool::PreProcess - Parent module for Plugins that perform pre-processing tasks on tailed lines. eg filtering
 
 =head1 VERSION
 

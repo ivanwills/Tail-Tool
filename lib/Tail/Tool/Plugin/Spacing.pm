@@ -93,8 +93,7 @@ __END__
 
 =head1 NAME
 
-Tail::Tool::Plugin::Spacing - Prints spaces when there has been a pause in
-running.
+Tail::Tool::Plugin::Spacing - Prints spaces when there has been a pause in running.
 
 =head1 VERSION
 
