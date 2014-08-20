@@ -1,5 +1,14 @@
 Revision history for Tail-Tool
 
+0.3.6   2014-08-20
+        Fixed travis-ci config (Ivan Wills)
+        Added travis config (Ivan Wills)
+        Fixed abstracts to match spec per http://neilb.org/2014/02/19/compliant-abstract.html (Ivan Wills)
+        Fixed end cleanup (Ivan Wills)
+        Adding tag files (Ivan Wills)
+        Added skipping trying to find "restart" plugin (Ivan Wills)
+        Finally fixed non-restart mode, probably need to move to follow mode (Ivan Wills)
+
 0.3.5   2013-07-15
         Added missing module to test
         Upgraded to using latest Getopt::Alt

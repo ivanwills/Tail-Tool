@@ -27,7 +27,7 @@ use IO::Prompt qw/prompt/;
 use TryCatch;
 use YAML qw/LoadFile DumpFile Dump/;
 
-our $VERSION = version->new('0.3.5');
+our $VERSION = version->new('0.3.6');
 my ($name)   = $PROGRAM_NAME =~ m{^.*/(.*?)$}mxs;
 my $spinner = Term::Spinner->new();
 
@@ -838,7 +838,7 @@ tailt - Tail files using the Tail::Tool library
 
 =head1 VERSION
 
-This documentation refers to tailt version 0.3.5.
+This documentation refers to tailt version 0.3.6.
 
 =head1 SYNOPSIS
 
