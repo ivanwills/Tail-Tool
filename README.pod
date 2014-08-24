@@ -1,8 +1,14 @@
-Tail-Tool
+=pod
+
+=begin html
+
+<a href="https://travis-ci.org/ivanwills/Tail-Tool"><img src="https://travis-ci.org/ivanwills/Tail-Tool.png" alt="Tail-Tool"></a>
+
+=head1 Tail-Tool
 
 Library for tailing files with plugins to enhance the output of the tail
 
-INSTALLATION
+=head1 INSTALLATION
 
 To install this module, run the following commands:
 
@@ -11,7 +17,7 @@ To install this module, run the following commands:
     ./Build test
     ./Build install
 
-SUPPORT AND DOCUMENTATION
+=head1 SUPPORT AND DOCUMENTATION
 
 After installing, you can find documentation for this module with the
 perldoc command.
@@ -35,13 +41,14 @@ You can also look for information at:
     Source Code
         git://github.com/ivanwills/Tail-Tool.git
 
-COPYRIGHT AND LICENCE
+=head1 COPYRIGHT AND LICENCE
 
-Copyright (C) 2010 Ivan Wills
+Copyright (C) 2010-2014 Ivan Wills
 
 This program is free software; you can redistribute it and/or modify it
 under the terms of either: the GNU General Public License as published
 by the Free Software Foundation; or the Artistic License.
 
-See http://Ivan Wills.perl.org/licenses/ for more information.
+See http://dev.perl.org/licenses/ for more information.
 
+=cut
