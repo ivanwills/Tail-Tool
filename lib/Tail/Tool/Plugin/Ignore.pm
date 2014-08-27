@@ -19,7 +19,7 @@ use English qw/ -no_match_vars /;
 extends 'Tail::Tool::PreProcess';
 with 'Tail::Tool::RegexList';
 
-our $VERSION     = version->new('0.3.5');
+our $VERSION     = version->new('0.3.6');
 our @EXPORT_OK   = qw//;
 our %EXPORT_TAGS = ();
 #our @EXPORT      = qw//;
@@ -51,7 +51,7 @@ Tail::Tool::Plugin::Ignore - <One-line description of module's purpose>
 
 =head1 VERSION
 
-This documentation refers to Tail::Tool::Plugin::Ignore version 0.3.5.
+This documentation refers to Tail::Tool::Plugin::Ignore version 0.3.6.
 
 
 =head1 SYNOPSIS

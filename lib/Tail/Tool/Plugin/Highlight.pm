@@ -21,7 +21,7 @@ use Readonly;
 extends 'Tail::Tool::PostProcess';
 with 'Tail::Tool::RegexList';
 
-our $VERSION     = version->new('0.3.5');
+our $VERSION     = version->new('0.3.6');
 our @EXPORT_OK   = qw//;
 our %EXPORT_TAGS = ();
 #our @EXPORT      = qw//;
@@ -115,7 +115,7 @@ Tail::Tool::Plugin::Highlight - Highlights any text that matches the supplied re
 
 =head1 VERSION
 
-This documentation refers to Tail::Tool::Plugin::Highlight version 0.3.5.
+This documentation refers to Tail::Tool::Plugin::Highlight version 0.3.6.
 
 
 =head1 SYNOPSIS

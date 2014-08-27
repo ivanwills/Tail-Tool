@@ -20,7 +20,7 @@ use AnyEvent;
 extends 'Tail::Tool::PreProcess';
 with 'Tail::Tool::RegexList';
 
-our $VERSION     = version->new('0.3.5');
+our $VERSION     = version->new('0.3.6');
 our @EXPORT_OK   = qw//;
 our %EXPORT_TAGS = ();
 #our @EXPORT      = qw//;
@@ -91,7 +91,7 @@ Tail::Tool::Plugin::GroupLines - Groups real lines of a log file so that other p
 
 =head1 VERSION
 
-This documentation refers to Tail::Tool::Plugin::GroupLines version 0.3.5.
+This documentation refers to Tail::Tool::Plugin::GroupLines version 0.3.6.
 
 =head1 SYNOPSIS
 
