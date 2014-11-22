@@ -17,7 +17,7 @@ use Pod::Usage;
 use Data::Dumper qw/Dumper/;
 use English qw/ -no_match_vars /;
 use FindBin qw/$Bin/;
-use Path::Class;
+use Path::Tiny;
 use Tail::Tool;
 use Term::Spinner;
 use Term::ANSIColor qw/colored/;
@@ -38,7 +38,7 @@ my %option = (
 my %found_plugins;
 my $restart = {};
 my $tt;
-my $config_file = file("$ENV{HOME}/.tailtrc");
+my $config_file = path("$ENV{HOME}/.tailtrc");
 
 main();
 exit 0;
@@ -245,7 +245,7 @@ sub get_plugins {
     my %plugins;
 
     for my $inc (@INC) {
-        my $dir = dir($inc, 'Tail', 'Tool', 'Plugin');
+        my $dir = path($inc, 'Tail', 'Tool', 'Plugin');
         next if !-d $dir;
 
         my @modules = grep { /[.]pm$/ } $dir->children;
