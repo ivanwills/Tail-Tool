@@ -2,7 +2,7 @@
 
 use strict;
 use warnings;
-use Test::More tests => 3 + 1;
+use Test::More;
 use Test::Warnings;
 
 sub not_in_file_ok {
@@ -47,3 +47,4 @@ not_in_file_ok(Changes =>
 );
 
 module_boilerplate_ok('lib/Tail/Tool.pm');
+done_testing();
