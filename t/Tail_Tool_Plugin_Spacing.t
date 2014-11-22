@@ -5,7 +5,7 @@ BEGIN { $ENV{TESTING} = 1 }
 use strict;
 use warnings;
 use Test::More tests => 8 + 1;
-use Test::NoWarnings;
+use Test::Warnings;
 use Data::Dumper qw/Dumper/;
 
 my $module = 'Tail::Tool::Plugin::Spacing';

@@ -3,7 +3,7 @@
 use strict;
 use warnings;
 use Test::More tests => 12 + 1;
-use Test::NoWarnings;
+use Test::Warnings;
 
 BEGIN {
     use_ok( 'Tail::Tool'                    );

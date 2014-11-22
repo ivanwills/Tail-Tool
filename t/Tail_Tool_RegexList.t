@@ -12,7 +12,7 @@ BEGIN { $ENV{TESTING} = 1 }
 use strict;
 use warnings;
 use Test::More;
-use Test::NoWarnings;
+use Test::Warnings;
 use Tail::Tool::Regex;
 use Data::Dumper qw/Dumper/;
 

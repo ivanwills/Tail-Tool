@@ -5,7 +5,7 @@ BEGIN { $ENV{TESTING} = 1 }
 use strict;
 use warnings;
 use Test::More tests => 6 + 1;
-use Test::NoWarnings;
+use Test::Warnings;
 use Test::Output;
 
 my $module = 'Tail::Tool';

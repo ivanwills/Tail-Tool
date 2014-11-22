@@ -5,7 +5,7 @@ BEGIN { $ENV{TESTING} = 1 }
 use strict;
 use warnings;
 use Test::More;
-use Test::NoWarnings;
+use Test::Warnings;
 
 my @data = test_data();
 plan tests => 2 + ( map {( $_->{name}, keys %{ $_->{test} } )} @data );
