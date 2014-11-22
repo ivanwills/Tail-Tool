@@ -1,5 +1,20 @@
 Revision history for Tail-Tool
 
+0.4.0   2014-11-22
+        Updating for release of version 0.4.0 (Ivan Wills)
+        Added missing modules to boilerplate test (Ivan Wills)
+        Cleaned up manifest (Ivan Wills)
+        Removed unused "use"es (Ivan Wills)
+        Changed from using Path::Class to use Path::Tiny (Ivan Wills)
+        Fixed test (Ivan Wills)
+        Removed test counts infavour of done_testing (Ivan Wills)
+        Changed from Test::NoWarnings to Test:Warnings (Ivan Wills)
+        Fixed boilerplate test (Ivan Wills)
+        Merge branch 'master' of github.com:ivanwills/Tail-Tool (Ivan Wills)
+        Converted to POD syntax (Ivan Wills)
+        Moved to pod (Ivan Wills)
+        Auto updated (Ivan Wills)
+
 0.3.6   2014-08-20
         Fixed travis-ci config (Ivan Wills)
         Added travis config (Ivan Wills)
