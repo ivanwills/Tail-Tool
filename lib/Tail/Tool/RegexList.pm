@@ -11,11 +11,10 @@ use warnings;
 use Moose::Role;
 use Moose::Util::TypeConstraints;
 use version;
-use Data::Dumper qw/Dumper/;
 use English qw/ -no_match_vars /;
 use Tail::Tool::Regex;
 
-our $VERSION     = version->new('0.3.6');
+our $VERSION = version->new('0.3.6');
 
 subtype 'ArrayRefRegex'
     => as 'ArrayRef[Tail::Tool::Regex]';

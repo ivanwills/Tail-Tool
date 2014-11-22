@@ -12,7 +12,6 @@ my $builder = Module::Build->new(
         'AnyEvent'                     => 0,
         'AnyEvent::Loop'               => 0,
         'AnyEvent::Impl::Perl'         => 0,
-        'Data::Dump::Streamer'         => 0,
         'Getopt::Alt'                  => '0.1.1',
         'IO::Prompt'                   => 0,
         'List::Util'                   => 0,

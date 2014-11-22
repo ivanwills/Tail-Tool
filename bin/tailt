@@ -9,12 +9,8 @@
 use strict;
 use warnings;
 use version;
-use Scalar::Util;
-use List::Util;
-#use List::MoreUtils;
 use Getopt::Alt qw/get_options/;
 use Pod::Usage;
-use Data::Dumper qw/Dumper/;
 use English qw/ -no_match_vars /;
 use FindBin qw/$Bin/;
 use Path::Tiny;
@@ -29,7 +25,7 @@ use YAML qw/LoadFile DumpFile Dump/;
 
 our $VERSION = version->new('0.3.6');
 my ($name)   = $PROGRAM_NAME =~ m{^.*/(.*?)$}mxs;
-my $spinner = Term::Spinner->new();
+my $spinner  = Term::Spinner->new();
 
 my %option = (
     lines    => 10,

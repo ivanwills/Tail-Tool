@@ -10,20 +10,13 @@ use Moose;
 use warnings;
 use version;
 use Carp;
-use Scalar::Util;
-use List::Util;
-#use List::MoreUtils;
-use Data::Dumper qw/Dumper/;
 use English qw/ -no_match_vars /;
 use AnyEvent;
 
 extends 'Tail::Tool::PreProcess';
 with 'Tail::Tool::RegexList';
 
-our $VERSION     = version->new('0.3.6');
-our @EXPORT_OK   = qw//;
-our %EXPORT_TAGS = ();
-#our @EXPORT      = qw//;
+our $VERSION = version->new('0.3.6');
 
 has end => (
     is   => 'rw',

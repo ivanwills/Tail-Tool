@@ -10,18 +10,12 @@ use Moose;
 use warnings;
 use version;
 use Carp;
-use Scalar::Util;
-use List::Util;
 use List::MoreUtils qw/pairwise/;
-use Data::Dumper qw/Dumper/;
 use English qw/ -no_match_vars /;
 
 extends 'Tail::Tool::PreProcess';
 
-our $VERSION     = version->new('0.3.6');
-our @EXPORT_OK   = qw//;
-our %EXPORT_TAGS = ();
-#our @EXPORT      = qw//;
+our $VERSION = version->new('0.3.6');
 
 has last_time => (
     is       => 'rw',

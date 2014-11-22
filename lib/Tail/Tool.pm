@@ -10,18 +10,10 @@ use Moose;
 use warnings;
 use version;
 use Carp;
-use Scalar::Util;
-use List::Util;
-#use List::MoreUtils;
-use Data::Dumper qw/Dumper/;
-use Data::Dump::Streamer;
 use English qw/ -no_match_vars /;
 use Tail::Tool::File;
 
-our $VERSION     = version->new('0.3.6');
-our @EXPORT_OK   = qw//;
-our %EXPORT_TAGS = ();
-#our @EXPORT      = qw//;
+our $VERSION = version->new('0.3.6');
 
 has files => (
     is      => 'rw',

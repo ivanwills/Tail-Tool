@@ -11,14 +11,10 @@ use warnings;
 use version;
 use Carp;
 use Scalar::Util qw/openhandle/;
-use Data::Dumper qw/Dumper/;
 use English qw/ -no_match_vars /;
 use AnyEvent;
 
-our $VERSION     = version->new('0.3.6');
-our @EXPORT_OK   = qw//;
-our %EXPORT_TAGS = ();
-#our @EXPORT      = qw//;
+our $VERSION = version->new('0.3.6');
 
 has name => (
     is            => 'rw',
