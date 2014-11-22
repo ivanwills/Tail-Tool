@@ -46,5 +46,17 @@ not_in_file_ok(Changes =>
     "placeholder date/time"       => qr(Date/time)
 );
 
+module_boilerplate_ok('bin/tailt');
 module_boilerplate_ok('lib/Tail/Tool.pm');
+module_boilerplate_ok('lib/Tail/Tool/File.pm');
+module_boilerplate_ok('lib/Tail/Tool/Plugin/GroupLines.pm');
+module_boilerplate_ok('lib/Tail/Tool/Plugin/Highlight.pm');
+module_boilerplate_ok('lib/Tail/Tool/Plugin/Ignore.pm');
+module_boilerplate_ok('lib/Tail/Tool/Plugin/Match.pm');
+module_boilerplate_ok('lib/Tail/Tool/Plugin/Replace.pm');
+module_boilerplate_ok('lib/Tail/Tool/Plugin/Spacing.pm');
+module_boilerplate_ok('lib/Tail/Tool/PostProcess.pm');
+module_boilerplate_ok('lib/Tail/Tool/PreProcess.pm');
+module_boilerplate_ok('lib/Tail/Tool/Regex.pm');
+module_boilerplate_ok('lib/Tail/Tool/RegexList.pm');
 done_testing();
