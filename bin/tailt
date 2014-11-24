@@ -22,6 +22,7 @@ use AnyEvent::Loop;
 use IO::Prompt qw/prompt/;
 use TryCatch;
 use YAML qw/LoadFile DumpFile Dump/;
+use File::HomeDir;
 
 our $VERSION = version->new('0.4.0');
 my ($name)   = $PROGRAM_NAME =~ m{^.*/(.*?)$}mxs;
@@ -34,7 +35,7 @@ my %option = (
 my %found_plugins;
 my $restart = {};
 my $tt;
-my $config_file = path("$ENV{HOME}/.tailtrc");
+my $config_file = path(File::HomeDir->my_home, '.tailtrc');
 
 main();
 exit 0;
