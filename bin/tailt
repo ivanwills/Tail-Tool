@@ -11,14 +11,10 @@ use warnings;
 use version;
 use Getopt::Alt qw/get_options/;
 use English qw/ -no_match_vars /;
-use FindBin qw/$Bin/;
 use Path::Tiny;
 use Tail::Tool;
-use Term::Spinner;
-use Term::ANSIColor qw/colored/;
 use AnyEvent;
 use AnyEvent::Loop;
-use IO::Prompt qw/prompt/;
 use TryCatch;
 use YAML qw/LoadFile DumpFile Dump/;
 use File::HomeDir;
@@ -227,7 +223,11 @@ MENU
 my $spinner;
 sub printer {
     my @lines = @_;
-    $spinner ||= Term::Spinner->new();
+
+    if ( !$spinner ) {
+        require Term::Spinner;
+        $spinner = Term::Spinner->new();
+    }
 
     if (@lines) {
         $spinner->advance;
@@ -826,6 +826,16 @@ sub get_hosts {
     }
 
     return @hosts;
+}
+
+sub prompt {
+    require IO::Promp;
+    return IO::Promp::prompt(@_);
+}
+
+sub colored {
+    require Term::ANSIColor;
+    return Term::ANSIColor::colored(@_);
 }
 
 __DATA__
