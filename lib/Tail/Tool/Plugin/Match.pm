@@ -15,7 +15,7 @@ use English qw/ -no_match_vars /;
 extends 'Tail::Tool::PreProcess';
 with 'Tail::Tool::RegexList';
 
-our $VERSION = version->new('0.4.0');
+our $VERSION = version->new('0.4.1');
 
 sub process {
     my ($self, $line) = @_;
@@ -44,7 +44,7 @@ Tail::Tool::Plugin::Match - Checks that each line passed matches a regex
 
 =head1 VERSION
 
-This documentation refers to Tail::Tool::Plugin::Match version 0.4.0.
+This documentation refers to Tail::Tool::Plugin::Match version 0.4.1.
 
 
 =head1 SYNOPSIS

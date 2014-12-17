@@ -1,5 +1,13 @@
 Revision history for Tail-Tool
 
+0.4.1   2014-12-17
+        Updating for release of version 0.4.1
+        Fixed typo (Ivan Wills)
+        Updated license (Ivan Wills)
+        More moving to late loading of modules (Ivan Wills)
+        Minor performance tweeks (Ivan Wills)
+        Changed to use File::HomeDir to get home directory (Ivan Wills)
+
 0.4.0   2014-11-22
         Updating for release of version 0.4.0 (Ivan Wills)
         Added missing modules to boilerplate test (Ivan Wills)

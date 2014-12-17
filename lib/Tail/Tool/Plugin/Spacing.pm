@@ -15,7 +15,7 @@ use English qw/ -no_match_vars /;
 
 extends 'Tail::Tool::PreProcess';
 
-our $VERSION = version->new('0.4.0');
+our $VERSION = version->new('0.4.1');
 
 has last_time => (
     is       => 'rw',
@@ -91,7 +91,7 @@ Tail::Tool::Plugin::Spacing - Prints spaces when there has been a pause in runni
 
 =head1 VERSION
 
-This documentation refers to Tail::Tool::Plugin::Spacing version 0.4.0.
+This documentation refers to Tail::Tool::Plugin::Spacing version 0.4.1.
 
 =head1 SYNOPSIS
 
