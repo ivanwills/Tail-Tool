@@ -829,8 +829,8 @@ sub get_hosts {
 }
 
 sub prompt {
-    require IO::Promp;
-    return IO::Promp::prompt(@_);
+    require IO::Prompt;
+    return IO::Prompt::prompt(@_);
 }
 
 sub colored {
