@@ -131,6 +131,7 @@ sub watch {
 
     my $w;
     if ( $self->name ne '-' && !$self->remote  && $inotify && !$self->no_inotify ) {
+        # IN_MODIFY | IN_ALL_EVENTS & ~IN_ACCESS
         $w = $inotify->watch( $self->name, Linux::Inotify2::IN_ALL_EVENTS(), sub { $self->run } );
         if ( !$watcher ) {
             $watcher = AE::io $inotify->fileno, 0, sub { $inotify->poll };
