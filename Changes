@@ -1,5 +1,13 @@
 Revision history for Tail-Tool
 
+0.4.2   2015-06-03
+        Updating for release of version 0.4.2
+        Year updated (Ivan Wills)
+        Future default event comment (Ivan Wills)
+        Removed unneeded tag (Ivan Wills)
+        Added specific Test::More version for the features being used (Ivan Wills)
+        Added config for coveralls.io (Ivan Wills)
+
 0.4.1   2014-12-17
         Updating for release of version 0.4.1
         Fixed typo (Ivan Wills)
