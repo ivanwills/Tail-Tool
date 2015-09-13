@@ -1,5 +1,11 @@
 Revision history for Tail-Tool
 
+0.4.3   2015-09-13
+        Updating for release of version 0.4.3
+        Removed Makefile (Ivan Wills)
+        Cleaned up documentation (Ivan Wills)
+        Added Perl 5.22 to list of perl versions to build with (Ivan Wills)
+
 0.4.2   2015-06-03
         Updating for release of version 0.4.2
         Year updated (Ivan Wills)

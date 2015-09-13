@@ -16,7 +16,7 @@ use AnyEvent;
 extends 'Tail::Tool::PreProcess';
 with 'Tail::Tool::RegexList';
 
-our $VERSION = version->new('0.4.2');
+our $VERSION = version->new('0.4.3');
 
 has end => (
     is   => 'rw',
@@ -84,7 +84,7 @@ Tail::Tool::Plugin::GroupLines - Groups real lines of a log file so that other p
 
 =head1 VERSION
 
-This documentation refers to Tail::Tool::Plugin::GroupLines version 0.4.2.
+This documentation refers to Tail::Tool::Plugin::GroupLines version 0.4.3.
 
 =head1 SYNOPSIS
 

@@ -13,7 +13,7 @@ use Carp;
 use English qw/ -no_match_vars /;
 use Tail::Tool::File;
 
-our $VERSION = version->new('0.4.2');
+our $VERSION = version->new('0.4.3');
 
 has files => (
     is      => 'rw',
@@ -234,7 +234,7 @@ Tail::Tool - Tool for sophisticated tailing of files
 
 =head1 VERSION
 
-This documentation refers to Tail::Tool version 0.4.2.
+This documentation refers to Tail::Tool version 0.4.3.
 
 =head1 SYNOPSIS
 

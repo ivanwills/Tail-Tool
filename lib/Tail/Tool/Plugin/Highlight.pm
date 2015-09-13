@@ -17,7 +17,7 @@ use Readonly;
 extends 'Tail::Tool::PostProcess';
 with 'Tail::Tool::RegexList';
 
-our $VERSION = version->new('0.4.2');
+our $VERSION = version->new('0.4.3');
 
 Readonly my @COLOURS => qw/
     red
@@ -109,7 +109,7 @@ Tail::Tool::Plugin::Highlight - Highlights any text that matches the supplied re
 
 =head1 VERSION
 
-This documentation refers to Tail::Tool::Plugin::Highlight version 0.4.2.
+This documentation refers to Tail::Tool::Plugin::Highlight version 0.4.3.
 
 
 =head1 SYNOPSIS
