@@ -14,7 +14,6 @@ lib/Tail/Tool/PreProcess.pm
 lib/Tail/Tool/Regex.pm
 lib/Tail/Tool/RegexList.pm
 LICENSE
-Makefile.PL
 MANIFEST
 META.json
 META.yml
