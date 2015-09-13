@@ -236,15 +236,12 @@ Tail::Tool - Tool for sophisticated tailing of files
 
 This documentation refers to Tail::Tool version 0.4.2.
 
-
 =head1 SYNOPSIS
 
    use Tail::Tool;
 
-   # Brief but working code example(s) here showing the most common usage(s)
-   # This section will be as far as many users bother reading, so make it as
-   # educational and exemplary as possible.
-
+   # Create a new Tail::Tool object tailing /tmp/test.log
+   # with the spacing plugin initialised.
    my $tt = Tail::Tool->new(
        files => [
            '/tmpl/test.log',
@@ -258,6 +255,7 @@ This documentation refers to Tail::Tool version 0.4.2.
        ...
    );
 
+   # run the tail
    $tt->tail();
 
 =head1 DESCRIPTION

@@ -876,7 +876,7 @@ This documentation refers to tailt version 0.4.2.
      --help          Prints this help information
      --man           Prints the full documentation for tailt
 
- PLUGINS:
+ PLUGIN OPTIONS:
   -h --highlight   Sets up the hightlight plugin options
   -m --match       Sets up the match plugin option to only show lines that natch
                    the regexp.

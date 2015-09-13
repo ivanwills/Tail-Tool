@@ -276,19 +276,12 @@ This documentation refers to Tail::Tool::File version 0.4.2.
 
 =head1 SYNOPSIS
 
-   use Tail::Tool::File;
+    use Tail::Tool::File;
 
-   # Brief but working code example(s) here showing the most common usage(s)
-   # This section will be as far as many users bother reading, so make it as
-   # educational and exemplary as possible.
-
+    # Create a new Tail::Tool::File object
+    my $file = Tail::Tool::File->new( '/my/file' );
 
 =head1 DESCRIPTION
-
-A full description of the module and its features.
-
-May include numerous subsections (i.e., =head2, =head3, etc.).
-
 
 =head1 SUBROUTINES/METHODS
 

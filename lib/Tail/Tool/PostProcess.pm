@@ -40,12 +40,8 @@ This documentation refers to Tail::Tool::PostProcess version 0.4.2.
 
 =head1 SYNOPSIS
 
-   use Tail::Tool::PostProcess;
-
-   # Brief but working code example(s) here showing the most common usage(s)
-   # This section will be as far as many users bother reading, so make it as
-   # educational and exemplary as possible.
-
+   # This module is for other to extend it doesn't do anything it self.
+   extends 'Tail::Tool::PostProcess';
 
 =head1 DESCRIPTION
 
