@@ -87,12 +87,18 @@ tags
 # Avoid prove saved state file
 .prove
 
+# Debian package files (not for CPAN)
+debian/
+
 # Other files of interest
 \..*\.tag$
-vim.sh
-errors.err
+.editorconfig
+.vtide.yml
 .travis.yml
 vrc.yml
+vim.sh
+errors.err
+cmds
 tmp*
 temp*
 tmp-writer.pl
