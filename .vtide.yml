@@ -1,17 +1,41 @@
---- 
-count: 4
-default: 
+---
+count: 6
+default:
   restart: 0
-  wait: 0
-editor: 
-  files: 
-    eg: 
-      - some-file.eg
+  wait: 1
+editor:
+  files:
+    base:
+      - lib/Tail/Tool.pm
+      - lib/Tail/Tool/File.pm
+      - lib/Tail/Tool/Regex.pm
+    more:
+      - lib/Tail/Tool/RegexList.pm
+      - lib/Tail/Tool/PostProcess.pm
+      - lib/Tail/Tool/PreProcess.pm
+    plugins:
+      - lib/Tail/Tool/Plugin/Highlight.pm
+      - lib/Tail/Tool/Plugin/GroupLines.pm
+      - lib/Tail/Tool/Plugin/Spacing.pm
+    plugins2:
+      - lib/Tail/Tool/Plugin/Ignore.pm
+      - lib/Tail/Tool/Plugin/Match.pm
+      - lib/Tail/Tool/Plugin/Replace.pm
 name: tailt
-terminals: 
-  2: []
-
-  3: []
-
-  4: []
-
+terminals:
+  1a:
+    command: ./Build && ./Build testcover
+    restart: 1
+    wait: 0
+    watch:
+      - lib
+      - bin
+      - tests
+  2:
+    edit: base
+  3:
+    edit: more
+  4:
+    edit: plugins
+  4:
+    edit: plugin2
