@@ -37,3 +37,4 @@ t/Tail_Tool_PostProcess.t
 t/Tail_Tool_PreProcess.t
 t/Tail_Tool_Regex.t
 t/Tail_Tool_RegexList.t
+Makefile.PL
