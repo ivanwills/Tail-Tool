@@ -1,5 +1,14 @@
 Revision history for Tail-Tool
 
+0.4.4   2016-05-01
+        Updating for release of version 0.4.4
+        Removed reference to removed file (Ivan Wills)
+        Updated license date (Ivan Wills)
+        Updated config to build/test (Ivan Wills)
+        Removed perl 5.8 from travis (Ivan Wills)
+        Cleaned up boilerplate (Ivan Wills)
+        VTide and editor configs (Ivan Wills)
+
 0.4.3   2015-09-13
         Updating for release of version 0.4.3
         Removed Makefile (Ivan Wills)

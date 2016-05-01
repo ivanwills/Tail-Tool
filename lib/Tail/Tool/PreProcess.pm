@@ -12,7 +12,7 @@ use version;
 use Carp;
 use English qw/ -no_match_vars /;
 
-our $VERSION = version->new('0.4.3');
+our $VERSION = version->new('0.4.4');
 
 has post => (
     is       => 'ro',
@@ -38,7 +38,7 @@ Tail::Tool::PreProcess - Parent module for Plugins that perform pre-processing t
 
 =head1 VERSION
 
-This documentation refers to Tail::Tool::PreProcess version 0.4.3.
+This documentation refers to Tail::Tool::PreProcess version 0.4.4.
 
 
 =head1 SYNOPSIS
