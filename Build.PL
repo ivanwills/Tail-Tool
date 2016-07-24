@@ -40,6 +40,7 @@ my $builder = Module::Build->new(
         'Test::Output'   => 0,
     },
     recommends => {
+        'Linux::Inotify2'    => 0,
         'Test::Spelling'     => 0,
         'Test::Perl::Critic' => 0,
         'Test::Kwalitee'     => 0,
