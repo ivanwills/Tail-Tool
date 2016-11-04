@@ -15,7 +15,8 @@ format config file that allows you to specify the plugins to load and their
 configrations.
 
 When you use the restart (C<--restart>) option C<tailt> can save your settings
-to a config file.
+to a config file. At a later point you can use the C<--config>> option to
+retreive those settings.
 
 =head1 CONFIGURATION
 
