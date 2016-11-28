@@ -13,7 +13,7 @@ editor:
       - lib/Tail/Tool/RegexList.pm
       - lib/Tail/Tool/PostProcess.pm
       - lib/Tail/Tool/PreProcess.pm
-    plugins:
+    plugin:
       - lib/Tail/Tool/Plugin/Highlight.pm
       - lib/Tail/Tool/Plugin/GroupLines.pm
       - lib/Tail/Tool/Plugin/Spacing.pm
@@ -37,5 +37,5 @@ terminals:
     edit: more
   4:
     edit: plugins
-  4:
-    edit: plugin2
+  5:
+    edit: plugins2
