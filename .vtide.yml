@@ -1,7 +1,7 @@
 ---
 count: 6
 default:
-  restart: 0
+  restart: 1
   wait: 1
 editor:
   files:
@@ -14,13 +14,13 @@ editor:
       - lib/Tail/Tool/PostProcess.pm
       - lib/Tail/Tool/PreProcess.pm
     plugins:
-      - lib/Tail/Tool/Plugin/Highlight.pm
       - lib/Tail/Tool/Plugin/GroupLines.pm
       - lib/Tail/Tool/Plugin/Spacing.pm
+      - lib/Tail/Tool/Plugin/Replace.pm
     plugins2:
+      - lib/Tail/Tool/Plugin/Highlight.pm
       - lib/Tail/Tool/Plugin/Ignore.pm
       - lib/Tail/Tool/Plugin/Match.pm
-      - lib/Tail/Tool/Plugin/Replace.pm
 name: tailt
 terminals:
   1a:
