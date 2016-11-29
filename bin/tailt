@@ -882,13 +882,26 @@ This documentation refers to tailt version 0.4.4.
                     the regexp.
   -i --ignore       Sets up the ignore plugin options to hide all lines that
                     match the regexp.
-  -r --replace      Sets op the replace plugin option which chnages match values.
+  -r --replace key=value
+                    Sets op the replace plugin option which chnages match values.
+            Keys:
+                regex   A regular expression to match log line content
+                replace A string to replace the contents matched above
      --spacing key=value
                     Add spacing when no new lines have occured for a period
                     of time
             Keys:
-                times      The time in seconds since last seen output (comma separated list of times)
-                lines      The number of lines to show for the matching time (also comma separated list)
+                times   he time in seconds since last seen output (comma separated list of times)
+                lines   he number of lines to show for the matching time (also comma separated list)
+     --grouplines key=value
+                    Controls the way lines are processed. If used this can
+                    allow you to control when a line is considered to start
+                    for example if you log file occasionally out puts messages
+                    that span several lines this can be used to group the
+                    lines back before (for example) using the highligh plugin.
+            Keys:
+                regex   A regular expression to match log line content
+                end     How to treat line ends? (Bool 0 or 1)
 
 =head1 DESCRIPTION
 
@@ -904,6 +917,8 @@ the URI is:
 Note if you want a absolute file location you must have two slashes at the
 start of the path. One slash means that the file is relative to the user
 that you are logging in as.
+
+=head2 Config
 
 =head1 SUBROUTINES/METHODS
 
