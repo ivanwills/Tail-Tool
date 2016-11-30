@@ -1,5 +1,5 @@
 ---
-count: 6
+count: 8
 default:
   restart: 1
   wait: 1
@@ -21,10 +21,14 @@ editor:
       - lib/Tail/Tool/Plugin/Highlight.pm
       - lib/Tail/Tool/Plugin/Ignore.pm
       - lib/Tail/Tool/Plugin/Match.pm
+    other:
+      - lib/Tail/Tool/Config.pm
+      - bin/*
 name: tailt
 terminals:
   1a:
     command: ./Build && ./Build testcover
+      - lib/Tail/Tool/Plugin/Replace.pm
     restart: 1
     wait: 0
     watch:
@@ -39,3 +43,5 @@ terminals:
     edit: plugins
   5:
     edit: plugins2
+  6:
+    edit: other
