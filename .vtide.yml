@@ -22,7 +22,7 @@ editor:
       - lib/Tail/Tool/Plugin/Ignore.pm
       - lib/Tail/Tool/Plugin/Match.pm
     other:
-      - lib/Tail/Tool/Config.pm
+      - lib/Tail/Tool/Config.pod
       - bin/*
 name: tailt
 terminals:
