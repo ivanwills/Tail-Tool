@@ -8,16 +8,76 @@ This documentation refers to Tail::Tool::Config version 0.4.4
 
 =head1 DESCRIPTION
 
+The L<Tail::Tool> application sortres it's configuration in C<~/.tailtrc> it
+allows the use of multiple seperate named configurations. Which you can
+specify on the command line via C<--config> argument. The file is a YAML
+format config file that allows you to specify the plugins to load and their
+configrations.
+
 When you use the restart (C<--restart>) option C<tailt> can save your settings
 to a config file.
 
-=head1 DIAGNOSTICS
+=head1 CONFIGURATION
 
-=head1 CONFIGURATION AND ENVIRONMENT
-
-=head1 DEPENDENCIES
-
-=head1 INCOMPATIBILITIES
+  ---
+  configs:
+    log4perl:
+      post_process:
+        - !!perl/hash:Tail::Tool::Plugin::Highlight
+          many: 1
+          post: 1
+          regex:
+            - !!perl/hash:Tail::Tool::Regex
+              colour:
+                - yellow
+              enabled: 1
+              regex: !!perl/regexp (?-xism:\bWARN\b)
+            - !!perl/hash:Tail::Tool::Regex
+              colour:
+                - red
+              enabled: 1
+              regex: !!perl/regexp (?-xism:\bERROR\b)
+            - !!perl/hash:Tail::Tool::Regex
+              colour:
+                - magenta
+                - bold
+              enabled: 1
+              regex: !!perl/regexp (?-xism:\bFATAL\b)
+            - !!perl/hash:Tail::Tool::Regex
+              colour:
+                - magenta
+              enabled: 1
+              regex: '[{]"\w\w\w:\w+Request":([{](?:(?:(?>[^{}]+|(?1))+))[}])[^}]*[}]'
+      pre_process:
+        - !!perl/hash:Tail::Tool::Plugin::GroupLines
+          regex:
+            - !!perl/hash:Tail::Tool::Regex
+              enabled: 1
+              regex: !!perl/regexp '(?-xism:^\[\d\d\d\d/\d\d/\d\d \d\d:\d\d:\d\d\])'
+        - !!perl/hash:Tail::Tool::Plugin::Spacing
+          last_time: 1300055107
+          lines:
+            - 2
+            - 5
+          many: 0
+          post: 0
+          times:
+            - 8
+            - 15
+        - !!perl/hash:Tail::Tool::Plugin::Ignore
+          many: 1
+          post: 0
+          regex:
+            - !!perl/hash:Tail::Tool::Regex
+              enabled: 0
+              regex: !!perl/regexp (?-xism:MyApp::Annoying)
+        - !!perl/hash:Tail::Tool::Plugin::Ignore
+          many: 1
+          post: 0
+          regex:
+            - !!perl/hash:Tail::Tool::Regex
+              enabled: 0
+              regex: !!perl/regexp (?-xism:MyApp::Session)
 
 =head1 BUGS AND LIMITATIONS
 
