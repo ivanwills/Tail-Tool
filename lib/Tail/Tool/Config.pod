@@ -21,8 +21,52 @@ to a config file.
 
   ---
   configs:
+    # the is a named configuration
     log4perl:
+      # Specify any PRE process plugins
+      pre_process:
+        # GroupLines allows you to controll when a new is considered finished.
+        - !!perl/hash:Tail::Tool::Plugin::GroupLines
+          regex:
+            - !!perl/hash:Tail::Tool::Regex
+              enabled: 1
+              # this is matching on a date string in square brackets at the
+              # start of a line
+              regex: !!perl/regexp '(?-xism:^\[\d\d\d\d/\d\d/\d\d \d\d:\d\d:\d\d\])'
+        # Spacing allows you inject blank lines when nothing has happened for
+        # a period of time. In this case after 8 seconds, insert 2 blank lines
+        # after 15 seconds insert 5 blank lines
+        - !!perl/hash:Tail::Tool::Plugin::Spacing
+          last_time: 1300055107
+          lines:
+            - 2
+            - 5
+          many: 0
+          post: 0
+          times:
+            - 8
+            - 15
+        - !!perl/hash:Tail::Tool::Plugin::Ignore
+          many: 1
+          post: 0
+          regex:
+            - !!perl/hash:Tail::Tool::Regex
+              enabled: 0
+              regex: !!perl/regexp (?-xism:MyApp::Annoying)
+        # Ignore plugin allows you hide certain lines (in this case any line
+        # containing MyApp::Session)
+        - !!perl/hash:Tail::Tool::Plugin::Ignore
+          many: 1
+          post: 0
+          regex:
+            - !!perl/hash:Tail::Tool::Regex
+              enabled: 0
+              regex: !!perl/regexp (?-xism:MyApp::Session)
+      # specify any POST process plugins
       post_process:
+        # The Highlight plugin allows you to colour parts of a line
+        # The follwoing example highlights WARN / ERRROR AND FATAL
+        # messages in yellow / red and magenta respectivly
         - !!perl/hash:Tail::Tool::Plugin::Highlight
           many: 1
           post: 1
@@ -43,41 +87,12 @@ to a config file.
                 - bold
               enabled: 1
               regex: !!perl/regexp (?-xism:\bFATAL\b)
+            # This is an example of highliting a balanced bracket object
             - !!perl/hash:Tail::Tool::Regex
               colour:
                 - magenta
               enabled: 1
               regex: '[{]"\w\w\w:\w+Request":([{](?:(?:(?>[^{}]+|(?1))+))[}])[^}]*[}]'
-      pre_process:
-        - !!perl/hash:Tail::Tool::Plugin::GroupLines
-          regex:
-            - !!perl/hash:Tail::Tool::Regex
-              enabled: 1
-              regex: !!perl/regexp '(?-xism:^\[\d\d\d\d/\d\d/\d\d \d\d:\d\d:\d\d\])'
-        - !!perl/hash:Tail::Tool::Plugin::Spacing
-          last_time: 1300055107
-          lines:
-            - 2
-            - 5
-          many: 0
-          post: 0
-          times:
-            - 8
-            - 15
-        - !!perl/hash:Tail::Tool::Plugin::Ignore
-          many: 1
-          post: 0
-          regex:
-            - !!perl/hash:Tail::Tool::Regex
-              enabled: 0
-              regex: !!perl/regexp (?-xism:MyApp::Annoying)
-        - !!perl/hash:Tail::Tool::Plugin::Ignore
-          many: 1
-          post: 0
-          regex:
-            - !!perl/hash:Tail::Tool::Regex
-              enabled: 0
-              regex: !!perl/regexp (?-xism:MyApp::Session)
 
 =head1 BUGS AND LIMITATIONS
 
