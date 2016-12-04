@@ -8,15 +8,15 @@ This documentation refers to Tail::Tool::Config version 0.4.4
 
 =head1 DESCRIPTION
 
-The L<Tail::Tool> application sortres it's configuration in C<~/.tailtrc> it
-allows the use of multiple seperate named configurations. Which you can
+The L<Tail::Tool> application stores it's configuration in C<~/.tailtrc> it
+allows the use of multiple separate named configurations. Which you can
 specify on the command line via C<--config> argument. The file is a YAML
 format config file that allows you to specify the plugins to load and their
-configrations.
+configurations.
 
 When you use the restart (C<--restart>) option C<tailt> can save your settings
 to a config file. At a later point you can use the C<--config>> option to
-retreive those settings.
+retrieve those settings.
 
 =head1 CONFIGURATION
 
