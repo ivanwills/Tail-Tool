@@ -1,5 +1,25 @@
 Revision history for Tail-Tool
 
+0.4.5   2016-12-04
+        Updating for release of version 0.4.5
+        Added Config to boilerplate test (Ivan Wills)
+        Fixed spelling (Ivan Wills)
+        Added config to manifest (Ivan Wills)
+        Adding info on how to get back saved config (Ivan Wills)
+        Adding comments to example YAML (Ivan Wills)
+        Adding example config and some more description (Ivan Wills)
+        Fixed name (Ivan Wills)
+        Working on docs (Ivan Wills)
+        updated config (Ivan Wills)
+        Starting on config documentation (Ivan Wills)
+        Adding more details about plugin arguments (Ivan Wills)
+        Switched file order (Ivan Wills)
+        Adding spacing documentation (Ivan Wills)
+        Fixed name (Ivan Wills)
+        Fixed up file loading (Ivan Wills)
+        Added perl 5.24 to travis build (Ivan Wills)
+        Added missing recommended package (Ivan Wills)
+
 0.4.4   2016-05-01
         Updating for release of version 0.4.4
         Removed reference to removed file (Ivan Wills)
