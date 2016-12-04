@@ -48,6 +48,7 @@ not_in_file_ok(Changes =>
 
 module_boilerplate_ok('bin/tailt');
 module_boilerplate_ok('lib/Tail/Tool.pm');
+module_boilerplate_ok('lib/Tail/Tool/Config.pod');
 module_boilerplate_ok('lib/Tail/Tool/File.pm');
 module_boilerplate_ok('lib/Tail/Tool/Plugin/GroupLines.pm');
 module_boilerplate_ok('lib/Tail/Tool/Plugin/Highlight.pm');
