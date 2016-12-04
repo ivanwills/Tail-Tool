@@ -2,6 +2,7 @@ bin/tailt
 Build.PL
 Changes
 lib/Tail/Tool.pm
+lib/Tail/Tool/Config.pod
 lib/Tail/Tool/File.pm
 lib/Tail/Tool/Plugin/GroupLines.pm
 lib/Tail/Tool/Plugin/Highlight.pm
