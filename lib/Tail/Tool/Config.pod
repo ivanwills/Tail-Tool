@@ -20,6 +20,8 @@ retrieve those settings.
 
 =head1 CONFIGURATION
 
+Example configuration:
+
   ---
   configs:
     # the is a named configuration
