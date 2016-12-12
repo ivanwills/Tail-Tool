@@ -97,6 +97,42 @@ Example configuration:
               enabled: 1
               regex: '[{]"\w\w\w:\w+Request":([{](?:(?:(?>[^{}]+|(?1))+))[}])[^}]*[}]'
 
+=head1 Pre-Process Plugins
+
+=over 4
+
+=item !!perl/hash:Tail::Tool::Plugin::GroupLines
+
+See L<Tail::Tool::Plugin::GroupLines>
+
+=item !!perl/hash:Tail::Tool::Plugin::Ignore
+
+See L<Tail::Tool::Plugin::Ignore>
+
+=item !!perl/hash:Tail::Tool::Plugin::Spacing
+
+See L<Tail::Tool::Plugin::Spacing>
+
+=back
+
+=head1 Post-Process Plugins
+
+=over 4
+
+=item !!perl/hash:Tail::Tool::Plugin::Highlight
+
+See L<Tail::Tool::Plugin::Highlight>
+
+=item !!perl/hash:Tail::Tool::Plugin::Match.pm
+
+See L<Tail::Tool::Plugin::Match.pm>
+
+=item !!perl/hash:Tail::Tool::Plugin::Replace.pm
+
+See L<Tail::Tool::Plugin::Replace.pm>
+
+=back
+
 =head1 BUGS AND LIMITATIONS
 
 There are no known bugs in this module.
