@@ -1,5 +1,11 @@
 Revision history for Tail-Tool
 
+0.4.6   2017-01-22
+        Updating for release of version 0.4.6
+        Updated date (Ivan Wills)
+        Adding links for the different plugins (Ivan Wills)
+        Better description (Ivan Wills)
+
 0.4.5   2016-12-04
         Updating for release of version 0.4.5
         Added Config to boilerplate test (Ivan Wills)
