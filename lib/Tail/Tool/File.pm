@@ -217,11 +217,20 @@ sub _get_file_handle {
         return $self->handle;
     }
 
-    if ( $self->remote || $self->name =~ m{^ssh://}xms ) {
+    if ( $self->remote || $self->name =~ m{^s(sh|cp)://}xms ) {
         $self->remote(1);
         return if $self->pause;
 
-        my ($user, $host, $port, $file) = $self->name =~ m{^ssh://(?: ([^@]+) [@] )? ( [\w.-]+ ) (?: [:] (\d+) )? / (.*)$}xms;
+        my $host_re = qr/( [\w.-]+ )/xms;
+        my $user_re = qr/([^@]+) [@]/xms;
+        my $port_re = qr/[:] (\d*)/xms;
+        my $file_re = qr/(.*)/xms;
+        my $ssh_re = qr{^ssh://(?: $user_re )? $host_re (?: $port_re )? / $file_re$}xms;
+        my $scp_re = qr{^scp://(?: $user_re )? $host_re $port_re $file_re$}xms;
+        my $re = $self->name =~ /^ssh/ ? $ssh_re : $scp_re;
+
+        my ($user, $host, $port, $file) = $self->name =~ m{$re}xms;
+
         if ( !$fh ) {
             my $cmd = sprintf "ssh %s$host %s 'tail -f -n %d %s'",
                ( $user         ? "$user\@"            : '' ),
