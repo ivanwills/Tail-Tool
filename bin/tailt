@@ -853,9 +853,13 @@ This documentation refers to tailt version 0.4.6.
    tailt [option] file1 [ file2 ...]
    tailt --help | --man | --VERSION
 
+ FILES:
+  Specify one or more local or remote files to tail:
+  local             specify local file (relative ./file, absolute /dir/file)
+  scp               Specify files (similar to vim) scp://[user@]host:[port](file/relative/to/home/dir|/absolute/file)
+  ssh               Specify files with ssh ssh://[user@]host[:port]/file
+
  OPTIONS:
-  file              This can be a local file or a remote file specified by an
-                    ssh URI eg ssh://user@example.com:22//var/log/error.log
   -r --restart      Turn on menu, which allows chnaging of options/files/plugin
                     configuration on the fly. To see the menu type any thing
                     other than q and press enter, typing q & enter quit.
