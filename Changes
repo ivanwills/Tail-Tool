@@ -1,5 +1,10 @@
 Revision history for Tail-Tool
 
+0.4.7   2017-04-10
+        Updating for release of version 0.4.7
+        Improving on file specification documentation (Ivan Wills)
+        Added supporting vim style scp urls for remote files (Ivan Wills)
+
 0.4.6   2017-01-22
         Updating for release of version 0.4.6
         Updated date (Ivan Wills)

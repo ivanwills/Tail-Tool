@@ -11,7 +11,7 @@ use warnings;
 use version;
 use English qw/ -no_match_vars /;
 
-our $VERSION = version->new('0.4.6');
+our $VERSION = version->new('0.4.7');
 
 has post => (
     is       => 'ro',
@@ -36,7 +36,7 @@ Tail::Tool::PostProcess - The parent module for plugins that change individual l
 
 =head1 VERSION
 
-This documentation refers to Tail::Tool::PostProcess version 0.4.6.
+This documentation refers to Tail::Tool::PostProcess version 0.4.7.
 
 =head1 SYNOPSIS
 
